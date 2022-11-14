@@ -24,7 +24,7 @@ export const Layout = () => {
           </Toolbar>
         </Container>
       </AppBar>
-      <Container maxWidth="sm" sx={{ marginTop: '65px' }}>
+      <Container maxWidth="lg" sx={{ marginTop: '65px' }}>
         <Outlet />
       </Container>
     </>
