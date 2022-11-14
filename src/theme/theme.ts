@@ -8,7 +8,7 @@ export const theme = createTheme({
   },
   palette: {
     primary: {
-      main: '#8e506e',
+      main: 'rgb(172, 85, 112)',
     },
   },
 } as ThemeOptions);

@@ -7,7 +7,7 @@ export const Layout = () => {
   return (
     <>
       <Header />
-      <Container maxWidth="sm" sx={{ marginTop: '65px' }}>
+      <Container maxWidth="lg" sx={{ marginTop: '65px', p: 5, height: 1 }}>
         <Outlet />
       </Container>
     </>

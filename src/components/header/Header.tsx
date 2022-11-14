@@ -7,14 +7,19 @@ import LanguageIcon from '@mui/icons-material/Language';
 
 export const Header = () => {
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: '#ffffff' }}>
-      <Container maxWidth="lg">
+    <AppBar position="fixed" sx={{ backgroundColor: '#ffffff', boxShadow: 'none' }}>
+      <Container>
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <IconButton component={NavLink} to="/">
-            <DashboardIcon color="primary" />
+          <IconButton component={NavLink} to="/" sx={{ color: '#333' }}>
+            <DashboardIcon fontSize="large" />
           </IconButton>
           <Box>
-            <ButtonGroup variant="text" aria-label="text button group" sx={{ mr: 2 }}>
+            <ButtonGroup
+              variant="contained"
+              aria-label="outlined primary button group"
+              sx={{ mr: 2 }}
+              size="small"
+            >
               <Button component={NavLink} to="/signIn">
                 {lang.en.signIn}
               </Button>
@@ -22,7 +27,7 @@ export const Header = () => {
                 {lang.en.signUp}
               </Button>
             </ButtonGroup>
-            <Button variant="outlined" startIcon={<LanguageIcon />}>
+            <Button variant="outlined" startIcon={<LanguageIcon />} size="small">
               en
             </Button>
           </Box>
