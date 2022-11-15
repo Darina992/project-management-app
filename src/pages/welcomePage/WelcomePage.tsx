@@ -44,7 +44,7 @@ export const WelcomePage = () => {
           }}
         ></Box>
       </Box>
-      <Box component="section" pt={10}>
+      <Box component="section" pt={10} pb={10}>
         <Typography align="center" variant="h2" sx={{ fontSize: 46, mb: 10 }}>
           {lang.en.titleTeam}
         </Typography>

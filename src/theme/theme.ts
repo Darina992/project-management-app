@@ -10,5 +10,8 @@ export const theme = createTheme({
     primary: {
       main: 'rgb(172, 85, 112)',
     },
+    secondary: {
+      main: '#ffffff',
+    },
   },
 } as ThemeOptions);
