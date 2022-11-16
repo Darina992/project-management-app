@@ -6,6 +6,7 @@ const i18Obj = {
     boardCreate: 'Create Board',
     boardCount: 'Number of boards: ',
     boardSearchInput: 'Board name',
+    boardDescription: 'Description',
   },
   ru: {
     signIn: 'Вход',
@@ -14,6 +15,7 @@ const i18Obj = {
     boardCreate: 'Создать доску',
     boardCount: 'Количество досек: ',
     boardSearchInput: 'Название доски',
+    boardDescription: 'Описание ',
   },
 };
 export default i18Obj;

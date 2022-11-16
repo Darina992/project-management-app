@@ -13,12 +13,28 @@ import ModeRoundedIcon from '@mui/icons-material/ModeRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { pink } from '@mui/material/colors';
 
-export const BoardRender: FC = () => {
+interface DateData {
+  nameBoard: string;
+  descriptionBoard: string;
+  nameUser: string;
+  idUser: string;
+}
+
+export const BoardRender: FC<DateData> = (date: DateData) => {
+  const { nameBoard, descriptionBoard, idUser } = date;
+
+  const handleSubmit = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const clases = e.currentTarget.classList;
+    const action = clases[2];
+    const idBoard = clases[1];
+    console.log(action, idBoard);
+  };
+
   return (
     <Grid item xs={12} sm={4} md={3} key={'w'}>
       <Card>
-        <Link className="board__link" to={'./'}>
-          <CardActionArea>
+        <CardActionArea>
+          <Link className="board__link" to={'/'}>
             <CardMedia
               component="img"
               height="100"
@@ -27,22 +43,22 @@ export const BoardRender: FC = () => {
             />
             <CardContent>
               <Typography noWrap gutterBottom variant="h5" component="div">
-                Lizard riiiiiiiiii roppppppppppp
+                {nameBoard}
               </Typography>
               <Typography noWrap variant="body2">
-                Lizards are a widespread rriiiiii roooooooo rooooooooo
+                {descriptionBoard}
               </Typography>
             </CardContent>
-            <CardActions>
-              <div className="button-icon">
-                <ModeRoundedIcon color="success" />
-              </div>
-              <div className="button-icon">
-                <DeleteRoundedIcon sx={{ color: pink[500] }} />
-              </div>
-            </CardActions>
-          </CardActionArea>
-        </Link>
+          </Link>
+          <CardActions>
+            <div className={`button-icon ${idUser} chahge`} onClick={(e) => handleSubmit(e)}>
+              <ModeRoundedIcon id="44" color="success" />
+            </div>
+            <div className={`button-icon ${idUser} delete`} onClick={(e) => handleSubmit(e)}>
+              <DeleteRoundedIcon id="55" sx={{ color: pink[500] }} />
+            </div>
+          </CardActions>
+        </CardActionArea>
       </Card>
     </Grid>
   );
