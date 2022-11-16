@@ -14,27 +14,28 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { theme } from '../../theme/theme';
 import { ThemeProvider } from '@mui/material';
-import { api } from '../../api/api';
-import { validateEmails, validatePasswords } from '../../utils/utils';
+import { INewUser } from '../../api/typesApi';
+import { validateLogins, validatePasswords } from '../../utils/utils';
+//import { useSelector } from 'react-redux';
+import { RootState, store } from '../../store/index';
+import { UserState, createNewUser } from '../../store/reducer';
 
 export default function SignUp() {
+  //const state: UserState = useSelector((state: RootState) => state.user);
   const [isNameValid, setIsNameValid] = useState(true);
-  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isLoginValid, setIsLoginValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get('name'),
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-    if (isNameValid && isEmailValid && isPasswordValid) {
-      api.createNewUser(
-        data.get('name') as string,
-        data.get('email') as string,
-        data.get('password') as string
-      );
+    const userInfo: INewUser = {
+      name: data.get('name') as string,
+      login: data.get('login') as string,
+      password: data.get('password') as string,
+    };
+    if (isNameValid && isLoginValid && isPasswordValid) {
+      store.dispatch(createNewUser(userInfo));
     }
   };
 
@@ -42,8 +43,8 @@ export default function SignUp() {
     name ? setIsNameValid(true) : setIsNameValid(false);
   };
 
-  const validateEmail = (email: string) => {
-    validateEmails(email) ? setIsEmailValid(true) : setIsEmailValid(false);
+  const validateLogin = (login: string) => {
+    validateLogins(login) ? setIsLoginValid(true) : setIsLoginValid(false);
   };
 
   const validatePassword = (password: string) => {
@@ -88,13 +89,13 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
+                  id="login"
+                  label="Login"
+                  name="login"
                   autoComplete="email"
-                  onChange={(event) => validateEmail(event.target.value)}
-                  error={!isEmailValid}
-                  helperText={isEmailValid ? '' : 'Enter correct email address!'}
+                  onChange={(event) => validateLogin(event.target.value)}
+                  error={!isLoginValid}
+                  helperText={isLoginValid ? '' : 'Empty!'}
                 />
               </Grid>
               <Grid item xs={12}>

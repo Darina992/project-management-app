@@ -1,10 +1,11 @@
 export type IUser = {
-  email: string;
-  pasword: string;
+  id: string;
+  name: string;
+  login: string;
 };
 
 export type INewUser = {
-  firstName: string;
-  email: string;
-  pasword: string;
+  name: string;
+  login: string;
+  password: string;
 };

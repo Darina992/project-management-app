@@ -6,7 +6,7 @@ export const api = {
     firstName: string,
     email: string,
     password: string
-  ): Promise<INewUser | undefined> {
+  ): Promise<IUser | undefined> {
     try {
       const response = await fetch('http://134.209.192.22:4000/signup', {
         method: 'POST',

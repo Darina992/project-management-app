@@ -1,9 +1,8 @@
-export function validateEmails(email: string) {
-  const re = /\S+@\S+\.\S+/;
-  return re.test(email);
+export function validateLogins(login: string) {
+  return login.length >= 2;
 }
 
 export function validatePasswords(password: string) {
-  //const re = /\S+@\S+\.\S+/;
+  //const re = /\S+@\S+\.\S+/  re.test(login);;
   return true;
 }
