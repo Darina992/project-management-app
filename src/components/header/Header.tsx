@@ -9,7 +9,7 @@ import {
   MenuItem,
   Menu,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import translate from '../../service/translate';
@@ -33,8 +33,28 @@ export const Header = () => {
     setAnchorLang(null);
   };
 
+  const [animation, setAnimation] = useState(false);
+  const onScroll = useCallback(() => {
+    if (window.scrollY > 100) {
+      setAnimation(true);
+    }
+    if (window.scrollY < 100) {
+      setAnimation(false);
+    }
+  }, []);
+  useEffect(() => {
+    window.addEventListener('scroll', onScroll);
+  }, [onScroll]);
+
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: '#ffffff', boxShadow: 'none' }}>
+    <AppBar
+      position="fixed"
+      sx={{
+        backgroundColor: animation ? 'rgb(245, 228, 222)' : '#ffffff',
+        boxShadow: 'none',
+        transition: 'background-color 3s',
+      }}
+    >
       <Container>
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <IconButton component={NavLink} to="/" sx={{ color: '#333' }}>
