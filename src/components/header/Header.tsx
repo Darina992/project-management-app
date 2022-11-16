@@ -8,6 +8,9 @@ import {
   Box,
   MenuItem,
   Menu,
+  Modal,
+  TextField,
+  TextareaAutosize,
 } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -23,7 +26,23 @@ export const Header = () => {
   const [langState, setLangState] = useState('EN');
   const lang = langState === 'EN' ? translate.en : translate.ru;
   const [anchorLang, setAnchorLang] = useState<null | HTMLElement>(null);
+  const [descriptionBoard, setDescriptionBoard] = useState('');
+  const [nameBoard, setNameBoard] = useState('');
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleClose = () => setOpenModal(false);
   const open = Boolean(anchorLang);
+
+  const createNewBoard = () => {
+    const data = {
+      nameBoard: nameBoard,
+      descriptionBoard: descriptionBoard,
+      nameUser: `${nameBoard}+NN`,
+      idUser: `${nameBoard}${descriptionBoard}`,
+    };
+    // setDoardData([...boardData, data]);
+    setOpenModal(false);
+  };
 
   const openMenuLang = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorLang(event.currentTarget);
@@ -56,6 +75,30 @@ export const Header = () => {
       }}
     >
       <Container>
+        <Modal
+          open={openModal}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box className="modal" component="form">
+            <TextField
+              id="standard-basic"
+              label={lang.boardSearchInput}
+              variant="standard"
+              onChange={(e) => setNameBoard(e.target.value)}
+            />
+            <TextareaAutosize
+              aria-label="minimum height"
+              minRows={7}
+              placeholder={lang.boardDescription}
+              onChange={(e) => setDescriptionBoard(e.target.value)}
+            />
+            <Button className="board__add-btn" variant="outlined" onClick={() => createNewBoard()}>
+              {lang.boardCreate}
+            </Button>
+          </Box>
+        </Modal>
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <IconButton component={NavLink} to="/" sx={{ color: '#333' }}>
             <DashboardIcon fontSize="large" />
@@ -82,7 +125,12 @@ export const Header = () => {
                 <Button variant="text" href="/profile" size="small" startIcon={<EditIcon />}>
                   {lang.buttonEditProfile}
                 </Button>
-                <Button variant="text" href="/main" size="small" startIcon={<AddIcon />}>
+                <Button
+                  onClick={() => setOpenModal(true)}
+                  variant="text"
+                  size="small"
+                  startIcon={<AddIcon />}
+                >
                   {lang.buttonNewBoard}
                 </Button>
                 <Button variant="text" href="/" size="small" startIcon={<LogoutIcon />}>
