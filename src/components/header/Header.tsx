@@ -1,11 +1,38 @@
-import { AppBar, Container, Button, ButtonGroup, Toolbar, IconButton, Box } from '@mui/material';
-import React from 'react';
+import {
+  AppBar,
+  Container,
+  Button,
+  ButtonGroup,
+  Toolbar,
+  IconButton,
+  Box,
+  MenuItem,
+  Menu,
+} from '@mui/material';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import lang from '../../service/translate';
+import translate from '../../service/translate';
 import LanguageIcon from '@mui/icons-material/Language';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 export const Header = () => {
+  const isAuth = true;
+  const [langState, setLangState] = useState('EN');
+  const lang = langState === 'EN' ? translate.en : translate.ru;
+  const [anchorLang, setAnchorLang] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorLang);
+
+  const openMenuLang = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorLang(event.currentTarget);
+  };
+  const closeMenuLang = (event: React.MouseEvent<HTMLElement>) => {
+    setLangState((event.target as HTMLElement).textContent as string);
+    setAnchorLang(null);
+  };
+
   return (
     <AppBar position="fixed" sx={{ backgroundColor: '#ffffff', boxShadow: 'none' }}>
       <Container>
@@ -13,23 +40,53 @@ export const Header = () => {
           <IconButton component={NavLink} to="/" sx={{ color: '#333' }}>
             <DashboardIcon fontSize="large" />
           </IconButton>
-          <Box>
-            <ButtonGroup
-              variant="contained"
-              aria-label="outlined primary button group"
-              sx={{ mr: 2 }}
+          <Box sx={{ display: 'flex' }}>
+            {!isAuth ? (
+              <ButtonGroup
+                variant="contained"
+                aria-label="outlined primary button group"
+                size="small"
+              >
+                <Button component={NavLink} to="/signIn">
+                  {lang.signIn}
+                </Button>
+                <Button component={NavLink} to="/signUp">
+                  {lang.signUp}
+                </Button>
+              </ButtonGroup>
+            ) : (
+              <Box sx={{ display: 'flex', gap: 3 }}>
+                <Button variant="contained" href="/main" size="small">
+                  {lang.buttonMainPage}
+                </Button>
+                <Button variant="text" href="/profile" size="small" startIcon={<EditIcon />}>
+                  {lang.buttonEditProfile}
+                </Button>
+                <Button variant="text" href="/main" size="small" startIcon={<AddIcon />}>
+                  {lang.buttonNewBoard}
+                </Button>
+                <Button variant="text" href="/" size="small" startIcon={<LogoutIcon />}>
+                  {lang.signOut}
+                </Button>
+              </Box>
+            )}
+            <Button
+              variant="outlined"
+              startIcon={<LanguageIcon />}
               size="small"
+              sx={{ ml: 2 }}
+              onClick={openMenuLang}
             >
-              <Button component={NavLink} to="/signIn">
-                {lang.en.signIn}
-              </Button>
-              <Button component={NavLink} to="/signUp">
-                {lang.en.signUp}
-              </Button>
-            </ButtonGroup>
-            <Button variant="outlined" startIcon={<LanguageIcon />} size="small">
-              en
+              {langState}
             </Button>
+            <Menu open={open} anchorEl={anchorLang}>
+              <MenuItem onClick={(e) => closeMenuLang(e)} sx={{ fontSize: '16px' }}>
+                EN
+              </MenuItem>
+              <MenuItem onClick={(e) => closeMenuLang(e)} sx={{ fontSize: '16px' }}>
+                RU
+              </MenuItem>
+            </Menu>
           </Box>
         </Toolbar>
       </Container>

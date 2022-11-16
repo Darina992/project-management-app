@@ -9,6 +9,10 @@ const i18Obj = {
     nameV: 'Viktoria',
     nameA: 'Asel',
     nameD: 'Darya',
+    buttonMainPage: 'Go to Main Page',
+    buttonEditProfile: 'Edit profile',
+    buttonNewBoard: 'new board',
+    signOut: 'Sign Out',
   },
   ru: {
     signIn: 'Вход',
@@ -20,6 +24,10 @@ const i18Obj = {
     nameV: 'Виктория',
     nameA: 'Асель',
     nameD: 'Дарья',
+    buttonMainPage: 'Главная страница',
+    buttonEditProfile: 'Профиль',
+    buttonNewBoard: 'Новая доска',
+    signOut: 'Выйти',
   },
 };
 export default i18Obj;
