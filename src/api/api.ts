@@ -2,7 +2,11 @@ import { apiPath, usersEndpoint } from './apiPath';
 import { IUser, INewUser } from './typesApi';
 
 export const api = {
-  async signUp(firstName: string, email: string, password: string): Promise<INewUser | undefined> {
+  async createNewUser(
+    firstName: string,
+    email: string,
+    password: string
+  ): Promise<INewUser | undefined> {
     try {
       const response = await fetch('http://134.209.192.22:4000/signup', {
         method: 'POST',
@@ -16,7 +20,6 @@ export const api = {
           password: password,
         }),
       });
-      console.log(response);
       if (response.ok) {
         return await response.json();
       } else {

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,30 +14,49 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { theme } from '../../theme/theme';
 import { ThemeProvider } from '@mui/material';
-//import { api } from '../../api/api';
+import { api } from '../../api/api';
+import { validateEmails, validatePasswords } from '../../utils/utils';
 
 export default function SignUp() {
+  const [isNameValid, setIsNameValid] = useState(true);
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      firstName: data.get('firstName'),
+      name: data.get('name'),
       email: data.get('email'),
       password: data.get('password'),
     });
+    if (isNameValid && isEmailValid && isPasswordValid) {
+      api.createNewUser(
+        data.get('name') as string,
+        data.get('email') as string,
+        data.get('password') as string
+      );
+    }
   };
 
-  const validateForm = (event: React.FormEvent<HTMLFormElement>) => {
-    console.log('validation');
+  const validateName = (name: string) => {
+    name ? setIsNameValid(true) : setIsNameValid(false);
+  };
+
+  const validateEmail = (email: string) => {
+    validateEmails(email) ? setIsEmailValid(true) : setIsEmailValid(false);
+  };
+
+  const validatePassword = (password: string) => {
+    validatePasswords(password) ? setIsPasswordValid(true) : setIsPasswordValid(false);
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs" sx={{ marginTop: 15 }}>
+      <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 1,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -53,12 +73,15 @@ export default function SignUp() {
               <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="name"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id="name"
+                  label="Name"
                   autoFocus
+                  onChange={(event) => validateName(event.target.value)}
+                  error={!isNameValid}
+                  helperText={isNameValid ? '' : 'Empty!'}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -69,6 +92,9 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  onChange={(event) => validateEmail(event.target.value)}
+                  error={!isEmailValid}
+                  helperText={isEmailValid ? '' : 'Enter correct email address!'}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -80,6 +106,9 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  onChange={(event) => validatePassword(event.target.value)}
+                  error={!isPasswordValid}
+                  helperText={isPasswordValid ? '' : 'Password should contain ...!'}
                 />
               </Grid>
               <Grid item xs={12}>
