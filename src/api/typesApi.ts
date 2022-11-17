@@ -9,3 +9,8 @@ export type INewUser = {
   login: string;
   password: string;
 };
+
+export type IAuthUser = {
+  login: string;
+  password: string;
+};

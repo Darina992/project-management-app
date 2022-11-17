@@ -8,85 +8,129 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Backdrop from '@mui/material/Backdrop';
+import Alert from '@mui/material/Alert';
+import Zoom from '@mui/material/Zoom';
+import CircularProgress from '@mui/material/CircularProgress';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { theme } from '../../theme/theme';
-import { ThemeProvider } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
+import { store, RootState } from '../../store/index';
+import { UserState } from '../../store/userReducer';
+import { signInUser, resetAuth } from '../../store/userReducer';
+import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { SignInFormData } from '../../types/userTypes';
 
 //const theme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const state: UserState = useSelector((state: RootState) => state.user);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignInFormData>();
+
+  //const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const onSubmit: SubmitHandler<SignInFormData> = (data) => {
+    console.log(data, state.isReg);
+    store.dispatch(signInUser(data));
+    //navigate('/main');
   };
 
+  const onErrors: SubmitErrorHandler<SignInFormData> = (errors) => console.error(errors);
+
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs" sx={{ marginTop: 15 }}>
-        <CssBaseline />
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
         <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
+          component="form"
+          onSubmit={handleSubmit(onSubmit, onErrors)}
+          onChange={() => dispatch(resetAuth())}
+          noValidate
+          sx={{ mt: 1 }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-              Sign In
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="signUp" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="login"
+            label="Login"
+            autoComplete="login"
+            autoFocus
+            {...register('login', { required: true })}
+            error={errors.login && true}
+            helperText={errors.login && 'Please,enter your login!'}
+          />
+          {state.isAuth && (
+            <Zoom in={true} style={{ transition: '3s' }}>
+              {<Alert severity="error">User not registered or password not correct!</Alert>}
+            </Zoom>
+          )}
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            {...register('password', {
+              required: true,
+              pattern: /(?=.*[0-9])[0-9a-zA-Z!@#$%^&*]{5,}/g,
+            })}
+            ///(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}/g
+            error={errors.password && true}
+            helperText={
+              errors.password && 'Please,create a password(letters,numbers,min length is 5)!'
+            }
+          />
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
+          />
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+            Sign In
+          </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link href="#" variant="body2">
+                Forgot password?
+              </Link>
             </Grid>
-          </Box>
+            <Grid item>
+              <Link href="signUp" variant="body2">
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
+          {state.isLoading && (
+            <Backdrop
+              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={state.isLoading}
+            >
+              <CircularProgress color="primary" />
+            </Backdrop>
+          )}
         </Box>
-      </Container>
-    </ThemeProvider>
+      </Box>
+    </Container>
   );
 }

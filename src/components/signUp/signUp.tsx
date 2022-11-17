@@ -7,6 +7,8 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
+import Zoom from '@mui/material/Zoom';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -18,12 +20,7 @@ import { UserState } from '../../store/userReducer';
 import { createNewUser, resetReg } from '../../store/userReducer';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-
-type SignUpFormData = {
-  name: string;
-  login: string;
-  password: string;
-};
+import { SignUpFormData } from '../../types/userTypes';
 
 export default function SignUp() {
   const state: UserState = useSelector((state: RootState) => state.user);
@@ -90,12 +87,13 @@ export default function SignUp() {
                 autoComplete="email"
                 {...register('login', { required: true })}
                 error={state.isReg ? true : errors.login && true}
-                helperText={
-                  state.isReg
-                    ? 'Choose another login or sign in'
-                    : errors.name && 'Please,enter your login!'
-                }
+                helperText={errors.login && 'Please,enter your login!'}
               />
+              {state.isReg && (
+                <Zoom in={true} style={{ transition: '3s' }}>
+                  {<Alert severity="error">User not registered or password not correct!</Alert>}
+                </Zoom>
+              )}
             </Grid>
             <Grid item xs={12}>
               <TextField
