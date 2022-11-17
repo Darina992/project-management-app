@@ -19,6 +19,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { AppDispatch, RootState } from 'store';
 import { setLang, setTranslate } from 'store/langReducer';
+import { ProfilePage } from 'pages/profile/Profile';
 
 export const Header = () => {
   const isAuth = true;
@@ -79,16 +80,34 @@ export const Header = () => {
               </ButtonGroup>
             ) : (
               <Box sx={{ display: 'flex', gap: 3 }}>
-                <Button variant="contained" href="/main" size="small">
+                <Button component={NavLink} to="/main" variant="contained" size="small">
                   {translate.buttonMainPage}
                 </Button>
-                <Button variant="text" href="/profile" size="small" startIcon={<EditIcon />}>
+                <Button
+                  variant="text"
+                  component={NavLink}
+                  to="/profile"
+                  size="small"
+                  startIcon={<EditIcon />}
+                >
                   {translate.buttonEditProfile}
                 </Button>
-                <Button variant="text" href="/main" size="small" startIcon={<AddIcon />}>
+                <Button
+                  variant="text"
+                  size="small"
+                  component={NavLink}
+                  to="/main"
+                  startIcon={<AddIcon />}
+                >
                   {translate.buttonNewBoard}
                 </Button>
-                <Button variant="text" href="/" size="small" startIcon={<LogoutIcon />}>
+                <Button
+                  variant="text"
+                  size="small"
+                  component={NavLink}
+                  to="/"
+                  startIcon={<LogoutIcon />}
+                >
                   {translate.signOut}
                 </Button>
               </Box>
