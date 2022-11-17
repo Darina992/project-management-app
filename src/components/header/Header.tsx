@@ -13,7 +13,7 @@ import {
   TextareaAutosize,
 } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Navigate, NavLink, useNavigate } from 'react-router-dom';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import translate from '../../service/translate';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -28,7 +28,9 @@ export const Header = () => {
   const [anchorLang, setAnchorLang] = useState<null | HTMLElement>(null);
   const [descriptionBoard, setDescriptionBoard] = useState('');
   const [nameBoard, setNameBoard] = useState('');
+  const [disabledBtnModal, setDisabledBtnModal] = useState(true);
   const [openModal, setOpenModal] = useState(false);
+  const navigate = useNavigate();
 
   const handleClose = () => setOpenModal(false);
   const open = Boolean(anchorLang);
@@ -42,7 +44,12 @@ export const Header = () => {
     };
     // setDoardData([...boardData, data]);
     setOpenModal(false);
+    navigate('/main');
   };
+
+  useEffect(() => {
+    nameBoard.length > 0 ? setDisabledBtnModal(false) : setDisabledBtnModal(true);
+  }, [nameBoard]);
 
   const openMenuLang = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorLang(event.currentTarget);
@@ -94,7 +101,16 @@ export const Header = () => {
               placeholder={lang.boardDescription}
               onChange={(e) => setDescriptionBoard(e.target.value)}
             />
-            <Button className="board__add-btn" variant="outlined" onClick={() => createNewBoard()}>
+            <Button
+              type="submit"
+              disabled={disabledBtnModal}
+              className="board__add-btn"
+              variant="outlined"
+              onClick={() => {
+                createNewBoard();
+                <Navigate to="/main" replace={false} />;
+              }}
+            >
               {lang.boardCreate}
             </Button>
           </Box>

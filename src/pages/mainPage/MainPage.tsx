@@ -26,21 +26,6 @@ interface DateData {
 
 export const MainPage: FC = () => {
   const [boardData, setDoardData] = useState<DateData[]>(FakeData);
-  const [open, setOpen] = useState(false);
-  const [descriptionBoard, setDescriptionBoard] = useState('');
-  const [nameBoard, setNameBoard] = useState('');
-  const handleClose = () => setOpen(false);
-
-  const createNewBoard = () => {
-    const data = {
-      nameBoard: nameBoard,
-      descriptionBoard: descriptionBoard,
-      nameUser: `${nameBoard}+NN`,
-      idUser: `${nameBoard}${descriptionBoard}`,
-    };
-    setDoardData([...boardData, data]);
-    setOpen(false);
-  };
 
   const handleSearch = (text: string) => {
     const data = FakeData.filter((el) => el.nameBoard.indexOf(text) > -1);
@@ -53,30 +38,6 @@ export const MainPage: FC = () => {
 
   return (
     <Box>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box className="modal" component="form">
-          <TextField
-            id="standard-basic"
-            label={lang.en.boardSearchInput}
-            variant="standard"
-            onChange={(e) => setNameBoard(e.target.value)}
-          />
-          <TextareaAutosize
-            aria-label="minimum height"
-            minRows={7}
-            placeholder={lang.en.boardDescription}
-            onChange={(e) => setDescriptionBoard(e.target.value)}
-          />
-          <Button className="board__add-btn" variant="outlined" onClick={() => createNewBoard()}>
-            {lang.en.boardCreate}
-          </Button>
-        </Box>
-      </Modal>
       <Typography gutterBottom variant="h4" component="div">
         {lang.en.boardTitle}
       </Typography>
@@ -94,16 +55,6 @@ export const MainPage: FC = () => {
               ),
             }}
           />
-        </Grid>
-        <Grid item xs={12} sm={4} md={3} key={'w2'}>
-          <Button
-            className="board__add-btn"
-            variant="outlined"
-            startIcon={<AddCircleRoundedIcon color="success" />}
-            onClick={() => setOpen(true)}
-          >
-            {lang.en.boardCreate}
-          </Button>
         </Grid>
       </Grid>
       <Grid container spacing={4}>
