@@ -1,49 +1,51 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../api/api';
 import { IUser, INewUser } from '../api/typesApi';
+import { useNavigate } from 'react-router-dom';
 
 export const initialUserState: UserState = {
   id: '',
   name: '',
-  login: '',
-  password: '',
+  isReg: false,
+  isLoading: false,
 };
 
 export interface UserState {
   id: string;
   name: string;
-  login: string;
-  password: string;
+  isReg: boolean;
+  isLoading: boolean;
 }
 
 export const createNewUser = createAsyncThunk('main/createNewUser', async (options: INewUser) => {
   const data = await api.createNewUser(options.name, options.login, options.password);
-  return data as IUser;
+  return data;
 });
 
 export const userSlice = createSlice({
   name: 'User',
   initialState: initialUserState,
   reducers: {
-    saveUserInfo: (state: UserState, action: PayloadAction<INewUser>) => {
-      state.name = action.payload.name;
-      state.login = action.payload.login;
-      state.password = action.payload.password;
+    resetReg: (state: UserState) => {
+      state.isReg = false;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(createNewUser.pending, (state: UserState) => {
-      //loading
+      state.isLoading = true;
     }),
       builder.addCase(createNewUser.fulfilled, (state, action) => {
-        state.id = action.payload.id;
-        state.name = action.payload.name;
-        state.login = action.payload.login;
-        console.log(state.id);
+        if (action.payload === 409) {
+          state.isReg = true;
+        } else {
+          state.id = (action.payload as IUser).id;
+          state.name = (action.payload as IUser).name;
+        }
+        state.isLoading = false;
       });
   },
 });
 
-export const { saveUserInfo } = userSlice.actions;
+export const { resetReg } = userSlice.actions;
 
 export default userSlice.reducer;

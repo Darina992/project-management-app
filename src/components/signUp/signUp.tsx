@@ -1,137 +1,148 @@
 import * as React from 'react';
-import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { theme } from '../../theme/theme';
-import { ThemeProvider } from '@mui/material';
-import { INewUser } from '../../api/typesApi';
-import { validateLogins, validatePasswords } from '../../utils/utils';
-//import { useSelector } from 'react-redux';
-import { RootState, store } from '../../store/index';
-import { UserState, createNewUser } from '../../store/reducer';
+import { useSelector, useDispatch } from 'react-redux';
+import { store, RootState } from '../../store/index';
+import { UserState } from '../../store/userReducer';
+import { createNewUser, resetReg } from '../../store/userReducer';
+import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+
+type SignUpFormData = {
+  name: string;
+  login: string;
+  password: string;
+};
 
 export default function SignUp() {
-  //const state: UserState = useSelector((state: RootState) => state.user);
-  const [isNameValid, setIsNameValid] = useState(true);
-  const [isLoginValid, setIsLoginValid] = useState(true);
-  const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const state: UserState = useSelector((state: RootState) => state.user);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpFormData>();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const userInfo: INewUser = {
-      name: data.get('name') as string,
-      login: data.get('login') as string,
-      password: data.get('password') as string,
-    };
-    if (isNameValid && isLoginValid && isPasswordValid) {
-      store.dispatch(createNewUser(userInfo));
-    }
+  //const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const onSubmit: SubmitHandler<SignUpFormData> = (data) => {
+    console.log(data);
+    store.dispatch(createNewUser(data));
+    //navigate('/main');
   };
 
-  const validateName = (name: string) => {
-    name ? setIsNameValid(true) : setIsNameValid(false);
-  };
-
-  const validateLogin = (login: string) => {
-    validateLogins(login) ? setIsLoginValid(true) : setIsLoginValid(false);
-  };
-
-  const validatePassword = (password: string) => {
-    validatePasswords(password) ? setIsPasswordValid(true) : setIsPasswordValid(false);
-  };
+  const onErrors: SubmitErrorHandler<SignUpFormData> = (errors) => console.error(errors);
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign up
+        </Typography>
         <Box
-          sx={{
-            marginTop: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
+          component="form"
+          noValidate
+          onSubmit={handleSubmit(onSubmit, onErrors)}
+          onChange={() => dispatch(resetReg())}
+          sx={{ mt: 3 }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="given-name"
-                  name="name"
-                  required
-                  fullWidth
-                  id="name"
-                  label="Name"
-                  autoFocus
-                  onChange={(event) => validateName(event.target.value)}
-                  error={!isNameValid}
-                  helperText={isNameValid ? '' : 'Empty!'}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="login"
-                  label="Login"
-                  name="login"
-                  autoComplete="email"
-                  onChange={(event) => validateLogin(event.target.value)}
-                  error={!isLoginValid}
-                  helperText={isLoginValid ? '' : 'Empty!'}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  onChange={(event) => validatePassword(event.target.value)}
-                  error={!isPasswordValid}
-                  helperText={isPasswordValid ? '' : 'Password should contain ...!'}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                autoComplete="given-name"
+                required
+                fullWidth
+                id="name"
+                label="Name"
+                autoFocus
+                {...register('name', { required: true })}
+                error={errors.name && true}
+                helperText={errors.name && 'Please,enter name!'}
+              />
             </Grid>
-            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-              Sign Up
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="signIn" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="login"
+                label="Login"
+                autoComplete="email"
+                {...register('login', { required: true })}
+                error={state.isReg ? true : errors.login && true}
+                helperText={
+                  state.isReg
+                    ? 'Choose another login or sign in'
+                    : errors.name && 'Please,enter your login!'
+                }
+              />
             </Grid>
-          </Box>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="new-password"
+                {...register('password', {
+                  required: true,
+                  pattern: /(?=.*[0-9])[0-9a-zA-Z!@#$%^&*]{5,}/g,
+                })}
+                ///(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}/g
+                error={errors.password && true}
+                helperText={
+                  errors.password && 'Please,create a password(letters,numbers,min length is 5)!'
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                label="I want to receive inspiration, marketing promotions and updates via email."
+              />
+            </Grid>
+          </Grid>
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+            Sign Up
+          </Button>
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link href="signIn" variant="body2">
+                Already have an account? Sign in
+              </Link>
+            </Grid>
+          </Grid>
         </Box>
-      </Container>
-    </ThemeProvider>
+      </Box>
+      {state.isLoading && (
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={state.isLoading}
+        >
+          <CircularProgress color="primary" />
+        </Backdrop>
+      )}
+    </Container>
   );
 }
