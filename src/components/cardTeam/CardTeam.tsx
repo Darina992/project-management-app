@@ -15,16 +15,16 @@ export const CardTeam: React.FC<{
 }> = ({ children, avatar, title, hrefGitHub }) => {
   return (
     <Card
-      sx={{ maxWidth: 300, backgroundColor: 'rgb(172, 85, 112)', color: '#fff', p: 1 }}
+      sx={{ width: 320, backgroundColor: 'rgb(172, 85, 112)', color: '#fff', p: 2 }}
       color="text.primary"
     >
       <CardMedia
         component="img"
         image={avatar}
         alt={title}
-        sx={{ borderRadius: '100%', border: '2px solid #fff' }}
+        sx={{ borderRadius: '100%', border: '2px solid #fff', maxWidth: 300 }}
       />
-      <CardContent>
+      <CardContent sx={{ pl: 0, pr: 0 }}>
         <Box sx={{ display: 'flex' }}>
           <Typography variant="h5" component="div">
             {title}
