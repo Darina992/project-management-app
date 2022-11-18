@@ -19,7 +19,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { AppDispatch, RootState } from 'store';
 import { setLang, setTranslate } from 'store/langReducer';
-import { ProfilePage } from 'pages/profile/Profile';
 
 export const Header = () => {
   const isAuth = true;
@@ -49,6 +48,10 @@ export const Header = () => {
   useEffect(() => {
     window.addEventListener('scroll', onScroll);
   }, [onScroll]);
+  useEffect(() => {
+    localStorage.setItem('lang', lang as string);
+    dispatch(setTranslate(lang as string));
+  }, [lang, dispatch]);
 
   return (
     <AppBar

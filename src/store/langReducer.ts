@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import translate from '../service/translate';
 
 export const initialLangState: ILangState = {
-  lang: 'EN',
+  lang: localStorage.getItem('lang') ? localStorage.getItem('lang') : 'EN',
   translate: translate.en,
 };
 
@@ -24,7 +24,7 @@ interface ILang {
   signOut: string;
 }
 export interface ILangState {
-  lang: string;
+  lang: string | null;
   translate: ILang;
 }
 
