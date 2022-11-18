@@ -2,8 +2,6 @@ import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -22,6 +20,7 @@ import { SignUpFormData } from '../../types/userTypes';
 
 export default function SignUp() {
   const state: UserState = useSelector((state: RootState) => state.user);
+  const { translate } = useSelector((state: RootState) => state.langReducer);
   const {
     register,
     handleSubmit,
@@ -50,7 +49,7 @@ export default function SignUp() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          {translate.signUp}
         </Typography>
         <Box
           component="form"
@@ -66,11 +65,11 @@ export default function SignUp() {
                 required
                 fullWidth
                 id="name"
-                label="Name"
+                label={translate.name}
                 autoFocus
                 {...register('name', { required: true })}
                 error={errors.name && true}
-                helperText={errors.name && 'Please,enter name!'}
+                helperText={errors.name && translate.nameError}
               />
             </Grid>
             <Grid item xs={12}>
@@ -78,15 +77,15 @@ export default function SignUp() {
                 required
                 fullWidth
                 id="login"
-                label="Login"
+                label={translate.login}
                 autoComplete="email"
                 {...register('login', { required: true })}
                 error={state.isReg ? true : errors.login && true}
-                helperText={errors.login && 'Please,enter your login!'}
+                helperText={errors.login && translate.loginError}
               />
               {state.isReg && (
                 <Zoom in={true} style={{ transition: '3s' }}>
-                  {<Alert severity="error">User is already registered, go to sign in!</Alert>}
+                  {<Alert severity="error"></Alert>}
                 </Zoom>
               )}
             </Grid>
@@ -94,7 +93,7 @@ export default function SignUp() {
               <TextField
                 required
                 fullWidth
-                label="Password"
+                label={translate.password}
                 type="password"
                 id="password"
                 autoComplete="new-password"
@@ -103,20 +102,18 @@ export default function SignUp() {
                   pattern: /(?=.*[0-9])[0-9a-zA-Z!@#$%^&*]{5,}/g,
                 })}
                 error={errors.password && true}
-                helperText={
-                  errors.password && 'Please,create a password(letters,numbers,min length is 5)!'
-                }
+                helperText={errors.password && translate.passwordError}
               />
             </Grid>
           </Grid>
           {state.isLoading && <LinearProgress color="primary" sx={{ marginTop: '10px' }} />}
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Sign Up
+            {translate.signUp}
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link href="signIn" variant="body2">
-                Already have an account? Sign in
+                {translate.signUpText}
               </Link>
             </Grid>
           </Grid>

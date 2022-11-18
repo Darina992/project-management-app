@@ -5,7 +5,7 @@ import langReducer from './langReducer';
 export const store = configureStore({
   reducer: {
     user: userReducer,
-    lang: langReducer,
+    langReducer: langReducer,
   },
 });
 

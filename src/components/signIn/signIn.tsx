@@ -21,6 +21,7 @@ import { SignInFormData } from '../../types/userTypes';
 
 export default function SignIn() {
   const state: UserState = useSelector((state: RootState) => state.user);
+  const { translate } = useSelector((state: RootState) => state.langReducer);
   const {
     register,
     handleSubmit,
@@ -56,7 +57,7 @@ export default function SignIn() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          {translate.signIn}
         </Typography>
         <Box
           component="form"
@@ -70,23 +71,23 @@ export default function SignIn() {
             required
             fullWidth
             id="login"
-            label="Login"
+            label={translate.login}
             autoComplete="login"
             autoFocus
             {...register('login', { required: true })}
             error={errors.login && true}
-            helperText={errors.login && 'Please,enter your login!'}
+            helperText={errors.login && translate.loginError}
           />
           {state.showAlert && (
             <Zoom in={true} style={{ transition: '3s' }}>
-              {<Alert severity="error">User is not registered or password is not correct!</Alert>}
+              {<Alert severity="error">{translate.signInAlert}</Alert>}
             </Zoom>
           )}
           <TextField
             margin="normal"
             required
             fullWidth
-            label="Password"
+            label={translate.password}
             type="password"
             id="password"
             autoComplete="current-password"
@@ -95,23 +96,21 @@ export default function SignIn() {
               pattern: /(?=.*[0-9])[0-9a-zA-Z!@#$%^&*]{5,}/g,
             })}
             error={errors.password && true}
-            helperText={
-              errors.password && 'Please,create a password(letters,numbers,min length is 5)!'
-            }
+            helperText={errors.password && translate.passwordError}
           />
           {state.isLoading && <LinearProgress color="primary" />}
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Sign In
+            {translate.signIn}
           </Button>
           <Grid container>
             <Grid item xs>
               <Link href="profile" variant="body2">
-                Forgot password?
+                {translate.signInForgetPassword}
               </Link>
             </Grid>
             <Grid item>
               <Link href="signUp" variant="body2">
-                {"Don't have an account? Sign Up"}
+                {translate.signInText}
               </Link>
             </Grid>
           </Grid>
