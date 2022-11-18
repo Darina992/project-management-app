@@ -18,6 +18,9 @@ const i18Obj = {
     buttonEditProfile: 'Edit profile',
     buttonNewBoard: 'new board',
     signOut: 'Sign Out',
+    confirmationToDelete: 'Are you sure you want to delete?',
+    ok: 'Ok',
+    close: 'Close',
   },
   ru: {
     signIn: 'Вход',
@@ -38,6 +41,9 @@ const i18Obj = {
     buttonEditProfile: 'Профиль',
     buttonNewBoard: 'Новая доска',
     signOut: 'Выйти',
+    confirmationToDelete: 'Вы действительно хотите удалить?',
+    ok: 'Да',
+    close: 'Закрыть',
   },
 };
 export default i18Obj;

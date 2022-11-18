@@ -1,15 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import {
-  Box,
-  Button,
-  Grid,
-  Typography,
-  InputAdornment,
-  TextField,
-  Modal,
-  TextareaAutosize,
-} from '@material-ui/core';
-import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
+import { Box, Grid, Typography, InputAdornment, TextField } from '@material-ui/core';
 import SearchIcon from '@mui/icons-material/Search';
 import lang from '../../service/translate';
 import { BoardRender } from './BoardRender';

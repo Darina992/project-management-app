@@ -1,17 +1,22 @@
 import {
+  Button,
   Card,
   CardActionArea,
   CardActions,
   CardContent,
   CardMedia,
+  Dialog,
+  DialogActions,
+  DialogTitle,
   Grid,
   Typography,
 } from '@mui/material';
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ModeRoundedIcon from '@mui/icons-material/ModeRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { pink } from '@mui/material/colors';
+import i18Obj from '../../service/translate';
 
 interface DateData {
   nameBoard: string;
@@ -22,6 +27,9 @@ interface DateData {
 
 export const BoardRender: FC<DateData> = (date: DateData) => {
   const { nameBoard, descriptionBoard, idUser } = date;
+  const [open, setOpen] = useState(false);
+  const [idBoard, setIdBoard] = useState<string>('');
+  // const [delete, setDelete] = useState(false);
 
   const handleSubmit = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const clases = e.currentTarget.classList;
@@ -30,11 +38,25 @@ export const BoardRender: FC<DateData> = (date: DateData) => {
     console.log(action, idBoard);
   };
 
+  const handleClickOpen = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const clases = e.currentTarget.classList;
+    setIdBoard(clases[1]);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleDelete = () => {
+    console.log(idBoard);
+    setOpen(false);
+  };
+
   return (
     <Grid item xs={12} sm={4} md={3} key={'w'}>
       <Card>
         <CardActionArea>
-          <Link className="board__link" to={'/'}>
+          <Link className="board__link" to={'/board'}>
             <CardMedia
               component="img"
               height="100"
@@ -54,9 +76,28 @@ export const BoardRender: FC<DateData> = (date: DateData) => {
             <div className={`button-icon ${idUser} chahge`} onClick={(e) => handleSubmit(e)}>
               <ModeRoundedIcon id="44" color="success" />
             </div>
-            <div className={`button-icon ${idUser} delete`} onClick={(e) => handleSubmit(e)}>
+            <div className={`button-icon ${idUser} delete`} onClick={(e) => handleClickOpen(e)}>
               <DeleteRoundedIcon id="55" sx={{ color: pink[500] }} />
             </div>
+            <Dialog
+              open={open}
+              keepMounted
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-slide-title"
+              aria-describedby="alert-dialog-slide-description"
+            >
+              <DialogTitle id="alert-dialog-slide-title">
+                {i18Obj.en.confirmationToDelete}
+              </DialogTitle>
+              <DialogActions>
+                <Button onClick={handleDelete} color="primary">
+                  {i18Obj.en.ok}
+                </Button>
+                <Button onClick={handleClose} color="primary">
+                  {i18Obj.en.close}
+                </Button>
+              </DialogActions>
+            </Dialog>
           </CardActions>
         </CardActionArea>
       </Card>
