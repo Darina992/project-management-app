@@ -19,7 +19,6 @@ import { store, RootState } from '../../store/index';
 import { UserState } from '../../store/userReducer';
 import { createNewUser, resetReg } from '../../store/userReducer';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { SignUpFormData } from '../../types/userTypes';
 
 export default function SignUp() {
@@ -30,13 +29,10 @@ export default function SignUp() {
     formState: { errors },
   } = useForm<SignUpFormData>();
 
-  //const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const onSubmit: SubmitHandler<SignUpFormData> = (data) => {
-    console.log(data);
     store.dispatch(createNewUser(data));
-    //navigate('/main');
   };
 
   const onErrors: SubmitErrorHandler<SignUpFormData> = (errors) => console.error(errors);
@@ -91,7 +87,7 @@ export default function SignUp() {
               />
               {state.isReg && (
                 <Zoom in={true} style={{ transition: '3s' }}>
-                  {<Alert severity="error">User not registered or password not correct!</Alert>}
+                  {<Alert severity="error">User is already registered, go to sign in!</Alert>}
                 </Zoom>
               )}
             </Grid>

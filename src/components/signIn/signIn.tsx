@@ -23,8 +23,6 @@ import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { SignInFormData } from '../../types/userTypes';
 
-//const theme = createTheme();
-
 export default function SignIn() {
   const state: UserState = useSelector((state: RootState) => state.user);
   const {
@@ -33,16 +31,20 @@ export default function SignIn() {
     formState: { errors },
   } = useForm<SignInFormData>();
 
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const onSubmit: SubmitHandler<SignInFormData> = (data) => {
-    console.log(data, state.isReg);
     store.dispatch(signInUser(data));
-    //navigate('/main');
   };
 
   const onErrors: SubmitErrorHandler<SignInFormData> = (errors) => console.error(errors);
+
+  React.useEffect(() => {
+    if (state.isAuth) {
+      navigate('/main');
+    }
+  }, [state.isAuth]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -79,7 +81,7 @@ export default function SignIn() {
             error={errors.login && true}
             helperText={errors.login && 'Please,enter your login!'}
           />
-          {state.isAuth && (
+          {state.showAlert && (
             <Zoom in={true} style={{ transition: '3s' }}>
               {<Alert severity="error">User not registered or password not correct!</Alert>}
             </Zoom>
