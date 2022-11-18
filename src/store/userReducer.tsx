@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../api/api';
-import { IUser, INewUser, IAuthUser } from '../api/typesApi';
+import { IUser, INewUser, IAuthUser, IToken } from '../api/typesApi';
 import { setToLocalStorage, getFromLocalStorage } from '../utils/utils';
 
 export const initialUserState: UserState = {
@@ -69,6 +69,7 @@ export const userSlice = createSlice({
         } else {
           state.isAuth = true;
           console.log(action.payload);
+          setToLocalStorage('$token', (action.payload as IToken).token);
         }
         state.isLoading = false;
       });

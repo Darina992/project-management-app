@@ -9,8 +9,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import Zoom from '@mui/material/Zoom';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
+import LinearProgress from '@mui/material/LinearProgress';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -103,20 +102,14 @@ export default function SignUp() {
                   required: true,
                   pattern: /(?=.*[0-9])[0-9a-zA-Z!@#$%^&*]{5,}/g,
                 })}
-                ///(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}/g
                 error={errors.password && true}
                 helperText={
                   errors.password && 'Please,create a password(letters,numbers,min length is 5)!'
                 }
               />
             </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid>
           </Grid>
+          {state.isLoading && <LinearProgress color="primary" sx={{ marginTop: '10px' }} />}
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign Up
           </Button>
@@ -129,14 +122,6 @@ export default function SignUp() {
           </Grid>
         </Box>
       </Box>
-      {state.isLoading && (
-        <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={state.isLoading}
-        >
-          <CircularProgress color="primary" />
-        </Backdrop>
-      )}
     </Container>
   );
 }

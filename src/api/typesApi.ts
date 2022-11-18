@@ -14,3 +14,7 @@ export type IAuthUser = {
   login: string;
   password: string;
 };
+
+export type IToken = {
+  token: string;
+};

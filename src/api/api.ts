@@ -1,5 +1,6 @@
 import { apiPath, usersEndpoint } from './apiPath';
-import { IUser, INewUser } from './typesApi';
+import { IUser, INewUser, IToken } from './typesApi';
+import { getFromLocalStorage } from '../utils/utils';
 
 export const api = {
   async createNewUser(name: string, login: string, password: string): Promise<IUser | number> {
@@ -27,11 +28,11 @@ export const api = {
         return await Promise.reject(new Error(response.statusText));
       }
     } catch (error) {
-      throw new Error('length must be at least 8 characters long');
+      throw new Error('Registration failed');
     }
   },
 
-  async signInUser(login: string, password: string): Promise<IUser | number> {
+  async signInUser(login: string, password: string): Promise<IToken | number> {
     try {
       const response = await fetch('http://134.209.192.22:4000/signin', {
         method: 'POST',
@@ -46,7 +47,6 @@ export const api = {
       });
       if (response.ok) {
         const data = await response.json();
-        //window.location.href = '/main';
         return data;
       } else if (response.status === 403) {
         console.log('User not registered');
@@ -55,7 +55,7 @@ export const api = {
         return await Promise.reject(new Error(response.statusText));
       }
     } catch (error) {
-      throw new Error('length must be at least 8 characters long');
+      throw new Error('Authorization failed');
     }
   },
 };

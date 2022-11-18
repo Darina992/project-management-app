@@ -1,17 +1,13 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import Backdrop from '@mui/material/Backdrop';
 import Alert from '@mui/material/Alert';
 import Zoom from '@mui/material/Zoom';
-import CircularProgress from '@mui/material/CircularProgress';
+import LinearProgress from '@mui/material/LinearProgress';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -83,7 +79,7 @@ export default function SignIn() {
           />
           {state.showAlert && (
             <Zoom in={true} style={{ transition: '3s' }}>
-              {<Alert severity="error">User not registered or password not correct!</Alert>}
+              {<Alert severity="error">User is not registered or password is not correct!</Alert>}
             </Zoom>
           )}
           <TextField
@@ -98,22 +94,18 @@ export default function SignIn() {
               required: true,
               pattern: /(?=.*[0-9])[0-9a-zA-Z!@#$%^&*]{5,}/g,
             })}
-            ///(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}/g
             error={errors.password && true}
             helperText={
               errors.password && 'Please,create a password(letters,numbers,min length is 5)!'
             }
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
+          {state.isLoading && <LinearProgress color="primary" />}
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign In
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link href="profile" variant="body2">
                 Forgot password?
               </Link>
             </Grid>
@@ -123,14 +115,6 @@ export default function SignIn() {
               </Link>
             </Grid>
           </Grid>
-          {state.isLoading && (
-            <Backdrop
-              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-              open={state.isLoading}
-            >
-              <CircularProgress color="primary" />
-            </Backdrop>
-          )}
         </Box>
       </Box>
     </Container>
