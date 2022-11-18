@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../api/api';
 import { IUser, INewUser, IAuthUser } from '../api/typesApi';
-import { useNavigate } from 'react-router-dom';
+import { setToLocalStorage, getFromLocalStorage } from '../utils/utils';
 
 export const initialUserState: UserState = {
-  id: '',
+  id: getFromLocalStorage('$userId') as string,
   name: '',
   isReg: false,
   isAuth: false,
@@ -55,6 +55,7 @@ export const userSlice = createSlice({
         } else {
           state.id = (action.payload as IUser).id;
           state.name = (action.payload as IUser).name;
+          setToLocalStorage('$userId', state.id);
         }
         state.isLoading = false;
       });

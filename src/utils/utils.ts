@@ -1,8 +1,7 @@
-export function validateLogins(login: string) {
-  return login.length >= 2;
+export function setToLocalStorage(key: string, value: string) {
+  window.localStorage.setItem(key, value);
 }
 
-export function validatePasswords(password: string) {
-  //const re = /\S+@\S+\.\S+/  re.test(login);;
-  return true;
+export function getFromLocalStorage(key: string) {
+  return window.localStorage.getItem(key);
 }
