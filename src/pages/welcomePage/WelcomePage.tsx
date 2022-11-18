@@ -6,16 +6,21 @@ import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOu
 import avatarV from '../../assets/avatar-v.png';
 import avatarD from '../../assets/avatar-d.png';
 import avatarA from '../../assets/avatar-a.png';
-import lang from '../../service/translate';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
+import './WelcomePage.scss';
 
 export const WelcomePage = () => {
-  const listItem = (content: string) => {
+  const { translate } = useSelector((state: RootState) => state.langReducer);
+  const listItem = (content: string, key: number) => {
     return (
-      <ListItem>
-        <ListItemIcon>
+      <ListItem key={key} sx={{ p: 0 }}>
+        <ListItemIcon sx={{ pl: '7px', minWidth: '30px', pr: '10px' }}>
           <ExpandCircleDownOutlinedIcon sx={{ color: '#fff' }} fontSize="small" />
         </ListItemIcon>
-        <ListItemText>{content}</ListItemText>
+        <ListItemText disableTypography className="list-item-text">
+          {content}
+        </ListItemText>
       </ListItem>
     );
   };
@@ -30,9 +35,9 @@ export const WelcomePage = () => {
       >
         <Box sx={{ width: 0.4, mt: 10 }}>
           <Typography variant="h1" sx={{ fontSize: 54, fontWeight: 400 }}>
-            {lang.en.titleWelcome}
+            {translate.titleWelcome}
           </Typography>
-          <Typography sx={{ fontSize: 21, mt: 5 }}>{lang.en.descrWelcome}</Typography>
+          <Typography sx={{ fontSize: 21, mt: 5 }}>{translate.descrWelcome}</Typography>
         </Box>
         <Box
           sx={{
@@ -46,30 +51,29 @@ export const WelcomePage = () => {
       </Box>
       <Box component="section" pt={10} pb={10}>
         <Typography align="center" variant="h2" sx={{ fontSize: 46, mb: 10 }}>
-          {lang.en.titleTeam}
+          {translate.titleTeam}
         </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 5 }}>
           <CardTeam
             avatar={avatarD}
-            title={lang.en.nameD}
+            title={translate.nameD}
             hrefGitHub={'https://github.com/Darina992'}
           >
-            {listItem('Forms')}
+            {translate.teamContentD.map((item, id) => listItem(item, id))}
           </CardTeam>
           <CardTeam
             avatar={avatarV}
-            title={lang.en.nameV}
+            title={translate.nameV}
             hrefGitHub={'https://github.com/vpuzyrevich'}
           >
-            {listItem('Welcome Page')}
-            {listItem('Welcome Page')}
+            {translate.teamContentV.map((item, id) => listItem(item, id))}
           </CardTeam>
           <CardTeam
             avatar={avatarA}
-            title={lang.en.nameA}
+            title={translate.nameA}
             hrefGitHub={'https://github.com/alimbaeva'}
           >
-            {listItem('Main Page')}
+            {translate.teamContentA.map((item, id) => listItem(item, id))}
           </CardTeam>
         </Box>
       </Box>

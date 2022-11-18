@@ -12,16 +12,18 @@ import {
 import React, { useCallback, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import translate from '../../service/translate';
+import { useDispatch, useSelector } from 'react-redux';
 import LanguageIcon from '@mui/icons-material/Language';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { AppDispatch, RootState } from 'store';
+import { setLang, setTranslate } from 'store/langReducer';
 
 export const Header = () => {
   const isAuth = true;
-  const [langState, setLangState] = useState('EN');
-  const lang = langState === 'EN' ? translate.en : translate.ru;
+  const { lang, translate } = useSelector((state: RootState) => state.langReducer);
+  const dispatch = useDispatch<AppDispatch>();
   const [anchorLang, setAnchorLang] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorLang);
 
@@ -29,7 +31,8 @@ export const Header = () => {
     setAnchorLang(event.currentTarget);
   };
   const closeMenuLang = (event: React.MouseEvent<HTMLElement>) => {
-    setLangState((event.target as HTMLElement).textContent as string);
+    dispatch(setTranslate((event.target as HTMLElement).textContent as string));
+    dispatch(setLang((event.target as HTMLElement).textContent as string));
     setAnchorLang(null);
   };
 
@@ -45,6 +48,10 @@ export const Header = () => {
   useEffect(() => {
     window.addEventListener('scroll', onScroll);
   }, [onScroll]);
+  useEffect(() => {
+    localStorage.setItem('lang', lang as string);
+    dispatch(setTranslate(lang as string));
+  }, [lang, dispatch]);
 
   return (
     <AppBar
@@ -68,25 +75,43 @@ export const Header = () => {
                 size="small"
               >
                 <Button component={NavLink} to="/signIn">
-                  {lang.signIn}
+                  {translate.signIn}
                 </Button>
                 <Button component={NavLink} to="/signUp">
-                  {lang.signUp}
+                  {translate.signUp}
                 </Button>
               </ButtonGroup>
             ) : (
               <Box sx={{ display: 'flex', gap: 3 }}>
-                <Button variant="contained" href="/main" size="small">
-                  {lang.buttonMainPage}
+                <Button component={NavLink} to="/main" variant="contained" size="small">
+                  {translate.buttonMainPage}
                 </Button>
-                <Button variant="text" href="/profile" size="small" startIcon={<EditIcon />}>
-                  {lang.buttonEditProfile}
+                <Button
+                  variant="text"
+                  component={NavLink}
+                  to="/profile"
+                  size="small"
+                  startIcon={<EditIcon />}
+                >
+                  {translate.buttonEditProfile}
                 </Button>
-                <Button variant="text" href="/main" size="small" startIcon={<AddIcon />}>
-                  {lang.buttonNewBoard}
+                <Button
+                  variant="text"
+                  size="small"
+                  component={NavLink}
+                  to="/main"
+                  startIcon={<AddIcon />}
+                >
+                  {translate.buttonNewBoard}
                 </Button>
-                <Button variant="text" href="/" size="small" startIcon={<LogoutIcon />}>
-                  {lang.signOut}
+                <Button
+                  variant="text"
+                  size="small"
+                  component={NavLink}
+                  to="/"
+                  startIcon={<LogoutIcon />}
+                >
+                  {translate.signOut}
                 </Button>
               </Box>
             )}
@@ -97,7 +122,7 @@ export const Header = () => {
               sx={{ ml: 2 }}
               onClick={openMenuLang}
             >
-              {langState}
+              {lang}
             </Button>
             <Menu open={open} anchorEl={anchorLang}>
               <MenuItem onClick={(e) => closeMenuLang(e)} sx={{ fontSize: '16px' }}>
