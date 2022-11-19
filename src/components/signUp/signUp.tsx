@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import Zoom from '@mui/material/Zoom';
+import Modal from '@mui/material/Modal';
 import LinearProgress from '@mui/material/LinearProgress';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
@@ -14,13 +15,16 @@ import Container from '@mui/material/Container';
 import { useSelector, useDispatch } from 'react-redux';
 import { store, RootState } from '../../store/index';
 import { UserState } from '../../store/userReducer';
-import { createNewUser, resetReg } from '../../store/userReducer';
+import { createNewUser, resetReg, signIn } from '../../store/userReducer';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { SignUpFormData } from '../../types/userTypes';
+import { useNavigate } from 'react-router-dom';
+import { styleModal } from './styles';
 
 export default function SignUp() {
   const state: UserState = useSelector((state: RootState) => state.user);
   const { translate } = useSelector((state: RootState) => state.langReducer);
+  const [successReg, setSuccessReg] = React.useState(false);
   const {
     register,
     handleSubmit,
@@ -28,12 +32,24 @@ export default function SignUp() {
   } = useForm<SignUpFormData>();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<SignUpFormData> = (data) => {
     store.dispatch(createNewUser(data));
   };
 
   const onErrors: SubmitErrorHandler<SignUpFormData> = (errors) => console.error(errors);
+
+  React.useEffect(() => {
+    if (state.successReg) {
+      setSuccessReg(true);
+      setTimeout(() => {
+        setSuccessReg(false);
+        dispatch(signIn());
+        navigate('/main');
+      }, 1500);
+    }
+  }, [state.successReg]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -85,7 +101,7 @@ export default function SignUp() {
               />
               {state.isReg && (
                 <Zoom in={true} style={{ transition: '3s' }}>
-                  {<Alert severity="error"></Alert>}
+                  <Alert severity="error">{translate.signUpAlert}</Alert>
                 </Zoom>
               )}
             </Grid>
@@ -119,6 +135,15 @@ export default function SignUp() {
           </Grid>
         </Box>
       </Box>
+      {successReg && (
+        <Modal open={true}>
+          <Box sx={styleModal}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              {translate.signUpSuccessReg}
+            </Typography>
+          </Box>
+        </Modal>
+      )}
     </Container>
   );
 }

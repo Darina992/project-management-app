@@ -19,10 +19,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { AppDispatch, RootState } from 'store';
 import { setLang, setTranslate } from 'store/langReducer';
+import { resetAuth } from 'store/userReducer';
 
 export const Header = () => {
-  const isAuth = true;
   const { lang, translate } = useSelector((state: RootState) => state.langReducer);
+  const { isAuth } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const [anchorLang, setAnchorLang] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorLang);
@@ -110,6 +111,7 @@ export const Header = () => {
                   component={NavLink}
                   to="/"
                   startIcon={<LogoutIcon />}
+                  onClick={() => dispatch(resetAuth())}
                 >
                   {translate.signOut}
                 </Button>
