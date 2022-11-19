@@ -17,16 +17,13 @@ import ModeRoundedIcon from '@mui/icons-material/ModeRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { pink } from '@mui/material/colors';
 import i18Obj from '../../service/translate';
+import { IBoard } from '../../types/boardsTypes';
 
-interface DateData {
-  nameBoard: string;
-  descriptionBoard: string;
-  nameUser: string;
-  idUser: string;
-}
-
-export const BoardRender: FC<DateData> = (date: DateData) => {
-  const { nameBoard, descriptionBoard, idUser } = date;
+export const BoardRender: FC<{ id: string; title: string; description: string }> = ({
+  id,
+  title,
+  description,
+}: IBoard) => {
   const [open, setOpen] = useState(false);
   const [idBoard, setIdBoard] = useState<string>('');
   // const [delete, setDelete] = useState(false);
@@ -65,18 +62,18 @@ export const BoardRender: FC<DateData> = (date: DateData) => {
             />
             <CardContent>
               <Typography noWrap gutterBottom variant="h5" component="div">
-                {nameBoard}
+                {title}
               </Typography>
               <Typography noWrap variant="body2">
-                {descriptionBoard}
+                {description}
               </Typography>
             </CardContent>
           </Link>
           <CardActions>
-            <div className={`button-icon ${idUser} chahge`} onClick={(e) => handleSubmit(e)}>
+            <div className={`button-icon ${id} chahge`} onClick={(e) => handleSubmit(e)}>
               <ModeRoundedIcon id="44" color="success" />
             </div>
-            <div className={`button-icon ${idUser} delete`} onClick={(e) => handleClickOpen(e)}>
+            <div className={`button-icon ${id} delete`} onClick={(e) => handleClickOpen(e)}>
               <DeleteRoundedIcon id="55" sx={{ color: pink[500] }} />
             </div>
             <Dialog

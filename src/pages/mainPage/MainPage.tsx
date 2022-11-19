@@ -1,38 +1,25 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { Box, Grid, Typography, InputAdornment, TextField } from '@material-ui/core';
 import SearchIcon from '@mui/icons-material/Search';
 import lang from '../../service/translate';
 import { BoardRender } from './BoardRender';
+import { useSelector } from 'react-redux';
+import { IBoard } from '../../types/boardsTypes';
+import { getBoardsState } from 'store/boardReduser';
 import './mainPage.scss';
-
-import FakeData from './FakeData';
-// import { getData, userTo, userIn, postBoards, getusers } from './Fapi';
-import { getData, userIn, postBoards, getusers } from './Fapi';
-
-interface DateData {
-  nameBoard: string;
-  descriptionBoard: string;
-  nameUser: string;
-  idUser: string;
-}
+import { userTo, userIn } from './Fapi';
 
 export const MainPage: FC = () => {
-  const [boardData, setDoardData] = useState<DateData[]>(FakeData);
+  const { boards, isCreated } = useSelector(getBoardsState);
+  console.log(boards, isCreated);
 
-  const handleSearch = (text: string) => {
-    const data = FakeData.filter((el) => el.nameBoard.indexOf(text) > -1);
-    setDoardData(data);
-  };
+  userTo();
+  userIn();
 
-  useEffect(() => {
-    setDoardData(boardData);
-  }, [boardData]);
-
-  // console.log(userTo());
-  console.log(userIn());
-  console.log(getusers());
-  console.log(postBoards());
-  console.log(getData());
+  // const handleSearch = (text: string) => {
+  //   const data = FakeData.filter((el) => el.nameBoard.indexOf(text) > -1);
+  //   setDoardData(data);
+  // };
 
   return (
     <Box>
@@ -44,7 +31,7 @@ export const MainPage: FC = () => {
           <TextField
             label={lang.en.boardSearchInput}
             variant="standard"
-            onChange={(e) => handleSearch(e.target.value)}
+            // onChange={(e) => handleSearch(e.target.value)}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -56,7 +43,7 @@ export const MainPage: FC = () => {
         </Grid>
       </Grid>
       <Grid container spacing={4}>
-        {boardData.map((el: DateData, id: number) => {
+        {boards.map((el: IBoard, id: number) => {
           return <BoardRender key={id} {...el} />;
         })}
       </Grid>

@@ -22,6 +22,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { AppDispatch, RootState } from 'store';
 import { setLang, setTranslate } from 'store/langReducer';
+import { createNewBoards, getAllBoard } from 'store/boardReduser';
 
 export const Header = () => {
   const isAuth = true;
@@ -39,15 +40,21 @@ export const Header = () => {
 
   const createNewBoard = () => {
     const data = {
-      nameBoard: nameBoard,
-      descriptionBoard: descriptionBoard,
-      nameUser: `${nameBoard}+NN`,
-      idUser: `${nameBoard}${descriptionBoard}`,
+      title: nameBoard,
+      description: descriptionBoard,
     };
-    // setDoardData([...boardData, data]);
+    dispatch(createNewBoards(data));
     setOpenModal(false);
     navigate('/main');
   };
+
+  const handleMainPage = () => {
+    dispatch(getAllBoard());
+  };
+
+  useEffect(() => {
+    dispatch(getAllBoard());
+  }, [openModal]);
 
   useEffect(() => {
     nameBoard.length > 0 ? setDisabledBtnModal(false) : setDisabledBtnModal(true);
@@ -142,7 +149,13 @@ export const Header = () => {
               </ButtonGroup>
             ) : (
               <Box sx={{ display: 'flex', gap: 3 }}>
-                <Button component={NavLink} to="/main" variant="contained" size="small">
+                <Button
+                  component={NavLink}
+                  to="/main"
+                  variant="contained"
+                  size="small"
+                  onClick={handleMainPage}
+                >
                   {translate.buttonMainPage}
                 </Button>
                 <Button
