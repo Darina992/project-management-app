@@ -6,6 +6,8 @@ import { BoardRender } from './BoardRender';
 import './mainPage.scss';
 
 import FakeData from './FakeData';
+// import { getData, userTo, userIn, postBoards, getusers } from './Fapi';
+import { getData, userIn, postBoards, getusers } from './Fapi';
 
 interface DateData {
   nameBoard: string;
@@ -25,6 +27,12 @@ export const MainPage: FC = () => {
   useEffect(() => {
     setDoardData(boardData);
   }, [boardData]);
+
+  // console.log(userTo());
+  console.log(userIn());
+  console.log(getusers());
+  console.log(postBoards());
+  console.log(getData());
 
   return (
     <Box>
