@@ -26,4 +26,5 @@ export interface ILang {
   signInForgetPassword: string;
   signInText: string;
   signUpSuccessReg: string;
+  backButton: string;
 }

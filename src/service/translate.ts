@@ -28,6 +28,7 @@ const i18Obj = {
     signInForgetPassword: 'Forgot password?',
     signInText: 'Do not have an account? Sign Up',
     signUpSuccessReg: 'You have successfully registered!',
+    backButton: 'Back',
   },
   ru: {
     signIn: 'Вход',
@@ -58,6 +59,7 @@ const i18Obj = {
     signInForgetPassword: 'Забыли пароль?',
     signInText: 'Нет учетной записи? Зарегистрируйтесь',
     signUpSuccessReg: 'Вы успешно зарегистрированы!',
+    backButton: 'Назад',
   },
 };
 export default i18Obj;

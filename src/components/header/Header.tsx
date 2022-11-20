@@ -100,7 +100,7 @@ export const Header = () => {
                   variant="text"
                   size="small"
                   component={NavLink}
-                  to="/main"
+                  to="/board"
                   startIcon={<AddIcon />}
                 >
                   {translate.buttonNewBoard}
