@@ -1,0 +1,185 @@
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
+import Zoom from '@mui/material/Zoom';
+import Modal from '@mui/material/Modal';
+import LinearProgress from '@mui/material/LinearProgress';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import BadgeTwoToneIcon from '@mui/icons-material/BadgeTwoTone';
+import { useSelector, useDispatch } from 'react-redux';
+import { store, RootState } from '../../store/index';
+import { UserState } from '../../store/userReducer';
+import {
+  editUser,
+  resetAuth,
+  deleteUser,
+  resetSuccessEdit,
+  resetSuccessDelete,
+} from '../../store/userReducer';
+import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
+import { SignUpFormData } from '../../types/userTypes';
+import { getFromLocalStorage } from '../../utils/utils';
+import { style } from './styles';
+import { useNavigate } from 'react-router-dom';
+
+export default function Profile() {
+  const state: UserState = useSelector((state: RootState) => state.user);
+  const { translate } = useSelector((state: RootState) => state.langReducer);
+  const [successDelete, setSuccessDelete] = React.useState(false);
+  const [successEdit, setSuccessEdit] = React.useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpFormData>();
+
+  const dispatch = useDispatch();
+
+  const onSubmit: SubmitHandler<SignUpFormData> = (data) => {
+    console.log(data);
+    store.dispatch(editUser(data));
+  };
+
+  const onErrors: SubmitErrorHandler<SignUpFormData> = (errors) => console.error(errors);
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    if (state.successDelete) {
+      setSuccessDelete(true);
+      dispatch(resetAuth());
+      setTimeout(() => {
+        setSuccessDelete(false);
+        dispatch(resetAuth());
+        dispatch(resetSuccessDelete());
+        navigate('/');
+      }, 2000);
+    }
+    if (state.successEdit) {
+      setSuccessEdit(true);
+      setTimeout(() => {
+        setSuccessEdit(false);
+        dispatch(resetSuccessEdit());
+      }, 1500);
+    }
+  }, [state.successDelete, state.successEdit]);
+
+  return (
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Typography component="h1" variant="h5">
+          <strong>{translate.profileEdit}</strong>
+        </Typography>
+        <Box sx={style.userInfoConteiner}>
+          <Avatar sx={{ m: 1, bgcolor: '#fed0d2', width: '100px', height: '100px' }}>
+            <BadgeTwoToneIcon sx={{ width: '70px', height: '70px', color: '#ac5570' }} />
+          </Avatar>
+          <Box sx={style.userInfo}>
+            <Box sx={{ m: 1 }}>
+              <strong>{translate.name}:</strong> {getFromLocalStorage('$name')}
+            </Box>
+            <Box sx={{ m: 1 }}>
+              <strong>{translate.login}:</strong> {getFromLocalStorage('$login')}
+            </Box>
+          </Box>
+        </Box>
+        <Box component="form" noValidate onSubmit={handleSubmit(onSubmit, onErrors)} sx={{ mt: 3 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                autoComplete="given-name"
+                required
+                fullWidth
+                id="name"
+                label={translate.name}
+                autoFocus
+                {...register('name', {
+                  required: true,
+                  value: getFromLocalStorage('$name') ? getFromLocalStorage('$name')! : '',
+                })}
+                error={errors.name && true}
+                helperText={errors.name && translate.nameError}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="login"
+                label={translate.login}
+                {...register('login', {
+                  required: true,
+                  value: getFromLocalStorage('$login') ? getFromLocalStorage('$login')! : '',
+                })}
+                error={state.isReg ? true : errors.login && true}
+                helperText={errors.login && translate.loginError}
+              />
+              {state.isReg && (
+                <Zoom in={true} style={{ transition: '3s' }}>
+                  <Alert severity="error">{translate.signUpAlert}</Alert>
+                </Zoom>
+              )}
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                label={translate.password}
+                type="password"
+                id="password"
+                autoComplete="new-password"
+                {...register('password', {
+                  required: true,
+                  pattern: /(?=.*[0-9])[0-9a-zA-Z!@#$%^&*]{5,}/g,
+                })}
+                error={errors.password && true}
+                helperText={errors.password && translate.passwordError}
+              />
+            </Grid>
+          </Grid>
+          {state.isLoading && <LinearProgress color="primary" sx={{ marginTop: '10px' }} />}
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+            {translate.profileEdit}
+          </Button>
+          <Button
+            fullWidth
+            variant="outlined"
+            sx={{ mt: 2, mb: 2 }}
+            onClick={() => store.dispatch(deleteUser())}
+          >
+            {translate.profileDelete}
+          </Button>
+        </Box>
+        {successDelete && (
+          <Modal open={true}>
+            <Box sx={style.modal}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                {translate.profileDeleteText}
+              </Typography>
+            </Box>
+          </Modal>
+        )}
+        {successEdit && (
+          <Modal open={true}>
+            <Box sx={style.modal}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                {translate.profileEditText}
+              </Typography>
+            </Box>
+          </Modal>
+        )}
+      </Box>
+    </Container>
+  );
+}

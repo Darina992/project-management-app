@@ -28,6 +28,10 @@ const i18Obj = {
     signInForgetPassword: 'Forgot password?',
     signInText: 'Do not have an account? Sign Up',
     signUpSuccessReg: 'You have successfully registered!',
+    profileEdit: 'Edit profile',
+    profileEditText: 'Data changed successfully!',
+    profileDelete: 'Delete profile',
+    profileDeleteText: 'Profile deleted successfully!',
   },
   ru: {
     signIn: 'Вход',
@@ -58,6 +62,10 @@ const i18Obj = {
     signInForgetPassword: 'Забыли пароль?',
     signInText: 'Нет учетной записи? Зарегистрируйтесь',
     signUpSuccessReg: 'Вы успешно зарегистрированы!',
+    profileEdit: 'Pедактировать профиль',
+    profileEditText: 'Данные успешно изменены!',
+    profileDelete: 'Удалить профиль',
+    profileDeleteText: 'Профиль успешно удален!',
   },
 };
 export default i18Obj;
