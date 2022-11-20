@@ -37,8 +37,6 @@ export const userIn = async (): Promise<void> => {
   }
   const data = await res.json();
   tokenU = data.token;
-  //   console.log(header);
-  console.log(data.token);
 };
 
 export const createNewBoard = async (title: string, description: string) => {
@@ -78,7 +76,6 @@ export const getAllBoards = async (): Promise<IBoard[]> => {
     });
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       return data;
     } else {
       return await Promise.reject(new Error(response.statusText));
@@ -140,7 +137,7 @@ export const updateBoardId = async (id: string, title: string, description: stri
 
 export const deleteBoard = async (id: string) => {
   try {
-    const response = await fetch(`http://localhost:4000/boards${id}`, {
+    const response = await fetch(`http://localhost:4000/boards/${id}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${tokenU}`,
@@ -149,7 +146,6 @@ export const deleteBoard = async (id: string) => {
     if (response.ok) {
       const data = await response.json();
       console.log('response.ok', response.ok);
-      console.log(data);
       return data;
     } else if (response.status === 404) {
       return response.status;

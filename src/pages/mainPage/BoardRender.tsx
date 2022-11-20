@@ -11,12 +11,15 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import ModeRoundedIcon from '@mui/icons-material/ModeRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { pink } from '@mui/material/colors';
 import i18Obj from '../../service/translate';
+import { AppDispatch, RootState } from 'store';
+import { deleteBoardID, getAllBoard, getBoardsState } from 'store/boardReduser';
 import { IBoard } from '../../types/boardsTypes';
 
 export const BoardRender: FC<{ id: string; title: string; description: string }> = ({
@@ -24,9 +27,9 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
   title,
   description,
 }: IBoard) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [open, setOpen] = useState(false);
   const [idBoard, setIdBoard] = useState<string>('');
-  // const [delete, setDelete] = useState(false);
 
   const handleSubmit = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const clases = e.currentTarget.classList;
@@ -47,6 +50,10 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
   const handleDelete = () => {
     console.log(idBoard);
     setOpen(false);
+    dispatch(deleteBoardID(idBoard));
+    setTimeout(() => {
+      dispatch(getAllBoard());
+    }, 500);
   };
 
   return (

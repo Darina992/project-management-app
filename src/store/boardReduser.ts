@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { createNewBoard, getAllBoards } from '../pages/mainPage/Fapi';
+import { createNewBoard, getAllBoards, deleteBoard } from '../pages/mainPage/Fapi';
 import { INewBoard, IBoards, IBoard } from '../types/boardsTypes';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from './index';
@@ -19,6 +19,11 @@ export const createNewBoards = createAsyncThunk(
 
 export const getAllBoard = createAsyncThunk('boards/getAllBoards', async () => {
   const data = await getAllBoards();
+  return data;
+});
+
+export const deleteBoardID = createAsyncThunk('boards/deleteBoard', async (id: string) => {
+  const data = await deleteBoard(id);
   return data;
 });
 
@@ -43,9 +48,19 @@ export const boardSlice = createSlice({
       })
       .addCase(getAllBoard.fulfilled, (state: IBoards, action) => {
         state.boards = action.payload;
-        console.log('action.payload', action.payload, state);
       })
       .addCase(getAllBoard.rejected, (state: IBoards) => {
+        state.isCreated = false;
+      });
+    builder
+      .addCase(deleteBoardID.pending, (state: IBoards) => {
+        state.isCreated = true;
+      })
+      .addCase(deleteBoardID.fulfilled, (state: IBoards, action) => {
+        state.boards = state.boards.filter((el) => el.id !== action.payload.id);
+        console.log('action.payload', action.payload);
+      })
+      .addCase(deleteBoardID.rejected, (state: IBoards) => {
         state.isCreated = false;
       });
   },
