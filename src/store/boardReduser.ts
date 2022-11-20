@@ -1,8 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { createNewBoard, getAllBoards, deleteBoard, updateBoardId } from '../pages/mainPage/Fapi';
+// import { createNewBoard, getAllBoards, deleteBoard, updateBoardId } from '../pages/mainPage/Fapi';
 import { INewBoard, IBoards, IBoard } from '../types/boardsTypes';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
 import { RootState } from './index';
+import { api } from '../api/api';
+
+console.log('+++++----------');
 
 export const initialBoardState: IBoards = {
   boards: [],
@@ -12,23 +15,24 @@ export const initialBoardState: IBoards = {
 export const createNewBoards = createAsyncThunk(
   'boards/createNewBoards',
   async (options: INewBoard) => {
-    const data = await createNewBoard(options.title, options.description);
+    const data = await api.createNewBoard(options.title, options.description);
     return data;
   }
 );
 
-export const getAllBoard = createAsyncThunk('boards/getAllBoards', async () => {
-  const data = await getAllBoards();
+export const getAllBoard = createAsyncThunk('boards/getAllBoard', async () => {
+  console.log('+++++++++++++++++++++++++++++++++++++');
+  const data = await api.getAllBoards();
   return data;
 });
 
 export const deleteBoardID = createAsyncThunk('boards/deleteBoard', async (id: string) => {
-  const data = await deleteBoard(id);
+  const data = await api.deleteBoard(id);
   return data;
 });
 
 export const updateBoard = createAsyncThunk('boards/updateBoard', async (data: IBoard) => {
-  const dataUp = await updateBoardId(data.id, data.title, data.description);
+  const dataUp = await api.updateBoardId(data.id, data.title, data.description);
   return dataUp;
 });
 
@@ -50,12 +54,15 @@ export const boardSlice = createSlice({
     builder
       .addCase(getAllBoard.pending, (state: IBoards) => {
         state.isCreated = true;
+        console.log('pending');
       })
       .addCase(getAllBoard.fulfilled, (state: IBoards, action) => {
         state.boards = action.payload;
+        console.log('fulfilled');
       })
       .addCase(getAllBoard.rejected, (state: IBoards) => {
         state.isCreated = false;
+        console.log('rejected');
       });
     builder
       .addCase(deleteBoardID.pending, (state: IBoards) => {

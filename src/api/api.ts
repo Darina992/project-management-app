@@ -205,7 +205,7 @@ export const api = {
   },
   async updateBoardId(id: string, title: string, description: string) {
     try {
-      const response = await fetch(`${apiPath}${apiEndpoints.boards}${id}`, {
+      const response = await fetch(`${apiPath}${apiEndpoints.boards}/${id}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${getFromLocalStorage('$token')}`,
@@ -232,7 +232,7 @@ export const api = {
   },
   async deleteBoard(id: string) {
     try {
-      const response = await fetch(`${apiPath}${apiEndpoints.boards}${id}`, {
+      const response = await fetch(`${apiPath}${apiEndpoints.boards}/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${getFromLocalStorage('$token')}`,

@@ -10,6 +10,7 @@ export const initialUserState: UserState = {
   isAuth: false,
   isLoading: false,
   showAlert: false,
+  successReg: false,
 };
 
 export interface UserState {
@@ -19,6 +20,7 @@ export interface UserState {
   isAuth: boolean;
   isLoading: boolean;
   showAlert: boolean;
+  successReg: boolean;
 }
 
 export const createNewUser = createAsyncThunk('main/createNewUser', async (options: INewUser) => {
@@ -43,6 +45,9 @@ export const userSlice = createSlice({
       state.isAuth = false;
       state.showAlert = false;
     },
+    signIn: (state: UserState) => {
+      state.isAuth = true;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(createNewUser.pending, (state: UserState) => {
@@ -52,9 +57,11 @@ export const userSlice = createSlice({
         if (action.payload === 409) {
           state.isReg = true;
           state.showAlert = true;
+          state.successReg = false;
         } else {
           state.id = (action.payload as IUser).id;
           state.name = (action.payload as IUser).name;
+          state.successReg = true;
           setToLocalStorage('$userId', state.id);
         }
         state.isLoading = false;
@@ -76,6 +83,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { resetReg, resetAuth } = userSlice.actions;
+export const { resetReg, resetAuth, signIn } = userSlice.actions;
 
 export default userSlice.reducer;

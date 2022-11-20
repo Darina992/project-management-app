@@ -35,6 +35,7 @@ const i18Obj = {
     signInAlert: 'User is not registered or password is not correct!',
     signInForgetPassword: 'Forgot password?',
     signInText: 'Do not have an account? Sign Up',
+    signUpSuccessReg: 'You have successfully registered!',
   },
   ru: {
     signIn: 'Вход',
@@ -72,6 +73,7 @@ const i18Obj = {
     signInAlert: 'Пользователь не зарегистрирован или введен неверный пароль!',
     signInForgetPassword: 'Забыли пароль?',
     signInText: 'Нет учетной записи? Зарегистрируйтесь',
+    signUpSuccessReg: 'Вы успешно зарегистрированы!',
   },
 };
 export default i18Obj;

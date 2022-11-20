@@ -7,13 +7,9 @@ import { useSelector } from 'react-redux';
 import { IBoard } from '../../types/boardsTypes';
 import { getBoardsState } from 'store/boardReduser';
 import './mainPage.scss';
-import { userTo, userIn } from './Fapi';
 
 export const MainPage: FC = () => {
   const { boards } = useSelector(getBoardsState);
-
-  userTo();
-  userIn();
 
   // const handleSearch = (text: string) => {
   //   const data = FakeData.filter((el) => el.nameBoard.indexOf(text) > -1);
