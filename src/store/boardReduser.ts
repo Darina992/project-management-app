@@ -5,8 +5,6 @@ import { TypedUseSelectorHook, useSelector } from 'react-redux';
 import { RootState } from './index';
 import { api } from '../api/api';
 
-console.log('+++++----------');
-
 export const initialBoardState: IBoards = {
   boards: [],
   isCreated: false,
@@ -21,7 +19,6 @@ export const createNewBoards = createAsyncThunk(
 );
 
 export const getAllBoard = createAsyncThunk('boards/getAllBoard', async () => {
-  console.log('+++++++++++++++++++++++++++++++++++++');
   const data = await api.getAllBoards();
   return data;
 });
@@ -54,15 +51,12 @@ export const boardSlice = createSlice({
     builder
       .addCase(getAllBoard.pending, (state: IBoards) => {
         state.isCreated = true;
-        console.log('pending');
       })
       .addCase(getAllBoard.fulfilled, (state: IBoards, action) => {
         state.boards = action.payload;
-        console.log('fulfilled');
       })
       .addCase(getAllBoard.rejected, (state: IBoards) => {
         state.isCreated = false;
-        console.log('rejected');
       });
     builder
       .addCase(deleteBoardID.pending, (state: IBoards) => {

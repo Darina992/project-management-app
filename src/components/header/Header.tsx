@@ -51,12 +51,10 @@ export const Header = () => {
 
   const handleMainPage = () => {
     dispatch(getAllBoard());
-    console.log('============================'); //================================
   };
 
   useEffect(() => {
     dispatch(getAllBoard());
-    // console.log('============================'); //================================
   }, [openModal]);
 
   useEffect(() => {
