@@ -116,7 +116,7 @@ export const api = {
       const response = await fetch(
         `${apiPath}${apiEndpoints.users}${getFromLocalStorage('$userId')}`,
         {
-          method: 'POST',
+          method: 'PUT',
           headers: {
             Authorization: `Bearer ${getFromLocalStorage('$token')}`,
             Accept: 'application/json',
@@ -131,6 +131,7 @@ export const api = {
       );
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
         return data;
       }
     } catch (error) {

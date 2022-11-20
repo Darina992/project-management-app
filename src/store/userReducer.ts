@@ -6,21 +6,27 @@ import { setToLocalStorage, getFromLocalStorage } from '../utils/utils';
 export const initialUserState: UserState = {
   id: getFromLocalStorage('$userId') as string,
   name: '',
+  login: '',
   isReg: false,
   isAuth: false,
   isLoading: false,
   showAlert: false,
   successReg: false,
+  successEdit: false,
+  successDelete: false,
 };
 
 export interface UserState {
   id: string;
   name: string;
+  login: string;
   isReg: boolean;
   isAuth: boolean;
   isLoading: boolean;
   showAlert: boolean;
   successReg: boolean;
+  successEdit: boolean;
+  successDelete: boolean;
 }
 
 export const createNewUser = createAsyncThunk('main/createNewUser', async (options: INewUser) => {
@@ -30,6 +36,17 @@ export const createNewUser = createAsyncThunk('main/createNewUser', async (optio
 
 export const signInUser = createAsyncThunk('main/signInUser', async (options: IAuthUser) => {
   const data = await api.signInUser(options.login, options.password);
+  return data;
+});
+
+export const editUser = createAsyncThunk('main/editUser', async (options: INewUser) => {
+  console.log(options);
+  const data = await api.editUser(options.name, options.login, options.password);
+  return data;
+});
+
+export const deleteUser = createAsyncThunk('main/deleteUser', async () => {
+  const data = await api.deleteUser();
   return data;
 });
 
@@ -48,6 +65,12 @@ export const userSlice = createSlice({
     signIn: (state: UserState) => {
       state.isAuth = true;
     },
+    resetSuccessEdit: (state: UserState) => {
+      state.successEdit = false;
+    },
+    resetSuccessDelete: (state: UserState) => {
+      state.successDelete = false;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(createNewUser.pending, (state: UserState) => {
@@ -61,8 +84,11 @@ export const userSlice = createSlice({
         } else {
           state.id = (action.payload as IUser).id;
           state.name = (action.payload as IUser).name;
+          state.login = (action.payload as IUser).login;
           state.successReg = true;
           setToLocalStorage('$userId', state.id);
+          setToLocalStorage('$name', state.name);
+          setToLocalStorage('$login', state.login);
         }
         state.isLoading = false;
       });
@@ -80,9 +106,36 @@ export const userSlice = createSlice({
         }
         state.isLoading = false;
       });
+    builder.addCase(editUser.pending, (state: UserState) => {
+      state.isLoading = true;
+    }),
+      builder.addCase(editUser.fulfilled, (state, action) => {
+        state.id = (action.payload as IUser).id;
+        state.name = (action.payload as IUser).name;
+        state.login = (action.payload as IUser).login;
+        setToLocalStorage('$userId', state.id);
+        setToLocalStorage('$name', state.name);
+        setToLocalStorage('$login', state.login);
+        state.successEdit = true;
+        state.isLoading = false;
+      });
+    builder.addCase(deleteUser.pending, (state: UserState) => {
+      state.isLoading = true;
+    }),
+      builder.addCase(deleteUser.fulfilled, (state) => {
+        state.id = '';
+        state.name = '';
+        state.login = '';
+        setToLocalStorage('$userId', '');
+        setToLocalStorage('$name', '');
+        setToLocalStorage('$login', '');
+        state.successDelete = true;
+        state.isLoading = false;
+      });
   },
 });
 
-export const { resetReg, resetAuth, signIn } = userSlice.actions;
+export const { resetReg, resetAuth, signIn, resetSuccessEdit, resetSuccessDelete } =
+  userSlice.actions;
 
 export default userSlice.reducer;
