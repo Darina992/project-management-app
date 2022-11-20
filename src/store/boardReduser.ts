@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { createNewBoard, getAllBoards, deleteBoard } from '../pages/mainPage/Fapi';
+import { createNewBoard, getAllBoards, deleteBoard, updateBoardId } from '../pages/mainPage/Fapi';
 import { INewBoard, IBoards, IBoard } from '../types/boardsTypes';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from './index';
+import { RootState } from './index';
 
 export const initialBoardState: IBoards = {
   boards: [],
@@ -27,6 +27,11 @@ export const deleteBoardID = createAsyncThunk('boards/deleteBoard', async (id: s
   return data;
 });
 
+export const updateBoard = createAsyncThunk('boards/updateBoard', async (data: IBoard) => {
+  const dataUp = await updateBoardId(data.id, data.title, data.description);
+  return dataUp;
+});
+
 export const boardSlice = createSlice({
   name: 'boards',
   initialState: initialBoardState,
@@ -36,8 +41,8 @@ export const boardSlice = createSlice({
       .addCase(createNewBoards.pending, (state: IBoards) => {
         state.isCreated = true;
       })
-      .addCase(createNewBoards.fulfilled, (state: IBoards, action) => {
-        console.log('ok');
+      .addCase(createNewBoards.fulfilled, (state: IBoards) => {
+        state.isCreated = true;
       })
       .addCase(createNewBoards.rejected, (state: IBoards) => {
         state.isCreated = false;
@@ -58,9 +63,18 @@ export const boardSlice = createSlice({
       })
       .addCase(deleteBoardID.fulfilled, (state: IBoards, action) => {
         state.boards = state.boards.filter((el) => el.id !== action.payload.id);
-        console.log('action.payload', action.payload);
       })
       .addCase(deleteBoardID.rejected, (state: IBoards) => {
+        state.isCreated = false;
+      });
+    builder
+      .addCase(updateBoard.pending, (state: IBoards) => {
+        state.isCreated = true;
+      })
+      .addCase(updateBoard.fulfilled, (state: IBoards) => {
+        state.isCreated = true;
+      })
+      .addCase(updateBoard.rejected, (state: IBoards) => {
         state.isCreated = false;
       });
   },

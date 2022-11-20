@@ -10,8 +10,7 @@ import './mainPage.scss';
 import { userTo, userIn } from './Fapi';
 
 export const MainPage: FC = () => {
-  const { boards, isCreated } = useSelector(getBoardsState);
-  console.log(boards, isCreated);
+  const { boards } = useSelector(getBoardsState);
 
   userTo();
   userIn();

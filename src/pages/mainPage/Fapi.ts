@@ -123,7 +123,6 @@ export const updateBoardId = async (id: string, title: string, description: stri
     });
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       return data;
     } else if (response.status === 404) {
       return response.status;
@@ -145,7 +144,6 @@ export const deleteBoard = async (id: string) => {
     });
     if (response.ok) {
       const data = await response.json();
-      console.log('response.ok', response.ok);
       return data;
     } else if (response.status === 404) {
       return response.status;

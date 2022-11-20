@@ -168,7 +168,9 @@ export const Header = () => {
                   {translate.buttonEditProfile}
                 </Button>
                 <Button
-                  onClick={() => setOpenModal(true)}
+                  onClick={() => {
+                    setOpenModal(true);
+                  }}
                   variant="text"
                   size="small"
                   startIcon={<AddIcon />}
