@@ -18,6 +18,7 @@ export const Routers = () => {
         <Route path="signIn" element={<SignIn />} />
         <Route path="main" element={<MainPage />} />
         <Route path="board" element={<BoardPage />} />
+        <Route path="board/:id" element={<BoardPage />} />
         <Route path="profile" element={<ProfilePage />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />

@@ -21,7 +21,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import ModeRoundedIcon from '@mui/icons-material/ModeRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { pink } from '@mui/material/colors';
-import i18Obj from '../../service/translate';
 import { AppDispatch, RootState } from 'store';
 import { deleteBoardID, getAllBoard, updateBoard } from 'store/boardReduser';
 import { IBoard } from '../../types/boardsTypes';
@@ -31,7 +30,7 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
   title,
   description,
 }: IBoard) => {
-  const { lang, translate } = useSelector((state: RootState) => state.langReducer);
+  const { translate } = useSelector((state: RootState) => state.langReducer);
   const dispatch = useDispatch<AppDispatch>();
   const [open, setOpen] = useState(false);
   const [idBoard, setIdBoard] = useState<string>('');
@@ -119,7 +118,7 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
       </Modal>
       <Card>
         <CardActionArea>
-          <Link className="board__link" to={'/board'}>
+          <Link className="board__link" to={`/board/${id}`}>
             <CardMedia
               component="img"
               height="100"

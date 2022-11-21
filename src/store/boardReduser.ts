@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-// import { createNewBoard, getAllBoards, deleteBoard, updateBoardId } from '../pages/mainPage/Fapi';
 import { INewBoard, IBoards, IBoard } from '../types/boardsTypes';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
 import { RootState } from './index';

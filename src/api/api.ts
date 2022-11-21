@@ -1,5 +1,5 @@
 import { apiPath, apiEndpoints } from './apiPath';
-import { IUser, INewUser, IToken } from './typesApi';
+import { IUser, IToken } from './typesApi';
 import { getFromLocalStorage } from '../utils/utils';
 
 export const api = {
@@ -244,6 +244,37 @@ export const api = {
       }
     } catch (error) {
       throw new Error('User is not deleted');
+    }
+  },
+  async createNewColumn(boardId: string, title: string) {
+    try {
+      const response = await fetch(
+        `${apiPath}${apiEndpoints.boards}/${boardId}/${apiEndpoints.columns}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: title,
+          }),
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        return data;
+      } else if (response.status === 404) {
+        console.log(response);
+        return response.status;
+      } else {
+        console.log(Promise.reject(new Error(response.statusText)));
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Registration failed');
     }
   },
 };

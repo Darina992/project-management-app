@@ -5,4 +5,5 @@ export const apiEndpoints = {
   signin: 'signin',
   signup: 'signup',
   boards: 'boards',
+  columns: 'columns',
 };

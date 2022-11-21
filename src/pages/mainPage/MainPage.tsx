@@ -5,12 +5,12 @@ import { BoardRender } from './BoardRender';
 import { useSelector } from 'react-redux';
 import { IBoard } from '../../types/boardsTypes';
 import { getBoardsState } from 'store/boardReduser';
-import { AppDispatch, RootState } from 'store';
+import { RootState } from 'store';
 import './mainPage.scss';
 
 export const MainPage: FC = () => {
   const { boards } = useSelector(getBoardsState);
-  const { lang, translate } = useSelector((state: RootState) => state.langReducer);
+  const { translate } = useSelector((state: RootState) => state.langReducer);
   const [boardData, setBoardData] = useState<IBoard[]>(boards);
 
   useEffect(() => {
