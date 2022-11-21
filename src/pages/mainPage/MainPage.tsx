@@ -1,15 +1,16 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Grid, Typography, InputAdornment, TextField } from '@material-ui/core';
 import SearchIcon from '@mui/icons-material/Search';
-import lang from '../../service/translate';
 import { BoardRender } from './BoardRender';
 import { useSelector } from 'react-redux';
 import { IBoard } from '../../types/boardsTypes';
 import { getBoardsState } from 'store/boardReduser';
+import { AppDispatch, RootState } from 'store';
 import './mainPage.scss';
 
 export const MainPage: FC = () => {
   const { boards } = useSelector(getBoardsState);
+  const { lang, translate } = useSelector((state: RootState) => state.langReducer);
   const [boardData, setBoardData] = useState<IBoard[]>(boards);
 
   useEffect(() => {
@@ -24,12 +25,12 @@ export const MainPage: FC = () => {
   return (
     <Box>
       <Typography gutterBottom variant="h4" component="div">
-        {lang.en.boardTitle}
+        {translate.boardTitle}
       </Typography>
       <Grid container spacing={4}>
         <Grid item xs={12} sm={4} md={3} key={'w1'}>
           <TextField
-            label={lang.en.boardSearchInput}
+            label={translate.boardSearchInput}
             variant="standard"
             onChange={(e) => handleSearch(e.target.value)}
             InputProps={{

@@ -150,14 +150,14 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
               aria-describedby="alert-dialog-slide-description"
             >
               <DialogTitle id="alert-dialog-slide-title">
-                {i18Obj.en.confirmationToDelete}
+                {translate.confirmationToDelete}
               </DialogTitle>
               <DialogActions>
                 <Button onClick={handleDelete} color="primary">
-                  {i18Obj.en.ok}
+                  {translate.ok}
                 </Button>
                 <Button onClick={handleCloseDialog} color="primary">
-                  {i18Obj.en.close}
+                  {translate.close}
                 </Button>
               </DialogActions>
             </Dialog>
