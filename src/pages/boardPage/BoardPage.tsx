@@ -37,8 +37,13 @@ export const BoardPage = () => {
           <Column />
           <Column />
         </Box>
-        <Button variant="outlined" startIcon={<AddIcon />} sx={{ height: 35 }}>
-          add col
+        <Button
+          variant="outlined"
+          size="small"
+          startIcon={<AddIcon />}
+          sx={{ height: '100%', minWidth: 170 }}
+        >
+          {translate.addColumn}
         </Button>
       </Box>
     </Box>

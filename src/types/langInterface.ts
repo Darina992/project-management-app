@@ -31,4 +31,5 @@ export interface ILang {
   profileEditText: string;
   profileDelete: string;
   profileDeleteText: string;
+  addColumn: string;
 }

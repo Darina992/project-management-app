@@ -33,6 +33,7 @@ const i18Obj = {
     profileEditText: 'Data changed successfully!',
     profileDelete: 'Delete profile',
     profileDeleteText: 'Profile deleted successfully!',
+    addColumn: 'Add column',
   },
   ru: {
     signIn: 'Вход',
@@ -68,6 +69,7 @@ const i18Obj = {
     profileEditText: 'Данные успешно изменены!',
     profileDelete: 'Удалить профиль',
     profileDeleteText: 'Профиль успешно удален!',
+    addColumn: 'Добавить столбец',
   },
 };
 export default i18Obj;
