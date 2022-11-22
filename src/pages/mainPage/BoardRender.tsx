@@ -47,12 +47,6 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
       <Card>
         <CardActionArea>
           <Link className="board__link" to={`/board/${id}`}>
-            <CardMedia
-              component="img"
-              height="100"
-              image="https://images.unsplash.com/photo-1621618765466-a0e74bd22170?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1469&q=80"
-              alt="green iguana"
-            />
             <CardContent>
               <Typography noWrap gutterBottom variant="h5" component="div">
                 {title}

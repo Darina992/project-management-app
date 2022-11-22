@@ -49,7 +49,7 @@ export const MainPage: FC = () => {
           />
         </Grid>
       </Grid>
-      <Grid container spacing={4}>
+      <Grid className="board-block" container spacing={4}>
         {boardData.map((el: IBoard, id: number) => {
           return <BoardRender key={id} {...el} />;
         })}
