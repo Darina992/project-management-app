@@ -30,4 +30,8 @@ export interface ILang {
   profileEditText: string;
   profileDelete: string;
   profileDeleteText: string;
+  addTask: string;
+  addTaskTitle: string;
+  addTaskTitleError: string;
+  addTaskDescription: string;
 }
