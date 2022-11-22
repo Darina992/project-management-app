@@ -4,10 +4,12 @@ import { RootState } from './index';
 
 export interface SearchType {
   openModal: boolean;
+  idBoard: string;
 }
 
 export const initialSearch: SearchType = {
   openModal: false,
+  idBoard: '',
 };
 
 const openModal = createSlice({
@@ -16,7 +18,14 @@ const openModal = createSlice({
   reducers: {
     setOpen(state, actions) {
       return {
+        ...state,
         openModal: actions.payload,
+      };
+    },
+    setIdBoard(state, actions) {
+      return {
+        ...state,
+        idBoard: actions.payload,
       };
     },
   },
