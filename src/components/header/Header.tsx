@@ -19,7 +19,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { AppDispatch, RootState } from 'store';
 import { setLang, setTranslate } from 'store/langReducer';
-import { getAllBoard } from 'store/boardReduser';
 import { resetAuth } from 'store/userReducer';
 import { ModalCreate } from '../modal/ModalCreate';
 import { actionsOpenModal } from 'store/modalReducer';
@@ -32,10 +31,6 @@ export const Header: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [anchorLang, setAnchorLang] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorLang);
-
-  const handleMainPage = () => {
-    dispatch(getAllBoard());
-  };
 
   const openMenuLang = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorLang(event.currentTarget);
@@ -95,13 +90,7 @@ export const Header: FC = () => {
               </ButtonGroup>
             ) : (
               <Box sx={{ display: 'flex', gap: 3 }}>
-                <Button
-                  component={NavLink}
-                  to="/main"
-                  variant="contained"
-                  size="small"
-                  onClick={handleMainPage}
-                >
+                <Button component={NavLink} to="/main" variant="contained" size="small">
                   {translate.buttonMainPage}
                 </Button>
                 <Button
