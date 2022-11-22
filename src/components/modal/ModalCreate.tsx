@@ -9,15 +9,14 @@ import { actionsOpenModal } from 'store/modalReducer';
 export const ModalCreate: FC = () => {
   const navigate = useNavigate();
   const { translate } = useSelector((state: RootState) => state.langReducer);
+  const { openModal } = useSelector((state: RootState) => state.openModal);
   const dispatch = useDispatch<AppDispatch>();
   const [descriptionBoard, setDescriptionBoard] = useState('');
   const [nameBoard, setNameBoard] = useState('');
   const [disabledBtnModal, setDisabledBtnModal] = useState(true);
-  const [openModal, setOpenModal] = useState(true);
+  //   const [update, setUpdate] = useState(true);
 
-  const handleClose = () => setOpenModal(false);
-
-  console.log('ModalCreate');
+  const handleClose = () => dispatch(actionsOpenModal.setOpen(false));
 
   const createNewBoard = () => {
     const data = {
@@ -26,13 +25,13 @@ export const ModalCreate: FC = () => {
     };
     dispatch(actionsOpenModal.setOpen(false));
     dispatch(createNewBoards(data));
-    setOpenModal(false);
     navigate('/main');
   };
 
-  useEffect(() => {
-    dispatch(getAllBoard());
-  }, [openModal]);
+  //   useEffect(() => {
+  //     dispatch(getAllBoard());
+  //     console.log('update', update);
+  //   }, [update]);
 
   useEffect(() => {
     nameBoard.length > 0 ? setDisabledBtnModal(false) : setDisabledBtnModal(true);
