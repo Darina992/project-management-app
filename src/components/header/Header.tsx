@@ -23,11 +23,12 @@ import { getAllBoard } from 'store/boardReduser';
 import { resetAuth } from 'store/userReducer';
 import { ModalCreate } from '../modal/ModalCreate';
 import { actionsOpenModal } from 'store/modalReducer';
+import { ModalDialogDell } from 'components/modal/ModalDialogDell';
 
 export const Header: FC = () => {
   const { lang, translate } = useSelector((state: RootState) => state.langReducer);
   const { isAuth } = useSelector((state: RootState) => state.user);
-  const { openModal } = useSelector((state: RootState) => state.openModal);
+  const { openModal, openDilog } = useSelector((state: RootState) => state.openModal);
   const dispatch = useDispatch<AppDispatch>();
   const [anchorLang, setAnchorLang] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorLang);
@@ -73,6 +74,7 @@ export const Header: FC = () => {
     >
       <Container>
         {openModal && <ModalCreate />}
+        {openDilog && <ModalDialogDell />}
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <IconButton component={NavLink} to="/" sx={{ color: '#333' }}>
             <DashboardIcon fontSize="large" />

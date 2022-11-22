@@ -5,11 +5,15 @@ import { RootState } from './index';
 export interface SearchType {
   openModal: boolean;
   idBoard: string;
+  openDilog: boolean;
+  deliteId: string;
 }
 
 export const initialSearch: SearchType = {
   openModal: false,
   idBoard: '',
+  openDilog: false,
+  deliteId: '',
 };
 
 const openModal = createSlice({
@@ -22,10 +26,22 @@ const openModal = createSlice({
         openModal: actions.payload,
       };
     },
+    setOpenDilog(state, actions) {
+      return {
+        ...state,
+        openDilog: actions.payload,
+      };
+    },
     setIdBoard(state, actions) {
       return {
         ...state,
         idBoard: actions.payload,
+      };
+    },
+    setDelteId(state, actions) {
+      return {
+        ...state,
+        deliteId: actions.payload,
       };
     },
   },

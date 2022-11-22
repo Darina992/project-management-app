@@ -1,24 +1,20 @@
 import {
-  Button,
   Card,
   CardActionArea,
   CardActions,
   CardContent,
   CardMedia,
-  Dialog,
-  DialogActions,
-  DialogTitle,
   Grid,
   Typography,
 } from '@mui/material';
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ModeRoundedIcon from '@mui/icons-material/ModeRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { pink } from '@mui/material/colors';
 import { AppDispatch, RootState } from 'store';
-import { deleteBoardID, getAllBoard } from 'store/boardReduser';
+import { getAllBoard } from 'store/boardReduser';
 import { IBoard } from '../../types/boardsTypes';
 import { actionsOpenModal } from 'store/modalReducer';
 
@@ -27,15 +23,12 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
   title,
   description,
 }: IBoard) => {
-  const { translate } = useSelector((state: RootState) => state.langReducer);
   const dispatch = useDispatch<AppDispatch>();
-  const [open, setOpen] = useState(false);
-  const [idBoard, setIdBoard] = useState<string>('');
-  const [updateBoardAll, setUpdateBoardAll] = useState(false);
+  const { openDilog } = useSelector((state: RootState) => state.openModal);
 
   useEffect(() => {
     dispatch(getAllBoard());
-  }, [updateBoardAll]);
+  }, [openDilog]);
 
   const handleSubmit = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const clases = e.currentTarget.classList;
@@ -45,17 +38,8 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
 
   const handleClickOpen = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const clases = e.currentTarget.classList;
-    setIdBoard(clases[1]);
-    setOpen(true);
-  };
-
-  const handleCloseDialog = () => {
-    setOpen(false);
-  };
-  const handleDelete = () => {
-    setOpen(false);
-    dispatch(deleteBoardID(idBoard));
-    setUpdateBoardAll(!updateBoardAll);
+    dispatch(actionsOpenModal.setDelteId(clases[1]));
+    dispatch(actionsOpenModal.setOpenDilog(true));
   };
 
   return (
@@ -85,25 +69,6 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
             <div className={`button-icon ${id} delete`} onClick={(e) => handleClickOpen(e)}>
               <DeleteRoundedIcon id="55" sx={{ color: pink[500] }} />
             </div>
-            <Dialog
-              open={open}
-              keepMounted
-              onClose={handleCloseDialog}
-              aria-labelledby="alert-dialog-slide-title"
-              aria-describedby="alert-dialog-slide-description"
-            >
-              <DialogTitle id="alert-dialog-slide-title">
-                {translate.confirmationToDelete}
-              </DialogTitle>
-              <DialogActions>
-                <Button onClick={handleDelete} color="primary">
-                  {translate.ok}
-                </Button>
-                <Button onClick={handleCloseDialog} color="primary">
-                  {translate.close}
-                </Button>
-              </DialogActions>
-            </Dialog>
           </CardActions>
         </CardActionArea>
       </Card>
