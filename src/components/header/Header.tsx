@@ -8,12 +8,9 @@ import {
   Box,
   MenuItem,
   Menu,
-  Modal,
-  TextField,
-  TextareaAutosize,
 } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Navigate, NavLink, useNavigate } from 'react-router-dom';
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import { useDispatch, useSelector } from 'react-redux';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -22,44 +19,22 @@ import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { AppDispatch, RootState } from 'store';
 import { setLang, setTranslate } from 'store/langReducer';
-import { createNewBoards, getAllBoard } from 'store/boardReduser';
+import { getAllBoard } from 'store/boardReduser';
 import { resetAuth } from 'store/userReducer';
+import { ModalCreate } from '../modal/ModalCreate';
+import { actionsOpenModal } from 'store/modalReducer';
 
-export const Header = () => {
+export const Header: FC = () => {
   const { lang, translate } = useSelector((state: RootState) => state.langReducer);
   const { isAuth } = useSelector((state: RootState) => state.user);
+  const { openModal } = useSelector((state: RootState) => state.openModal);
   const dispatch = useDispatch<AppDispatch>();
   const [anchorLang, setAnchorLang] = useState<null | HTMLElement>(null);
-  const [descriptionBoard, setDescriptionBoard] = useState('');
-  const [nameBoard, setNameBoard] = useState('');
-  const [disabledBtnModal, setDisabledBtnModal] = useState(true);
-  const [openModal, setOpenModal] = useState(false);
-  const navigate = useNavigate();
-
-  const handleClose = () => setOpenModal(false);
   const open = Boolean(anchorLang);
-
-  const createNewBoard = () => {
-    const data = {
-      title: nameBoard,
-      description: descriptionBoard,
-    };
-    dispatch(createNewBoards(data));
-    setOpenModal(false);
-    navigate('/main');
-  };
 
   const handleMainPage = () => {
     dispatch(getAllBoard());
   };
-
-  useEffect(() => {
-    dispatch(getAllBoard());
-  }, [openModal]);
-
-  useEffect(() => {
-    nameBoard.length > 0 ? setDisabledBtnModal(false) : setDisabledBtnModal(true);
-  }, [nameBoard]);
 
   const openMenuLang = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorLang(event.currentTarget);
@@ -97,39 +72,7 @@ export const Header = () => {
       }}
     >
       <Container>
-        <Modal
-          open={openModal}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box className="modal" component="form">
-            <TextField
-              id="standard-basic"
-              label={translate.boardSearchInput}
-              variant="standard"
-              onChange={(e) => setNameBoard(e.target.value)}
-            />
-            <TextareaAutosize
-              aria-label="minimum height"
-              minRows={7}
-              placeholder={translate.boardDescription}
-              onChange={(e) => setDescriptionBoard(e.target.value)}
-            />
-            <Button
-              type="submit"
-              disabled={disabledBtnModal}
-              className="board__add-btn"
-              variant="outlined"
-              onClick={() => {
-                createNewBoard();
-                <Navigate to="/main" replace={false} />;
-              }}
-            >
-              {translate.boardCreate}
-            </Button>
-          </Box>
-        </Modal>
+        {openModal && <ModalCreate />}
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <IconButton component={NavLink} to="/" sx={{ color: '#333' }}>
             <DashboardIcon fontSize="large" />
@@ -170,7 +113,7 @@ export const Header = () => {
                 </Button>
                 <Button
                   onClick={() => {
-                    setOpenModal(true);
+                    dispatch(actionsOpenModal.setOpen(true));
                   }}
                   variant="text"
                   size="small"

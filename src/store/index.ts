@@ -3,6 +3,7 @@ import userReducer from './userReducer';
 import langReducer from './langReducer';
 import { reducerBoardSlice } from './boardReduser';
 import { reducerColumnSlice } from './columnReducer';
+import { reducerOpenModal } from './modalReducer';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     langReducer: langReducer,
     boards: reducerBoardSlice,
     columns: reducerColumnSlice,
+    openModal: reducerOpenModal,
   },
 });
 
