@@ -15,10 +15,11 @@ import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { useForm } from 'react-hook-form';
+import { IColumn } from 'types/boardType';
 
-export const Column = () => {
+export const Column: React.FC<{ data: IColumn }> = ({ data }) => {
   const [isEditTitleColumn, setIsEditTitleColumn] = useState(false);
-  const [titleColumn, setTitleColumn] = useState('title');
+  const [titleColumn, setTitleColumn] = useState(data.title);
   const { register, handleSubmit, getValues } = useForm();
 
   const onSaveTitleColumn = () => {

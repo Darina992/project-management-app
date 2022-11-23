@@ -3,5 +3,6 @@ export const apiEndpoints = {
   users: 'users/',
   signin: 'signin',
   signup: 'signup',
-  getBoard: 'boards/',
+  boards: 'boards/',
+  columns: 'columns',
 };

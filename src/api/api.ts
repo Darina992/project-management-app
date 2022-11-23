@@ -140,7 +140,7 @@ export const api = {
   },
   async getBoard(idBoard: string) {
     try {
-      const response = await fetch(`${apiPath}${apiEndpoints.getBoard}${idBoard}`, {
+      const response = await fetch(`${apiPath}${apiEndpoints.boards}${idBoard}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${getFromLocalStorage('$token')}`,
@@ -148,6 +148,34 @@ export const api = {
           'Content-Type': 'application/json',
         },
       });
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else if (response.status === 404) {
+        return response.status;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Board was not founded!');
+    }
+  },
+  async createColumn(boardId: string, title: string) {
+    try {
+      const response = await fetch(
+        `${apiPath}${apiEndpoints.boards}${boardId}/${apiEndpoints.columns}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: title,
+          }),
+        }
+      );
       if (response.ok) {
         const data = await response.json();
         return data;

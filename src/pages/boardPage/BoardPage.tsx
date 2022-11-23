@@ -1,24 +1,23 @@
 import { Box, Button, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useSelector } from 'react-redux';
-import { RootState } from 'store';
+import { AppDispatch, RootState } from 'store';
 import { Column } from 'components/column/Column';
 import AddIcon from '@mui/icons-material/Add';
 import { NavLink, useParams } from 'react-router-dom';
-import { api } from 'api/api';
-import { IBoard } from 'types/boardType';
+import { useDispatch } from 'react-redux';
+import { createColumn, getBoardData } from 'store/boardReducer';
 
 export const BoardPage = () => {
   const { idBoard } = useParams();
   const { translate } = useSelector((state: RootState) => state.langReducer);
-  const [boardData, setBoardData] = useState<IBoard>();
+  const { boardData } = useSelector((state: RootState) => state.board);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    api.getBoard(idBoard as string).then((data: IBoard) => {
-      setBoardData(data);
-    });
-  }, [idBoard]);
+    dispatch(getBoardData(idBoard as string));
+  }, [idBoard, dispatch, boardData]);
 
   return (
     <Box component="main">
@@ -40,19 +39,19 @@ export const BoardPage = () => {
       </Box>
       <Box sx={{ display: 'flex', gap: 5, mt: 5, p: 2, overflowX: 'auto' }}>
         <Box sx={{ display: 'flex', gap: 3 }}>
-          <Column />
-          <Column />
-          <Column />
-          <Column />
-          <Column />
-          <Column />
-          <Column />
+          {boardData &&
+            boardData?.columns.map((column) => {
+              return <Column key={column.id} data={column} />;
+            })}
         </Box>
         <Button
           variant="outlined"
           size="small"
           startIcon={<AddIcon />}
           sx={{ height: '100%', minWidth: 170 }}
+          onClick={() =>
+            dispatch(createColumn({ idBoard: idBoard as string, title: 'In Progress2' }))
+          }
         >
           {translate.addColumn}
         </Button>
