@@ -1,5 +1,5 @@
 import { apiPath, apiEndpoints } from './apiPath';
-import { IUser, INewUser, IToken } from './typesApi';
+import { IUser, IToken } from './typesApi';
 import { getFromLocalStorage } from '../utils/utils';
 
 export const api = {
@@ -136,6 +136,28 @@ export const api = {
       }
     } catch (error) {
       throw new Error('User is not found');
+    }
+  },
+  async getBoard(idBoard: string) {
+    try {
+      const response = await fetch(`${apiPath}${apiEndpoints.getBoard}${idBoard}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else if (response.status === 404) {
+        return response.status;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Board was not founded!');
     }
   },
 };

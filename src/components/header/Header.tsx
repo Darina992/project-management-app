@@ -19,11 +19,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { AppDispatch, RootState } from 'store';
 import { setLang, setTranslate } from 'store/langReducer';
-import { resetAuth } from 'store/userReducer';
+import { resetAuth, UserState } from 'store/userReducer';
 
 export const Header = () => {
   const { lang, translate } = useSelector((state: RootState) => state.langReducer);
-  const { isAuth } = useSelector((state: RootState) => state.user);
+  const { isAuth } = useSelector<RootState, UserState>((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const [anchorLang, setAnchorLang] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorLang);
