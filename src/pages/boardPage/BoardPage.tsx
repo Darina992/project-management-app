@@ -8,6 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { NavLink, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { createColumn, getBoardData } from 'store/boardReducer';
+import boardBg from '../../assets/board-bg.png';
 
 export const BoardPage = () => {
   const { idBoard } = useParams();
@@ -20,7 +21,17 @@ export const BoardPage = () => {
   }, [idBoard, dispatch, boardData]);
 
   return (
-    <Box component="main">
+    <Box
+      component="main"
+      sx={{
+        width: 1,
+        height: 1,
+        background: `url(${boardBg})`,
+        backgroundSize: '100%',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'right bottom',
+      }}
+    >
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box>
           <Typography variant="h3">{boardData?.title}</Typography>
@@ -50,6 +61,7 @@ export const BoardPage = () => {
           startIcon={<AddIcon />}
           sx={{ height: '100%', minWidth: 170 }}
           onClick={() =>
+            //open form
             dispatch(createColumn({ idBoard: idBoard as string, title: 'In Progress2' }))
           }
         >

@@ -24,7 +24,7 @@ export const Layout = () => {
     <OuterContainer>
       <Header />
       <InnerContainer>
-        <Container maxWidth="lg" sx={{ marginTop: '65px', p: 5, height: 1 }}>
+        <Container maxWidth="lg" sx={{ marginTop: '65px', p: 5, minHeight: 1 }}>
           <Outlet />
         </Container>
       </InnerContainer>

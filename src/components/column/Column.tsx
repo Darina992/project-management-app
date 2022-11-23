@@ -72,6 +72,7 @@ export const Column: React.FC<{ data: IColumn }> = ({ data }) => {
               aria-label="settings"
               onClick={() => {
                 dispatch(
+                  // add open modal
                   deleteColumn({
                     boardId: boardData?.id as string,
                     title: data.title,
