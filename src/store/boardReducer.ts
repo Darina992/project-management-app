@@ -31,6 +31,19 @@ export const deleteColumn = createAsyncThunk(
   }
 );
 
+export const updateColumn = createAsyncThunk(
+  'board/updateColumn',
+  async (options: { boardId: string; title: string; columnId: string; order: number }) => {
+    const data = await api.updateColumn(
+      options.boardId,
+      options.title,
+      options.columnId,
+      options.order
+    );
+    return data;
+  }
+);
+
 export const boardSlice = createSlice({
   name: 'board',
   initialState: initialBoardState,

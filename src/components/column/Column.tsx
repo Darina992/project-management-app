@@ -18,7 +18,7 @@ import { useForm } from 'react-hook-form';
 import { IColumn } from 'types/boardType';
 import { useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from 'store';
-import { deleteColumn } from 'store/boardReducer';
+import { deleteColumn, updateColumn } from 'store/boardReducer';
 import { useSelector } from 'react-redux';
 
 export const Column: React.FC<{ data: IColumn }> = ({ data }) => {
@@ -30,6 +30,14 @@ export const Column: React.FC<{ data: IColumn }> = ({ data }) => {
 
   const onSaveTitleColumn = () => {
     setTitleColumn(getValues('title'));
+    dispatch(
+      updateColumn({
+        boardId: boardData?.id as string,
+        title: getValues('title'),
+        columnId: data.id,
+        order: data.order,
+      })
+    );
     setIsEditTitleColumn(false);
   };
   const formTitleColumn = () => {
