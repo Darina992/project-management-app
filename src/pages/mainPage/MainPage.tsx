@@ -4,7 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { BoardRender } from './BoardRender';
 import { useDispatch, useSelector } from 'react-redux';
 import { IBoard } from '../../types/boardsTypes';
-import { getAllBoard, getBoardsState } from 'store/boardReduser';
+import { getAllBoard, getBoardsState } from 'store/mainReducer ';
 import { AppDispatch, RootState } from 'store';
 import './mainPage.scss';
 

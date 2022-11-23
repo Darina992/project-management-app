@@ -14,7 +14,7 @@ import ModeRoundedIcon from '@mui/icons-material/ModeRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { pink } from '@mui/material/colors';
 import { AppDispatch, RootState } from 'store';
-import { getAllBoard } from 'store/boardReduser';
+import { getAllBoard } from 'store/mainReducer ';
 import { IBoard } from '../../types/boardsTypes';
 import { actionsOpenModal } from 'store/modalReducer';
 

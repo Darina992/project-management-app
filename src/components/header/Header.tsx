@@ -20,7 +20,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { AppDispatch, RootState } from 'store';
 import { setLang, setTranslate } from 'store/langReducer';
 import { resetAuth } from 'store/userReducer';
-import { ModalCreate } from '../modal/ModalCreate';
+import { BoardlCreate } from '../modal/BoardlCreate';
 import { actionsOpenModal } from 'store/modalReducer';
 import { ModalDialogDell } from 'components/modal/ModalDialogDell';
 
@@ -68,7 +68,7 @@ export const Header: FC = () => {
       }}
     >
       <Container>
-        {openModal && <ModalCreate />}
+        {openModal && <BoardlCreate />}
         {openDilog && <ModalDialogDell />}
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <IconButton component={NavLink} to="/" sx={{ color: '#333' }}>

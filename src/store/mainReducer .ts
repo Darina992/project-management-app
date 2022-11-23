@@ -32,7 +32,7 @@ export const updateBoard = createAsyncThunk('boards/updateBoard', async (data: I
   return dataUp;
 });
 
-export const boardSlice = createSlice({
+export const mainReducer = createSlice({
   name: 'boards',
   initialState: initialBoardState,
   reducers: {},
@@ -80,9 +80,9 @@ export const boardSlice = createSlice({
   },
 });
 
-const { actions: actionsBoardSlice, reducer: reducerBoardSlice } = boardSlice;
+const { actions: actionsMainSlice, reducer: reducerMainSlice } = mainReducer;
 
 export const getBoardsSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const getBoardsState = (state: RootState) => state.boards;
 
-export { actionsBoardSlice, reducerBoardSlice };
+export { actionsMainSlice, reducerMainSlice };

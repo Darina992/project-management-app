@@ -3,10 +3,10 @@ import React, { FC, useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { AppDispatch, RootState } from 'store';
 import { useDispatch, useSelector } from 'react-redux';
-import { createNewBoards, getAllBoard, updateBoard } from 'store/boardReduser';
+import { createNewBoards, updateBoard } from 'store/mainReducer ';
 import { actionsOpenModal } from 'store/modalReducer';
 
-export const ModalCreate: FC = () => {
+export const BoardlCreate: FC = () => {
   const navigate = useNavigate();
   const { translate } = useSelector((state: RootState) => state.langReducer);
   const { openModal, idBoard } = useSelector((state: RootState) => state.openModal);
@@ -39,7 +39,7 @@ export const ModalCreate: FC = () => {
   };
 
   useEffect(() => {
-    nameBoard.length > 0 ? setDisabledBtnModal(false) : setDisabledBtnModal(true);
+    nameBoard ? setDisabledBtnModal(false) : setDisabledBtnModal(true);
   }, [nameBoard]);
 
   return (

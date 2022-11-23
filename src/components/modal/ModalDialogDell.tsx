@@ -2,7 +2,7 @@ import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
 import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from 'store';
-import { deleteBoardID } from 'store/boardReduser';
+import { deleteBoardID } from 'store/mainReducer ';
 import { actionsOpenModal } from 'store/modalReducer';
 
 export const ModalDialogDell: FC = () => {
