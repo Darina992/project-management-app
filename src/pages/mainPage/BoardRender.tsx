@@ -58,10 +58,10 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
           </Link>
           <CardActions>
             <div className={`button-icon ${id} chahge`} onClick={(e) => handleSubmit(e)}>
-              <ModeRoundedIcon id="44" color="success" />
+              <ModeRoundedIcon color="success" />
             </div>
             <div className={`button-icon ${id} delete`} onClick={(e) => handleClickOpen(e)}>
-              <DeleteRoundedIcon id="55" sx={{ color: pink[500] }} />
+              <DeleteRoundedIcon sx={{ color: pink[500] }} />
             </div>
           </CardActions>
         </CardActionArea>
