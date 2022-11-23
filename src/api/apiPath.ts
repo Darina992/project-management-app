@@ -6,3 +6,9 @@ export const apiEndpoints = {
   boards: 'boards/',
   columns: 'columns',
 };
+export const enum METHODS {
+  get = 'GET',
+  post = 'POST',
+  delete = 'DELETE',
+  put = 'PUT',
+}

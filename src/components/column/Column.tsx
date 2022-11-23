@@ -16,11 +16,17 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { useForm } from 'react-hook-form';
 import { IColumn } from 'types/boardType';
+import { useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from 'store';
+import { deleteColumn } from 'store/boardReducer';
+import { useSelector } from 'react-redux';
 
 export const Column: React.FC<{ data: IColumn }> = ({ data }) => {
   const [isEditTitleColumn, setIsEditTitleColumn] = useState(false);
   const [titleColumn, setTitleColumn] = useState(data.title);
   const { register, handleSubmit, getValues } = useForm();
+  const { boardData } = useSelector((state: RootState) => state.board);
+  const dispatch = useDispatch<AppDispatch>();
 
   const onSaveTitleColumn = () => {
     setTitleColumn(getValues('title'));
@@ -54,7 +60,18 @@ export const Column: React.FC<{ data: IColumn }> = ({ data }) => {
         <CardHeader
           title={<Typography onClick={() => setIsEditTitleColumn(true)}>{titleColumn}</Typography>}
           action={
-            <IconButton aria-label="settings" onClick={() => console.log('delate')}>
+            <IconButton
+              aria-label="settings"
+              onClick={() => {
+                dispatch(
+                  deleteColumn({
+                    boardId: boardData?.id as string,
+                    title: data.title,
+                    columnId: data.id,
+                  })
+                );
+              }}
+            >
               <DeleteOutlineIcon fontSize="small" />
             </IconButton>
           }

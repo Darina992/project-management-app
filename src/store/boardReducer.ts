@@ -23,6 +23,14 @@ export const createColumn = createAsyncThunk(
   }
 );
 
+export const deleteColumn = createAsyncThunk(
+  'board/deleteColumn',
+  async (options: { boardId: string; title: string; columnId: string }) => {
+    const data = await api.deleteColumn(options.boardId, options.title, options.columnId);
+    return data;
+  }
+);
+
 export const boardSlice = createSlice({
   name: 'board',
   initialState: initialBoardState,
