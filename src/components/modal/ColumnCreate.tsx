@@ -38,14 +38,15 @@ export const ColumnCreate: FC = () => {
       <Box className="modal" component="form" onSubmit={handleSubmit(onSubmit)}>
         <TextField
           id="standard-basic"
-          label={translate.boardSearchInput}
+          label={translate.columnSearchInput}
           variant="standard"
           sx={{ mb: 3 }}
           {...register('name', { required: true })}
+          error={errors.name && true}
+          helperText={errors.name && translate.titleColumnError}
         />
-        {errors.name && <span>This field is required</span>}
         <Button type="submit" sx={{ mt: 3 }} className="board__add-btn" variant="outlined">
-          {translate.boardCreate}
+          {translate.columnCreate}
         </Button>
       </Box>
     </Modal>

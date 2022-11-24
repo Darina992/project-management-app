@@ -19,3 +19,7 @@ export interface IColumns {
 export interface IFormInput {
   name: string;
 }
+export interface IFormBoardCreate {
+  name: string;
+  description: string;
+}

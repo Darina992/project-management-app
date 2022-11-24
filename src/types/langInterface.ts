@@ -11,12 +11,16 @@ export interface ILang {
   teamContentA: string[];
   teamContentD: string[];
   boardTitle: string;
+  titleBoardError: string;
+  titleColumnError: string;
   buttonMainPage: string;
   buttonEditProfile: string;
   buttonNewBoard: string;
   boardSearchInput: string;
+  columnSearchInput: string;
   boardDescription: string;
   boardCreate: string;
+  columnCreate: string;
   confirmationToDelete: string;
   close: string;
   ok: string;
