@@ -8,12 +8,13 @@ export const initialUserState: UserState = {
   name: '',
   login: '',
   isReg: false,
-  isAuth: false,
+  isAuth: getFromLocalStorage('$userId') ? true : false,
   isLoading: false,
   showAlert: false,
   successReg: false,
   successEdit: false,
   successDelete: false,
+  unsuccessDelete: false,
 };
 
 export interface UserState {
@@ -27,6 +28,7 @@ export interface UserState {
   successReg: boolean;
   successEdit: boolean;
   successDelete: boolean;
+  unsuccessDelete: boolean;
 }
 
 export const createNewUser = createAsyncThunk('main/createNewUser', async (options: INewUser) => {
@@ -70,6 +72,9 @@ export const userSlice = createSlice({
     },
     resetSuccessDelete: (state: UserState) => {
       state.successDelete = false;
+    },
+    resetUnsuccessDelete: (state: UserState) => {
+      state.unsuccessDelete = false;
     },
   },
   extraReducers: (builder) => {
@@ -122,20 +127,32 @@ export const userSlice = createSlice({
     builder.addCase(deleteUser.pending, (state: UserState) => {
       state.isLoading = true;
     }),
-      builder.addCase(deleteUser.fulfilled, (state) => {
-        state.id = '';
-        state.name = '';
-        state.login = '';
-        setToLocalStorage('$userId', '');
-        setToLocalStorage('$name', '');
-        setToLocalStorage('$login', '');
-        state.successDelete = true;
-        state.isLoading = false;
+      builder.addCase(deleteUser.fulfilled, (state, action) => {
+        console.log(action.payload);
+        if (action.payload === 204) {
+          state.id = '';
+          state.name = '';
+          state.login = '';
+          setToLocalStorage('$userId', '');
+          setToLocalStorage('$name', '');
+          setToLocalStorage('$login', '');
+          state.successDelete = true;
+          state.isLoading = false;
+        } else {
+          state.unsuccessDelete = true;
+          state.isLoading = false;
+        }
       });
   },
 });
 
-export const { resetReg, resetAuth, signIn, resetSuccessEdit, resetSuccessDelete } =
-  userSlice.actions;
+export const {
+  resetReg,
+  resetAuth,
+  signIn,
+  resetSuccessEdit,
+  resetSuccessDelete,
+  resetUnsuccessDelete,
+} = userSlice.actions;
 
 export default userSlice.reducer;

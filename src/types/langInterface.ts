@@ -42,6 +42,7 @@ export interface ILang {
   profileEditText: string;
   profileDelete: string;
   profileDeleteText: string;
+  profileDeleteTextUnsuccess: string;
   addTask: string;
   addTaskTitle: string;
   addTaskTitleError: string;
