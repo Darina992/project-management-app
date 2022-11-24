@@ -15,11 +15,13 @@ import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { useForm } from 'react-hook-form';
-import { IColumn } from 'types/boardType';
 import { useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from 'store';
 import { deleteColumn, updateColumn } from 'store/boardReducer';
 import { useSelector } from 'react-redux';
+import AddTask from 'components/addTask/addTask';
+import { Task } from 'components/task/Task';
+import { IColumn } from 'api/typesApi';
 
 export const Column: React.FC<{ data: IColumn }> = ({ data }) => {
   const [isEditTitleColumn, setIsEditTitleColumn] = useState(false);
@@ -27,6 +29,12 @@ export const Column: React.FC<{ data: IColumn }> = ({ data }) => {
   const { register, handleSubmit, getValues } = useForm();
   const { boardData } = useSelector((state: RootState) => state.board);
   const dispatch = useDispatch<AppDispatch>();
+  const [isFormTask, setIsFormTask] = useState(false);
+  const { translate } = useSelector((state: RootState) => state.langReducer);
+
+  const onCloseModal = () => {
+    setIsFormTask(false);
+  };
 
   const onSaveTitleColumn = () => {
     setTitleColumn(getValues('title'));
@@ -60,8 +68,10 @@ export const Column: React.FC<{ data: IColumn }> = ({ data }) => {
     );
   };
 
-  return (
-    <Card sx={{ width: 300 }}>
+  return isFormTask ? (
+    <AddTask boardId={boardData?.id as string} columnId={data.id} onClose={onCloseModal} />
+  ) : (
+    <Card sx={{ width: 275, backgroundColor: 'rgb(233, 239, 243)' }}>
       {isEditTitleColumn ? (
         <CardHeader title={formTitleColumn()} />
       ) : (
@@ -88,10 +98,12 @@ export const Column: React.FC<{ data: IColumn }> = ({ data }) => {
           sx={{ fontSize: 22, fontFamily: 'Montserrat' }}
         />
       )}
-      <CardContent></CardContent>
+      <CardContent sx={{ maxHeight: 350, overflowY: 'auto' }}>
+        {data.tasks && data.tasks?.map((task) => <Task key={task.id} taskData={task} />)}
+      </CardContent>
       <CardActions>
-        <Button variant="text" startIcon={<AddIcon />}>
-          add task
+        <Button variant="text" startIcon={<AddIcon />} onClick={() => setIsFormTask(true)}>
+          {translate.addTask}
         </Button>
       </CardActions>
     </Card>

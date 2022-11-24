@@ -1,13 +1,15 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { api } from 'api/api';
-import { IBoard } from 'types/boardType';
+import { IBoard, ITask } from 'api/typesApi';
 
 export const initialBoardState: IBoardState = {
   boardData: null,
+  tasks: [],
 };
 
 export interface IBoardState {
   boardData: IBoard | null;
+  tasks: ITask[];
 }
 
 export const getBoardData = createAsyncThunk('board/getBoardData', async (idBoard: string) => {
@@ -44,6 +46,15 @@ export const updateColumn = createAsyncThunk(
   }
 );
 
+export const getAllTasks = createAsyncThunk(
+  'board/getAllTasks',
+  async (options: { boardId: string; columnId: string }) => {
+    const data = await api.getAllTasks(options.boardId, options.columnId);
+    console.log(data);
+    return data;
+  }
+);
+
 export const boardSlice = createSlice({
   name: 'board',
   initialState: initialBoardState,
@@ -57,6 +68,9 @@ export const boardSlice = createSlice({
     builder
       .addCase(getBoardData.fulfilled, (state, action) => {
         state.boardData = action.payload;
+      })
+      .addCase(getAllTasks.fulfilled, (state, action) => {
+        state.tasks = action.payload;
       })
       .addDefaultCase(() => {});
   },

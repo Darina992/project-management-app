@@ -435,4 +435,29 @@ export const api = {
       throw new Error('Board was not founded!');
     }
   },
+  async getAllTasks(boardId: string, columnId: string) {
+    try {
+      const response = await fetch(
+        `${apiPath}${apiEndpoints.boards}/${boardId}/${apiEndpoints.columns}/${columnId}/${apiEndpoints.tasks}`,
+        {
+          method: METHODS.get,
+          headers: {
+            Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else if (response.status === 404) {
+        return response.status;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Board was not founded!');
+    }
+  },
 };

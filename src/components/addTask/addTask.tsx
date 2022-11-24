@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { store, RootState } from '../../store/index';
 import { createNewTask } from '../../store/tasksReducer';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
@@ -14,9 +14,10 @@ import { style } from './styles';
 type MyProps = {
   boardId: string;
   columnId: string;
+  onClose: () => void;
 };
 
-export default function AddTask({ boardId, columnId }: MyProps) {
+export default function AddTask({ boardId, columnId, onClose }: MyProps) {
   const user = useSelector((state: RootState) => state.user);
   const { translate } = useSelector((state: RootState) => state.langReducer);
 
@@ -36,12 +37,13 @@ export default function AddTask({ boardId, columnId }: MyProps) {
         userId: user.id,
       })
     );
+    onClose();
   };
 
   const onErrors: SubmitErrorHandler<AddTaskForm> = (errors) => console.error(errors);
 
   return (
-    <Modal open={true}>
+    <Modal open={true} onClose={onClose}>
       <Box sx={style.modal}>
         <Typography id="modalAddTask-title" variant="h5" component="h2" sx={style.modalTitle}>
           <strong>{translate.addTask}</strong>
