@@ -5,6 +5,7 @@ export const apiEndpoints = {
   signup: 'signup',
   boards: 'boards',
   columns: 'columns',
+  tasks: 'tasks',
 };
 export const enum METHODS {
   get = 'GET',

@@ -41,6 +41,10 @@ const i18Obj = {
     profileEditText: 'Data changed successfully!',
     profileDelete: 'Delete profile',
     profileDeleteText: 'Profile deleted successfully!',
+    addTask: 'Add task',
+    addTaskTitle: 'Task title',
+    addTaskTitleError: 'Add title',
+    addTaskDescription: 'Task description',
     addColumn: 'Add column',
   },
   ru: {
@@ -85,6 +89,10 @@ const i18Obj = {
     profileEditText: 'Данные успешно изменены!',
     profileDelete: 'Удалить профиль',
     profileDeleteText: 'Профиль успешно удален!',
+    addTask: 'Добавить задачу',
+    addTaskTitle: 'Название задачи',
+    addTaskTitleError: 'Добавьте название',
+    addTaskDescription: 'Описание задачи',
     addColumn: 'Добавить колонку',
   },
 };

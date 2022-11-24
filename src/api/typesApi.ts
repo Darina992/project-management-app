@@ -18,3 +18,18 @@ export type IAuthUser = {
 export type IToken = {
   token: string;
 };
+
+export type ITask = {
+  id: string;
+  title: string;
+  description: string;
+  userId: string;
+};
+
+export type INewTask = {
+  boardId: string;
+  columnId: string;
+  title: string;
+  description: string;
+  userId: string;
+};
