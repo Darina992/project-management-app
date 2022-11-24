@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useSelector } from 'react-redux';
 import { AppDispatch, RootState } from 'store';
@@ -19,6 +19,9 @@ export const BoardPage = () => {
   useEffect(() => {
     dispatch(getBoardData(idBoard as string));
   }, [idBoard, dispatch]);
+  // useEffect(() => {
+  //   dispatch(getAllColumns(idBoard as string));
+  // }, []);
 
   return (
     <Box

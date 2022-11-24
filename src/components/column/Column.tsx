@@ -99,7 +99,8 @@ export const Column: React.FC<{ data: IColumn }> = ({ data }) => {
         />
       )}
       <CardContent sx={{ maxHeight: 350, overflowY: 'auto' }}>
-        {data.tasks && data.tasks?.map((task) => <Task key={task.id} taskData={task} />)}
+        {data.tasks &&
+          data.tasks?.map((task) => <Task key={task.id} taskData={task} columnId={data.id} />)}
       </CardContent>
       <CardActions>
         <Button variant="text" startIcon={<AddIcon />} onClick={() => setIsFormTask(true)}>
