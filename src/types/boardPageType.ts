@@ -12,4 +12,14 @@ export interface IColumn {
 export interface IColumns {
   columns: IColumn[];
   isCreated: boolean;
+  openModal: boolean;
+  idBoard: string;
+}
+
+export interface IFormInput {
+  name: string;
+}
+export interface IFormBoardCreate {
+  name: string;
+  description: string;
 }

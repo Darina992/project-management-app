@@ -7,6 +7,8 @@ import { api } from '../api/api';
 export const initialColumnState: IColumns = {
   columns: [],
   isCreated: false,
+  openModal: false,
+  idBoard: '',
 };
 
 export const createNewColumn = createAsyncThunk(
@@ -20,7 +22,14 @@ export const createNewColumn = createAsyncThunk(
 export const columnSlice = createSlice({
   name: 'columns',
   initialState: initialColumnState,
-  reducers: {},
+  reducers: {
+    setOpen: (state, actions) => {
+      state.openModal = actions.payload;
+    },
+    setIdBoard: (state, actions) => {
+      state.idBoard = actions.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createNewColumn.pending, (state: IColumns) => {
