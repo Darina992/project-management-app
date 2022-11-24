@@ -9,11 +9,15 @@ import { NavLink, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { createColumn, getBoardData } from 'store/boardReducer';
 import boardBg from '../../assets/board-bg.png';
+import { ColumnCreate } from 'components/modal/ColumnCreate';
+import { actionsColumnSlice } from 'store/columnReducer';
 
 export const BoardPage = () => {
   const { idBoard } = useParams();
   const { translate } = useSelector((state: RootState) => state.langReducer);
   const { boardData } = useSelector((state: RootState) => state.board);
+  const { openModal } = useSelector((state: RootState) => state.columns);
+  // const [isFormColumn, setIsFormColumn] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -22,8 +26,13 @@ export const BoardPage = () => {
   // useEffect(() => {
   //   dispatch(getAllColumns(idBoard as string));
   // }, []);
+  // const onModalClose = () => {
 
-  return (
+  // }
+
+  return openModal ? (
+    <ColumnCreate />
+  ) : (
     <Box
       component="main"
       sx={{
@@ -63,10 +72,7 @@ export const BoardPage = () => {
           size="small"
           startIcon={<AddIcon />}
           sx={{ height: '100%', minWidth: 170 }}
-          onClick={() =>
-            //open form
-            dispatch(createColumn({ idBoard: idBoard as string, title: 'In Progress2' }))
-          }
+          onClick={() => dispatch(actionsColumnSlice.setOpen(true))}
         >
           {translate.addColumn}
         </Button>
