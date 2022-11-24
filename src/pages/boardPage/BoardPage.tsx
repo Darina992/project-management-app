@@ -18,7 +18,7 @@ export const BoardPage = () => {
 
   useEffect(() => {
     dispatch(getBoardData(idBoard as string));
-  }, [idBoard, dispatch, boardData]);
+  }, [idBoard, dispatch]);
 
   return (
     <Box

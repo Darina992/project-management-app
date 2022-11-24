@@ -28,6 +28,32 @@ export const MainPage: FC = () => {
     setBoardData(data);
   };
 
-export const MainPage = () => {
-  return <Box>Main</Box>;
+  return (
+    <Box>
+      <Typography gutterBottom variant="h4" component="div">
+        {translate.boardTitle}
+      </Typography>
+      <Grid container spacing={4}>
+        <Grid item xs={12} sm={4} md={3} key={'w1'}>
+          <TextField
+            label={translate.boardSearchInput}
+            variant="standard"
+            onChange={(e) => handleSearch(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+      </Grid>
+      <Grid className="board-block" container spacing={4}>
+        {boardData.map((el: IBoard, id: number) => {
+          return <BoardRender key={id} {...el} />;
+        })}
+      </Grid>
+    </Box>
+  );
 };

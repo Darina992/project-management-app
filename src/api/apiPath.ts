@@ -3,7 +3,7 @@ export const apiEndpoints = {
   users: 'users/',
   signin: 'signin',
   signup: 'signup',
-  boards: 'boards/',
+  boards: 'boards',
   columns: 'columns',
 };
 export const enum METHODS {
