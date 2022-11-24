@@ -1,5 +1,5 @@
 import { apiPath, apiEndpoints } from './apiPath';
-import { IUser, IToken } from './typesApi';
+import { IUser, IToken, ITask } from './typesApi';
 import { getFromLocalStorage } from '../utils/utils';
 
 export const api = {
@@ -65,7 +65,6 @@ export const api = {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         return data;
       } else {
         return await Promise.reject(new Error(response.statusText));
@@ -87,7 +86,6 @@ export const api = {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         return data;
       } else {
         return await Promise.reject(new Error(response.statusText));
@@ -131,7 +129,6 @@ export const api = {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         return data;
       }
     } catch (error) {
@@ -264,10 +261,8 @@ export const api = {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         return data;
       } else if (response.status === 404) {
-        console.log(response);
         return response.status;
       } else {
         console.log(Promise.reject(new Error(response.statusText)));
@@ -275,6 +270,40 @@ export const api = {
       }
     } catch (error) {
       throw new Error('Registration failed');
+    }
+  },
+  async createTask(
+    boardId: string,
+    columnId: string,
+    title: string,
+    description: string,
+    userId: string
+  ): Promise<ITask | undefined> {
+    try {
+      const response = await fetch(
+        `${apiPath}${apiEndpoints.boards}/${boardId}/${apiEndpoints.columns}/${columnId}/${apiEndpoints.tasks}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: title,
+            description: description,
+            userId: userId,
+          }),
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Task is not created');
     }
   },
 };

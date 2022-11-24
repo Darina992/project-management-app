@@ -8,3 +8,8 @@ export type SignInFormData = {
   login: string;
   password: string;
 };
+
+export type AddTaskForm = {
+  addTask: string;
+  addDescription: string;
+};
