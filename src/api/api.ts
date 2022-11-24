@@ -65,7 +65,6 @@ export const api = {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         return data;
       } else {
         return await Promise.reject(new Error(response.statusText));
@@ -87,7 +86,6 @@ export const api = {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         return data;
       } else {
         return await Promise.reject(new Error(response.statusText));
@@ -131,7 +129,6 @@ export const api = {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         return data;
       }
     } catch (error) {
@@ -264,10 +261,8 @@ export const api = {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         return data;
       } else if (response.status === 404) {
-        console.log(response);
         return response.status;
       } else {
         console.log(Promise.reject(new Error(response.statusText)));
@@ -310,5 +305,5 @@ export const api = {
     } catch (error) {
       throw new Error('Task is not created');
     }
-  }
+  },
 };
