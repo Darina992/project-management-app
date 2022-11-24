@@ -1,4 +1,4 @@
-import { Box, TextField, TextareaAutosize, Button, Modal } from '@mui/material';
+import { Box, TextField, Button, Modal } from '@mui/material';
 import React, { FC } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { AppDispatch, RootState } from 'store';
@@ -58,16 +58,20 @@ export const BoardlCreate: FC = () => {
           error={errors.name && true}
           helperText={errors.name && translate.titleBoardError}
         />
-        <TextareaAutosize
-          aria-label="minimum height"
-          minRows={7}
-          placeholder={translate.boardDescription}
-          {...register('description')}
+        <TextField
+          id="standard-basic"
+          label={translate.boardDescription}
+          variant="standard"
+          {...register('description', { required: true })}
+          error={errors.name && true}
+          helperText={errors.name && translate.descriptionBoardError}
+          style={{ marginTop: 10 }}
         />
         <Button
           type="submit"
           className="board__add-btn"
           variant="outlined"
+          style={{ marginTop: 20 }}
           onClick={() => {
             <Navigate to="/main" replace={false} />;
           }}

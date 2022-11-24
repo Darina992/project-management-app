@@ -13,6 +13,7 @@ export interface ILang {
   boardTitle: string;
   titleBoardError: string;
   titleColumnError: string;
+  descriptionBoardError: string;
   buttonMainPage: string;
   buttonEditProfile: string;
   buttonNewBoard: string;
