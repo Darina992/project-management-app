@@ -34,7 +34,7 @@ export default function SignUp() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<SignUpFormData> = (data) => {
+  const onSubmit: SubmitHandler<SignUpFormData> = (data: SignUpFormData) => {
     store.dispatch(createNewUser(data));
   };
 

@@ -2,6 +2,11 @@ const i18Obj = {
   en: {
     signIn: 'Sign In',
     signUp: 'Sign Up',
+    boardTitle: 'Your boards',
+    boardCreate: 'Create Board',
+    boardCount: 'Number of boards: ',
+    boardSearchInput: 'Board name',
+    boardDescription: 'Description',
     titleWelcome: 'TaskManager',
     descrWelcome:
       "This is a program that helps manage tasks. Plan, manage and track all your team's tasks in one software.",
@@ -16,6 +21,9 @@ const i18Obj = {
     buttonEditProfile: 'Edit profile',
     buttonNewBoard: 'new board',
     signOut: 'Sign Out',
+    confirmationToDelete: 'Are you sure you want to delete?',
+    ok: 'Ok',
+    close: 'Close',
     name: 'Name',
     nameError: 'Please,enter name!',
     login: 'Login',
@@ -32,10 +40,16 @@ const i18Obj = {
     profileEditText: 'Data changed successfully!',
     profileDelete: 'Delete profile',
     profileDeleteText: 'Profile deleted successfully!',
+    addColumn: 'Add column',
   },
   ru: {
     signIn: 'Вход',
     signUp: 'Регистриция',
+    boardTitle: 'Ваши доски',
+    boardCreate: 'Создать доску',
+    boardCount: 'Количество досек: ',
+    boardSearchInput: 'Название доски',
+    boardDescription: 'Описание ',
     titleWelcome: 'Таск-менеджер',
     descrWelcome:
       'Это программа, которая помогает управлять задачами. Планируйте, управляйте и отслеживайте все задачи вашей команды в одном программном обеспечении.',
@@ -50,6 +64,9 @@ const i18Obj = {
     buttonEditProfile: 'Профиль',
     buttonNewBoard: 'Новая доска',
     signOut: 'Выйти',
+    confirmationToDelete: 'Вы действительно хотите удалить?',
+    ok: 'Да',
+    close: 'Закрыть',
     name: 'Имя',
     nameError: 'Пожалуйста, введите имя!',
     login: 'Логин',
@@ -66,6 +83,7 @@ const i18Obj = {
     profileEditText: 'Данные успешно изменены!',
     profileDelete: 'Удалить профиль',
     profileDeleteText: 'Профиль успешно удален!',
+    addColumn: 'Добавить колонку',
   },
 };
 export default i18Obj;
