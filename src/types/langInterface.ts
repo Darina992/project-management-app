@@ -10,9 +10,16 @@ export interface ILang {
   teamContentV: string[];
   teamContentA: string[];
   teamContentD: string[];
+  boardTitle: string;
   buttonMainPage: string;
   buttonEditProfile: string;
   buttonNewBoard: string;
+  boardSearchInput: string;
+  boardDescription: string;
+  boardCreate: string;
+  confirmationToDelete: string;
+  close: string;
+  ok: string;
   signOut: string;
   name: string;
   nameError: string;
@@ -34,4 +41,5 @@ export interface ILang {
   addTaskTitle: string;
   addTaskTitleError: string;
   addTaskDescription: string;
+  addColumn: string;
 }

@@ -1,0 +1,50 @@
+.board {
+    &__add-btn {
+        height: 48px;
+    }
+    &__link {
+        color: #000;
+        text-decoration: none;
+    }
+
+}
+
+.button-icon {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    margin: 0 6px;
+}
+
+.button-icon:hover {
+    background-color: rgb(208, 201, 201);
+}
+.modal {
+    width: 500px;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(248, 248, 245);
+    border: none;
+    border-radius: 10px;
+    box-shadow: 24;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    textarea {
+        width: 100%;
+        padding: 1rem;
+        background-color: inherit;
+        margin: 2rem 0;
+        border-radius: 5px;
+    }
+    textarea:focus {
+        outline: none !important;
+        border:1px solid rgb(6, 17, 132);
+      }
+}
