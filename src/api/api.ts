@@ -1,5 +1,5 @@
 import { apiPath, apiEndpoints } from './apiPath';
-import { IUser, INewUser, IToken } from './typesApi';
+import { IUser, INewUser, IToken, ITask } from './typesApi';
 import { getFromLocalStorage } from '../utils/utils';
 
 export const api = {
@@ -136,6 +136,40 @@ export const api = {
       }
     } catch (error) {
       throw new Error('User is not found');
+    }
+  },
+  async createTask(
+    boardId: string,
+    columnId: string,
+    title: string,
+    description: string,
+    userId: string
+  ): Promise<ITask | undefined> {
+    try {
+      const response = await fetch(
+        `${apiPath}${apiEndpoints.boards}/${boardId}/${apiEndpoints.columns}/${columnId}/${apiEndpoints.tasks}`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: title,
+            description: description,
+            userId: userId,
+          }),
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Task is not created');
     }
   },
 };

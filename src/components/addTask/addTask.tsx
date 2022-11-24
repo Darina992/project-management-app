@@ -6,11 +6,18 @@ import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 import { useSelector, useDispatch } from 'react-redux';
 import { store, RootState } from '../../store/index';
+import { createNewTask } from '../../store/tasksReducer';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { AddTaskForm } from '../../types/userTypes';
 import { style } from './styles';
 
-export default function AddTask() {
+type MyProps = {
+  boardId: string;
+  columnId: string;
+};
+
+export default function AddTask({ boardId, columnId }: MyProps) {
+  const user = useSelector((state: RootState) => state.user);
   const { translate } = useSelector((state: RootState) => state.langReducer);
 
   const {
@@ -20,8 +27,15 @@ export default function AddTask() {
   } = useForm<AddTaskForm>();
 
   const onSubmit: SubmitHandler<AddTaskForm> = (data) => {
-    //store.dispatch(signInUser(data));
-    console.log('submit');
+    store.dispatch(
+      createNewTask({
+        boardId: boardId,
+        columnId: columnId,
+        title: data.addTask,
+        description: data.addDescription,
+        userId: user.id,
+      })
+    );
   };
 
   const onErrors: SubmitErrorHandler<AddTaskForm> = (errors) => console.error(errors);

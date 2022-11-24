@@ -3,4 +3,7 @@ export const apiEndpoints = {
   users: 'users/',
   signin: 'signin',
   signup: 'signup',
+  boards: 'boards',
+  columns: 'columns',
+  tasks: 'tasks',
 };
