@@ -1,41 +1,33 @@
-import { Box } from '@mui/material';
-import { Link } from 'react-router-dom';
-import React, { useEffect } from 'react';
-import { getFromLocalStorage } from 'utils/utils';
-import { apiPath } from 'api/apiPath';
+import React, { FC, useEffect, useState } from 'react';
+import { Box, Grid, Typography, InputAdornment, TextField } from '@material-ui/core';
+import SearchIcon from '@mui/icons-material/Search';
+import { BoardRender } from './BoardRender';
+import { useDispatch, useSelector } from 'react-redux';
+import { IBoard } from '../../types/boardsTypes';
+import { getAllBoard, getBoardsState } from 'store/mainReducer ';
+import { AppDispatch, RootState } from 'store';
+import './mainPage.scss';
+
+export const MainPage: FC = () => {
+  const { boards } = useSelector(getBoardsState);
+  const { translate } = useSelector((state: RootState) => state.langReducer);
+  const { openModal } = useSelector((state: RootState) => state.openModal);
+  const dispatch = useDispatch<AppDispatch>();
+  const [boardData, setBoardData] = useState<IBoard[]>(boards);
+
+  useEffect(() => {
+    dispatch(getAllBoard());
+  }, [openModal]);
+
+  useEffect(() => {
+    setBoardData(boards);
+  }, [boards]);
+
+  const handleSearch = (text: string) => {
+    const data = boards.filter((el: IBoard) => el.title.indexOf(text) > -1);
+    setBoardData(data);
+  };
 
 export const MainPage = () => {
-  // const [boards, setBoards] = useState<{ id: string; title: string; description: string }>();
-  useEffect(() => {
-    // fetch(`${apiPath}boards`, {
-    //   method: 'POST',
-    //   headers: {
-    //     Authorization: `Bearer ${getFromLocalStorage('$token')}`,
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     title: 'Homework tasks',
-    //     description: 'My board tasks',
-    //   }),
-    // })
-    //   .then((responce) => responce.json())
-    //   .then((data) => console.log(data));
-    fetch(`${apiPath}boards`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${getFromLocalStorage('$token')}`,
-      },
-    })
-      .then((responce) => responce.json())
-      .then((data) => console.log(data));
-  }, []);
-  const id = '6049deec-d6e6-4a46-bd44-f83e2ea58ef5';
-  return (
-    <Box>
-      <Link className="board__link" to={`/board/${id}`}>
-        Board
-      </Link>
-    </Box>
-  );
+  return <Box>Main</Box>;
 };

@@ -59,21 +59,21 @@ export const WelcomePage = () => {
             title={translate.nameD}
             hrefGitHub={'https://github.com/Darina992'}
           >
-            {translate.teamContentD.map((item, id) => listItem(item, id))}
+            {translate.teamContentD.map((item: string, id: number) => listItem(item, id))}
           </CardTeam>
           <CardTeam
             avatar={avatarV}
             title={translate.nameV}
             hrefGitHub={'https://github.com/vpuzyrevich'}
           >
-            {translate.teamContentV.map((item, id) => listItem(item, id))}
+            {translate.teamContentV.map((item: string, id: number) => listItem(item, id))}
           </CardTeam>
           <CardTeam
             avatar={avatarA}
             title={translate.nameA}
             hrefGitHub={'https://github.com/alimbaeva'}
           >
-            {translate.teamContentA.map((item, id) => listItem(item, id))}
+            {translate.teamContentA.map((item: string, id: number) => listItem(item, id))}
           </CardTeam>
         </Box>
       </Box>

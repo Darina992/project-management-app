@@ -9,7 +9,7 @@ import {
   MenuItem,
   Menu,
 } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,10 +20,14 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { AppDispatch, RootState } from 'store';
 import { setLang, setTranslate } from 'store/langReducer';
 import { resetAuth, UserState } from 'store/userReducer';
+import { BoardlCreate } from '../modal/BoardlCreate';
+import { actionsOpenModal } from 'store/modalReducer';
+import { ModalDialogDell } from 'components/modal/ModalDialogDell';
 
-export const Header = () => {
+export const Header: FC = () => {
   const { lang, translate } = useSelector((state: RootState) => state.langReducer);
-  const { isAuth } = useSelector<RootState, UserState>((state: RootState) => state.user);
+  const { isAuth } = useSelector((state: RootState) => state.user);
+  const { openModal, openDilog } = useSelector((state: RootState) => state.openModal);
   const dispatch = useDispatch<AppDispatch>();
   const [anchorLang, setAnchorLang] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorLang);
@@ -64,6 +68,8 @@ export const Header = () => {
       }}
     >
       <Container>
+        {openModal && <BoardlCreate />}
+        {openDilog && <ModalDialogDell />}
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <IconButton component={NavLink} to="/" sx={{ color: '#333' }}>
             <DashboardIcon fontSize="large" />
@@ -97,10 +103,11 @@ export const Header = () => {
                   {translate.buttonEditProfile}
                 </Button>
                 <Button
+                  onClick={() => {
+                    dispatch(actionsOpenModal.setOpen(true));
+                  }}
                   variant="text"
                   size="small"
-                  component={NavLink}
-                  to="/board"
                   startIcon={<AddIcon />}
                 >
                   {translate.buttonNewBoard}
