@@ -21,6 +21,8 @@ import {
   resetSuccessEdit,
   resetSuccessDelete,
   resetUnsuccessDelete,
+  showConfirm,
+  closeConfirm,
 } from '../../store/userReducer';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { SignUpFormData } from '../../types/userTypes';
@@ -28,12 +30,14 @@ import { getFromLocalStorage } from '../../utils/utils';
 import { style } from './styles';
 import { useNavigate } from 'react-router-dom';
 import ModalWarning from './ModalWarning';
+import ModalConfirm from './ModalConfirm';
 
 export default function Profile() {
   const state: UserState = useSelector((state: RootState) => state.user);
   const { translate } = useSelector((state: RootState) => state.langReducer);
   const [successDelete, setSuccessDelete] = React.useState(false);
   const [successEdit, setSuccessEdit] = React.useState(false);
+  const [confirm, setConfirm] = React.useState(false);
   const {
     register,
     handleSubmit,
@@ -165,11 +169,12 @@ export default function Profile() {
             fullWidth
             variant="outlined"
             sx={{ mt: 2, mb: 2 }}
-            onClick={() => store.dispatch(deleteUser())}
+            onClick={() => dispatch(showConfirm())}
           >
             {translate.profileDelete}
           </Button>
         </Box>
+        {state.showConfirm && <ModalConfirm />}
         {successDelete && <ModalWarning text={translate.profileDeleteText} />}
         {state.unsuccessDelete && <ModalWarning text={translate.profileDeleteTextUnsuccess} />}
         {successEdit && <ModalWarning text={translate.profileEditText} />}

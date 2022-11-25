@@ -11,6 +11,7 @@ export const initialUserState: UserState = {
   isAuth: getFromLocalStorage('$userId') ? true : false,
   isLoading: false,
   showAlert: false,
+  showConfirm: false,
   successReg: false,
   successEdit: false,
   successDelete: false,
@@ -25,6 +26,7 @@ export interface UserState {
   isAuth: boolean;
   isLoading: boolean;
   showAlert: boolean;
+  showConfirm: boolean;
   successReg: boolean;
   successEdit: boolean;
   successDelete: boolean;
@@ -75,6 +77,12 @@ export const userSlice = createSlice({
     },
     resetUnsuccessDelete: (state: UserState) => {
       state.unsuccessDelete = false;
+    },
+    showConfirm: (state: UserState) => {
+      state.showConfirm = true;
+    },
+    closeConfirm: (state: UserState) => {
+      state.showConfirm = false;
     },
   },
   extraReducers: (builder) => {
@@ -130,6 +138,7 @@ export const userSlice = createSlice({
       builder.addCase(deleteUser.fulfilled, (state, action) => {
         console.log(action.payload);
         if (action.payload === 204) {
+          state.showConfirm = false;
           state.id = '';
           state.name = '';
           state.login = '';
@@ -153,6 +162,8 @@ export const {
   resetSuccessEdit,
   resetSuccessDelete,
   resetUnsuccessDelete,
+  showConfirm,
+  closeConfirm,
 } = userSlice.actions;
 
 export default userSlice.reducer;

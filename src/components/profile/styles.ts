@@ -13,10 +13,10 @@ export const style = {
   modal: {
     position: 'absolute' as const,
     top: '50%',
-    left: '50%',
+    left: '49%',
     transform: 'translate(-50%, -50%)',
     width: 400,
-    bgcolor: '#fed0d2',
+    bgcolor: '#eceaeb',
     color: 'inherit',
     outline: 'none',
     border: '2px solid white',
