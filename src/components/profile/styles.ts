@@ -1,14 +1,16 @@
 export const style = {
   userInfoConteiner: {
-    margin: '20px',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: '300px',
+    width: '350px',
   },
   userInfo: {
     display: 'flex',
     flexDirection: 'column',
+    fontFamily: 'Caveat, cursive',
+    fontWeight: '600',
+    color: '#5b1c52',
   },
   modal: {
     position: 'absolute' as const,

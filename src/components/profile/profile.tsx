@@ -1,28 +1,24 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import Zoom from '@mui/material/Zoom';
-import Modal from '@mui/material/Modal';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import BadgeTwoToneIcon from '@mui/icons-material/BadgeTwoTone';
 import { useSelector, useDispatch } from 'react-redux';
 import { store, RootState } from '../../store/index';
 import { UserState } from '../../store/userReducer';
+import Editor from '../../assets/editor.png';
 import {
   editUser,
   resetAuth,
-  deleteUser,
   resetSuccessEdit,
   resetSuccessDelete,
   resetUnsuccessDelete,
   showConfirm,
-  closeConfirm,
 } from '../../store/userReducer';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { SignUpFormData } from '../../types/userTypes';
@@ -37,7 +33,6 @@ export default function Profile() {
   const { translate } = useSelector((state: RootState) => state.langReducer);
   const [successDelete, setSuccessDelete] = React.useState(false);
   const [successEdit, setSuccessEdit] = React.useState(false);
-  const [confirm, setConfirm] = React.useState(false);
   const {
     register,
     handleSubmit,
@@ -94,19 +89,19 @@ export default function Profile() {
         <Typography component="h1" variant="h5">
           <strong>{translate.profileEdit}</strong>
         </Typography>
-        <Box sx={style.userInfoConteiner}>
-          <Avatar sx={{ m: 1, bgcolor: '#fed0d2', width: '100px', height: '100px' }}>
-            <BadgeTwoToneIcon sx={{ width: '70px', height: '70px', color: '#ac5570' }} />
-          </Avatar>
+        <Grid sx={style.userInfoConteiner} justifyContent="space-between">
+          <Box>
+            <img src={Editor} />
+          </Box>
           <Box sx={style.userInfo}>
             <Box sx={{ m: 1 }}>
-              <strong>{translate.name}:</strong> {getFromLocalStorage('$name')}
+              <strong>{translate.name.toUpperCase()}:</strong> {getFromLocalStorage('$name')}
             </Box>
             <Box sx={{ m: 1 }}>
-              <strong>{translate.login}:</strong> {getFromLocalStorage('$login')}
+              <strong>{translate.login.toUpperCase()}:</strong> {getFromLocalStorage('$login')}
             </Box>
           </Box>
-        </Box>
+        </Grid>
         <Box component="form" noValidate onSubmit={handleSubmit(onSubmit, onErrors)} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>

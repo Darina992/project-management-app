@@ -14,7 +14,7 @@ import Container from '@mui/material/Container';
 import { useSelector, useDispatch } from 'react-redux';
 import { store, RootState } from '../../store/index';
 import { UserState } from '../../store/userReducer';
-import { signInUser, resetAuth, signIn } from '../../store/userReducer';
+import { signInUser, resetAuth } from '../../store/userReducer';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { SignInFormData } from '../../types/userTypes';
@@ -102,12 +102,7 @@ export default function SignIn() {
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             {translate.signIn}
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="profile" variant="body2">
-                {translate.signInForgetPassword}
-              </Link>
-            </Grid>
+          <Grid container justifyContent="flex-end">
             <Grid item>
               <Link href="signUp" variant="body2">
                 {translate.signInText}

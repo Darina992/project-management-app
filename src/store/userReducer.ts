@@ -61,6 +61,7 @@ export const userSlice = createSlice({
     resetReg: (state: UserState) => {
       state.isReg = false;
       state.showAlert = false;
+      state.successReg = false;
     },
     resetAuth: (state: UserState) => {
       state.isAuth = false;
