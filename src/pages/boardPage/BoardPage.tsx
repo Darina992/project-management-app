@@ -7,7 +7,7 @@ import { Column } from 'components/column/Column';
 import AddIcon from '@mui/icons-material/Add';
 import { NavLink, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { createColumn, getBoardData } from 'store/boardReducer';
+import { getBoardData } from 'store/boardReducer';
 import boardBg from '../../assets/board-bg.png';
 import { ColumnCreate } from 'components/modal/ColumnCreate';
 import { actionsColumnSlice } from 'store/columnReducer';
@@ -17,11 +17,11 @@ export const BoardPage = () => {
   const { translate } = useSelector((state: RootState) => state.langReducer);
   const { boardData } = useSelector((state: RootState) => state.board);
   const { openModal } = useSelector((state: RootState) => state.columns);
-  // const [isFormColumn, setIsFormColumn] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     dispatch(getBoardData(idBoard as string));
+    dispatch(actionsColumnSlice.setIdBoard(idBoard));
   }, [idBoard, dispatch]);
   // useEffect(() => {
   //   dispatch(getAllColumns(idBoard as string));
