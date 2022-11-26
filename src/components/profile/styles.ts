@@ -4,13 +4,17 @@ export const style = {
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '350px',
+    marginTop: '20px',
   },
   userInfo: {
     display: 'flex',
     flexDirection: 'column',
     fontFamily: 'Caveat, cursive',
     fontWeight: '600',
-    color: '#5b1c52',
+    color: 'white',
+    backgroundColor: '#bb6b84',
+    borderRadius: '5px',
+    boxShadow: '1px 1px 5px grey',
   },
   modal: {
     position: 'absolute' as const,
