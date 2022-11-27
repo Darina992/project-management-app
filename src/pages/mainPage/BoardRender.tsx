@@ -38,7 +38,12 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
 
   const handleClickOpen = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const clases = e.currentTarget.classList;
-    dispatch(actionsOpenModal.setDelteId(clases[1]));
+    const data = {
+      id: clases[1] as string,
+      actionFor: 'board' as string,
+    };
+
+    dispatch(actionsOpenModal.setDelteId(data));
     dispatch(actionsOpenModal.setOpenDilog(true));
   };
 
