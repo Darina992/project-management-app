@@ -63,7 +63,7 @@ export const BoardPage = () => {
         </Button>
       </Box>
       <Box sx={{ display: 'flex', gap: 5, mt: 5, p: 2, overflowX: 'auto' }}>
-        <Box sx={{ display: 'flex', gap: 3 }}>
+        <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start' }}>
           {boardState &&
             boardState?.columns.map((column) => {
               return <Column key={column.id} columnId={column.id} dataColumn={column} />;

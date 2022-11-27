@@ -88,7 +88,7 @@ export const Column: React.FC<{ columnId: string; dataColumn: IColumn }> = ({
   return isFormTask ? (
     <AddTask boardId={idBoard as string} columnId={columnId} onClose={onCloseModal} />
   ) : (
-    <Card sx={{ width: 275, backgroundColor: 'rgb(233, 239, 243)' }}>
+    <Card sx={{ width: 265, backgroundColor: 'rgb(233, 239, 243)' }}>
       {isEditTitleColumn ? (
         <CardHeader title={formTitleColumn()} />
       ) : (
