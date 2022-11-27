@@ -7,7 +7,7 @@ import { Column } from 'components/column/Column';
 import AddIcon from '@mui/icons-material/Add';
 import { NavLink, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { getAllColumns, getBoardData } from 'store/boardReducer';
+import { getBoardData } from 'store/boardReducer';
 import boardBg from '../../assets/board-bg.png';
 import { ColumnCreate } from 'components/modal/ColumnCreate';
 import { actionsColumnSlice } from 'store/columnReducer';
@@ -16,18 +16,17 @@ import { IBoard } from 'api/typesApi';
 export const BoardPage = () => {
   const { idBoard } = useParams();
   const { translate } = useSelector((state: RootState) => state.langReducer);
-  const { boardData, columns } = useSelector((state: RootState) => state.board);
+  const { boardData } = useSelector((state: RootState) => state.board);
   const { openModal } = useSelector((state: RootState) => state.columns);
   const dispatch = useDispatch<AppDispatch>();
   const [boardState, setBoardState] = useState<IBoard>(boardData as IBoard);
+  const { openDilog } = useSelector((state: RootState) => state.openModal);
 
   useEffect(() => {
     dispatch(getBoardData(idBoard as string));
     dispatch(actionsColumnSlice.setIdBoard(idBoard));
-  }, [idBoard, dispatch, openModal]);
-  // useEffect(() => {
-  //   dispatch(getAllColumns(idBoard as string));
-  // }, [idBoard, dispatch]);
+  }, [idBoard, dispatch, openModal, openDilog]);
+
   useEffect(() => {
     setBoardState(() => boardData as IBoard);
   }, [boardData]);

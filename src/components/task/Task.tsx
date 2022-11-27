@@ -1,8 +1,7 @@
 import { Box, IconButton, Typography } from '@mui/material';
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { ITask } from 'api/typesApi';
-import { getBoardData } from 'store/boardReducer';
 import { AppDispatch } from 'store';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -11,10 +10,6 @@ import { actionsOpenModal } from 'store/modalReducer';
 export const Task: FC<{ taskData: ITask; columnId: string }> = ({ taskData, columnId }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { idBoard } = useParams();
-
-  useEffect(() => {
-    dispatch(getBoardData(idBoard as string));
-  }, [dispatch, idBoard, columnId]);
 
   const handleDelete = () => {
     const data = {

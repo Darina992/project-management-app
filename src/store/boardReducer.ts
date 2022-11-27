@@ -84,16 +84,11 @@ export const deleteTask = createAsyncThunk(
 export const boardSlice = createSlice({
   name: 'board',
   initialState: initialBoardState,
-  // reducers: {
-  //   setBoardData: (state: IBoardState, action: PayloadAction<IBoard>) => {
-  //     state.boardData = action.payload;
-  //   },
-  // },
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getBoardData.fulfilled, (state, action) => {
-        state.boardData = action.payload;
+        state.boardData = JSON.parse(JSON.stringify(action.payload));
       })
       .addCase(getAllTasks.fulfilled, (state, action) => {
         state.tasks = JSON.parse(JSON.stringify(action.payload));
@@ -108,8 +103,6 @@ export const boardSlice = createSlice({
   },
 });
 
-const { actions, reducer } = boardSlice;
-
-// export const { setBoardData } = actions;
+const { reducer } = boardSlice;
 
 export default reducer;
