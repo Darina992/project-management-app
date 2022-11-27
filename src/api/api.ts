@@ -1,4 +1,4 @@
-import { apiPath, apiEndpoints } from './apiPath';
+import { apiPath, apiEndpoints, METHODS } from './apiPath';
 import { IUser, IToken, ITask } from './typesApi';
 import { getFromLocalStorage } from '../utils/utils';
 
@@ -304,6 +304,210 @@ export const api = {
       }
     } catch (error) {
       throw new Error('Task is not created');
+    }
+  },
+  async getBoard(idBoard: string) {
+    try {
+      const response = await fetch(`${apiPath}${apiEndpoints.boards}/${idBoard}`, {
+        method: METHODS.get,
+        headers: {
+          Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else if (response.status === 404) {
+        return response.status;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Board was not founded!');
+    }
+  },
+  async createColumn(boardId: string, title: string) {
+    try {
+      const response = await fetch(
+        `${apiPath}${apiEndpoints.boards}/${boardId}/${apiEndpoints.columns}`,
+        {
+          method: METHODS.post,
+          headers: {
+            Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: title,
+          }),
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else if (response.status === 404) {
+        return response.status;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Board was not founded!');
+    }
+  },
+  async getColumn(boardId: string, columnId: string) {
+    try {
+      const response = await fetch(
+        `${apiPath}${apiEndpoints.boards}/${boardId}/${apiEndpoints.columns}/${columnId}`,
+        {
+          method: METHODS.get,
+          headers: {
+            Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else if (response.status === 404) {
+        return response.status;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Board was not founded!');
+    }
+  },
+  async deleteColumn(boardId: string, title: string, columnId: string) {
+    try {
+      const response = await fetch(
+        `${apiPath}${apiEndpoints.boards}/${boardId}/${apiEndpoints.columns}/${columnId}`,
+        {
+          method: METHODS.delete,
+          headers: {
+            Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else if (response.status === 404) {
+        return response.status;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Board was not founded!');
+    }
+  },
+  async updateColumn(boardId: string, title: string, columnId: string, order: number) {
+    try {
+      const response = await fetch(
+        `${apiPath}${apiEndpoints.boards}/${boardId}/${apiEndpoints.columns}/${columnId}`,
+        {
+          method: METHODS.put,
+          headers: {
+            Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: title,
+            order: order,
+          }),
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else if (response.status === 404) {
+        return response.status;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Board was not founded!');
+    }
+  },
+  async getAllColumns(boardId: string) {
+    try {
+      const response = await fetch(
+        `${apiPath}${apiEndpoints.boards}/${boardId}/${apiEndpoints.columns}`,
+        {
+          method: METHODS.get,
+          headers: {
+            Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else if (response.status === 404) {
+        return response.status;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Board was not founded!');
+    }
+  },
+  async getAllTasks(boardId: string, columnId: string) {
+    try {
+      const response = await fetch(
+        `${apiPath}${apiEndpoints.boards}/${boardId}/${apiEndpoints.columns}/${columnId}/${apiEndpoints.tasks}`,
+        {
+          method: METHODS.get,
+          headers: {
+            Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else if (response.status === 404) {
+        return response.status;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Board was not founded!');
+    }
+  },
+  async deleteTask(boardId: string, columnId: string, taskId: string) {
+    try {
+      const response = await fetch(
+        `${apiPath}${apiEndpoints.boards}/${boardId}/${apiEndpoints.columns}/${columnId}/${apiEndpoints.tasks}/${taskId}`,
+        {
+          method: METHODS.delete,
+          headers: {
+            Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else if (response.status === 404) {
+        return response.status;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Board was not founded!');
     }
   },
 };

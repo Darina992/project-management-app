@@ -23,3 +23,8 @@ export interface IFormBoardCreate {
   name: string;
   description: string;
 }
+
+export interface IGetColumn {
+  boardId: string;
+  columnId: string;
+}

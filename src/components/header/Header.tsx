@@ -19,7 +19,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { AppDispatch, RootState } from 'store';
 import { setLang, setTranslate } from 'store/langReducer';
-import { resetAuth } from 'store/userReducer';
+import { resetAuth, UserState } from 'store/userReducer';
 import { BoardlCreate } from '../modal/BoardlCreate';
 import { actionsOpenModal } from 'store/modalReducer';
 import { ModalDialogDell } from 'components/modal/ModalDialogDell';
