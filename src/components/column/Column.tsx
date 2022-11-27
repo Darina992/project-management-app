@@ -17,13 +17,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from 'store';
-import { deleteColumn, getBoardData, updateColumn } from 'store/boardReducer';
+import { getBoardData, updateColumn } from 'store/boardReducer';
 import { useSelector } from 'react-redux';
 import AddTask from 'components/addTask/addTask';
 import { Task } from 'components/task/Task';
-import { IColumn, ITask } from 'api/typesApi';
+import { IColumn } from 'api/typesApi';
 import { useParams } from 'react-router-dom';
-import { ModalDialogDell } from 'components/modal/ModalDialogDell';
 import { actionsOpenModal } from 'store/modalReducer';
 
 export const Column: React.FC<{ columnId: string; dataColumn: IColumn }> = ({
@@ -33,21 +32,26 @@ export const Column: React.FC<{ columnId: string; dataColumn: IColumn }> = ({
   const { idBoard } = useParams();
   const [isEditTitleColumn, setIsEditTitleColumn] = useState(false);
   const { register, handleSubmit, getValues } = useForm();
-  const { tasks } = useSelector((state: RootState) => state.board);
   const [titleColumn, setTitleColumn] = useState(dataColumn.title);
   const dispatch = useDispatch<AppDispatch>();
   const [isFormTask, setIsFormTask] = useState(false);
   const { translate } = useSelector((state: RootState) => state.langReducer);
-  const [tasksData, setTasksData] = useState<ITask[]>(tasks);
+  const { openDilog } = useSelector((state: RootState) => state.openModal);
 
   useEffect(() => {
     dispatch(getBoardData(idBoard as string));
     // dispatch(getAllTasks({ boardId: idBoard as string, columnId: columnId }));
-  }, [dispatch, idBoard, columnId, isFormTask]);
-  // useEffect(() => {
-  //   // dispatch(getBoardData(idBoard as string));
-  //   setTasksData(() => tasks);
-  // }, [tasks]);
+  }, [dispatch, idBoard, columnId, isFormTask, openDilog]);
+
+  const handleDelete = () => {
+    const data = {
+      id: dataColumn.id,
+      actionFor: 'column',
+    };
+    dispatch(actionsOpenModal.setDelteId(data));
+    dispatch(actionsOpenModal.setIdBoard(idBoard));
+    dispatch(actionsOpenModal.setOpenDilog(true));
+  };
 
   const onCloseModal = () => {
     setIsFormTask(false);
@@ -95,23 +99,7 @@ export const Column: React.FC<{ columnId: string; dataColumn: IColumn }> = ({
         <CardHeader
           title={<Typography onClick={() => setIsEditTitleColumn(true)}>{titleColumn}</Typography>}
           action={
-            <IconButton
-              aria-label="settings"
-              onClick={() => {
-                // dispatch(actionsOpenModal.setOpenDilog(true));
-                // dispatch(actionsOpenModal.setIdBoard(idBoard));
-                dispatch(
-                  // add open modal
-                  deleteColumn({
-                    boardId: idBoard as string,
-                    title: dataColumn.title as string,
-                    columnId: columnId,
-                  })
-                );
-                // // dispatch(getAllColumns(idBoard as string));
-                // dispatch(getBoardData(idBoard as string));
-              }}
-            >
+            <IconButton aria-label="settings" onClick={() => handleDelete()}>
               <DeleteOutlineIcon fontSize="small" />
             </IconButton>
           }
