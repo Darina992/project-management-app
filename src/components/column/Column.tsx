@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
@@ -17,20 +17,37 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from 'store';
-import { deleteColumn, updateColumn } from 'store/boardReducer';
+import { deleteColumn, getBoardData, updateColumn } from 'store/boardReducer';
 import { useSelector } from 'react-redux';
 import AddTask from 'components/addTask/addTask';
 import { Task } from 'components/task/Task';
-import { IColumn } from 'api/typesApi';
+import { IColumn, ITask } from 'api/typesApi';
+import { useParams } from 'react-router-dom';
+import { ModalDialogDell } from 'components/modal/ModalDialogDell';
+import { actionsOpenModal } from 'store/modalReducer';
 
-export const Column: React.FC<{ data: IColumn }> = ({ data }) => {
+export const Column: React.FC<{ columnId: string; dataColumn: IColumn }> = ({
+  columnId,
+  dataColumn,
+}) => {
+  const { idBoard } = useParams();
   const [isEditTitleColumn, setIsEditTitleColumn] = useState(false);
-  const [titleColumn, setTitleColumn] = useState(data.title);
   const { register, handleSubmit, getValues } = useForm();
-  const { boardData } = useSelector((state: RootState) => state.board);
+  const { tasks } = useSelector((state: RootState) => state.board);
+  const [titleColumn, setTitleColumn] = useState(dataColumn.title);
   const dispatch = useDispatch<AppDispatch>();
   const [isFormTask, setIsFormTask] = useState(false);
   const { translate } = useSelector((state: RootState) => state.langReducer);
+  const [tasksData, setTasksData] = useState<ITask[]>(tasks);
+
+  useEffect(() => {
+    dispatch(getBoardData(idBoard as string));
+    // dispatch(getAllTasks({ boardId: idBoard as string, columnId: columnId }));
+  }, [dispatch, idBoard, columnId, isFormTask]);
+  // useEffect(() => {
+  //   // dispatch(getBoardData(idBoard as string));
+  //   setTasksData(() => tasks);
+  // }, [tasks]);
 
   const onCloseModal = () => {
     setIsFormTask(false);
@@ -40,10 +57,10 @@ export const Column: React.FC<{ data: IColumn }> = ({ data }) => {
     setTitleColumn(getValues('title'));
     dispatch(
       updateColumn({
-        boardId: boardData?.id as string,
+        boardId: idBoard as string,
         title: getValues('title'),
-        columnId: data.id,
-        order: data.order,
+        columnId: dataColumn.id,
+        order: dataColumn.order,
       })
     );
     setIsEditTitleColumn(false);
@@ -69,7 +86,7 @@ export const Column: React.FC<{ data: IColumn }> = ({ data }) => {
   };
 
   return isFormTask ? (
-    <AddTask boardId={boardData?.id as string} columnId={data.id} onClose={onCloseModal} />
+    <AddTask boardId={idBoard as string} columnId={columnId} onClose={onCloseModal} />
   ) : (
     <Card sx={{ width: 275, backgroundColor: 'rgb(233, 239, 243)' }}>
       {isEditTitleColumn ? (
@@ -81,14 +98,18 @@ export const Column: React.FC<{ data: IColumn }> = ({ data }) => {
             <IconButton
               aria-label="settings"
               onClick={() => {
+                // dispatch(actionsOpenModal.setOpenDilog(true));
+                // dispatch(actionsOpenModal.setIdBoard(idBoard));
                 dispatch(
                   // add open modal
                   deleteColumn({
-                    boardId: boardData?.id as string,
-                    title: data.title,
-                    columnId: data.id,
+                    boardId: idBoard as string,
+                    title: dataColumn.title as string,
+                    columnId: columnId,
                   })
                 );
+                // // dispatch(getAllColumns(idBoard as string));
+                // dispatch(getBoardData(idBoard as string));
               }}
             >
               <DeleteOutlineIcon fontSize="small" />
@@ -99,8 +120,10 @@ export const Column: React.FC<{ data: IColumn }> = ({ data }) => {
         />
       )}
       <CardContent sx={{ maxHeight: 350, overflowY: 'auto' }}>
-        {data.tasks &&
-          data.tasks?.map((task) => <Task key={task.id} taskData={task} columnId={data.id} />)}
+        {dataColumn.tasks &&
+          dataColumn.tasks.map((task) => (
+            <Task key={task.id} taskData={task} columnId={columnId} />
+          ))}
       </CardContent>
       <CardActions>
         <Button variant="text" startIcon={<AddIcon />} onClick={() => setIsFormTask(true)}>

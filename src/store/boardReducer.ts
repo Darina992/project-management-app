@@ -1,16 +1,19 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { api } from 'api/api';
 import { IBoard, IColumn, ITask } from 'api/typesApi';
+import { IGetColumn } from 'types/boardPageType';
 
 export const initialBoardState: IBoardState = {
   boardData: null,
   columns: [],
+  column: null,
   tasks: [],
 };
 
 export interface IBoardState {
   boardData: IBoard | null;
   columns: IColumn[];
+  column: IColumn | null;
   tasks: ITask[];
 }
 
@@ -55,6 +58,12 @@ export const getAllColumns = createAsyncThunk('board/getAllColumns', async (idBo
   return data;
 });
 
+export const getColumn = createAsyncThunk('board/getColumns', async (options: IGetColumn) => {
+  const data = await api.getColumn(options.boardId, options.columnId);
+  console.log(data);
+  return data;
+});
+
 export const getAllTasks = createAsyncThunk(
   'board/getAllTasks',
   async (options: { boardId: string; columnId: string }) => {
@@ -87,10 +96,13 @@ export const boardSlice = createSlice({
         state.boardData = action.payload;
       })
       .addCase(getAllTasks.fulfilled, (state, action) => {
-        state.tasks = action.payload;
+        state.tasks = JSON.parse(JSON.stringify(action.payload));
       })
       .addCase(getAllColumns.fulfilled, (state, action) => {
-        state.columns = action.payload;
+        state.columns = JSON.parse(JSON.stringify(action.payload));
+      })
+      .addCase(getColumn.fulfilled, (state, action) => {
+        state.column = action.payload;
       })
       .addDefaultCase(() => {});
   },
