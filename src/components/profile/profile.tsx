@@ -27,6 +27,7 @@ import { style } from './styles';
 import { useNavigate } from 'react-router-dom';
 import ModalWarning from './ModalWarning';
 import ModalConfirm from './ModalConfirm';
+import './style.sass';
 
 export default function Profile() {
   const state: UserState = useSelector((state: RootState) => state.user);
@@ -89,7 +90,11 @@ export default function Profile() {
         <Typography component="h1" variant="h5">
           <strong>{translate.profileEdit}</strong>
         </Typography>
-        <Grid sx={style.userInfoConteiner} justifyContent="space-between">
+        <Grid
+          sx={style.userInfoConteiner}
+          justifyContent="space-between"
+          className="user-info-conteiner"
+        >
           <Box>
             <img src={Editor} />
           </Box>
