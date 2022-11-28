@@ -31,7 +31,12 @@ export const Column: React.FC<{ columnId: string; dataColumn: IColumn }> = ({
 }) => {
   const { idBoard } = useParams();
   const [isEditTitleColumn, setIsEditTitleColumn] = useState(false);
-  const { register, handleSubmit, getValues } = useForm();
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm();
   const [titleColumn, setTitleColumn] = useState(dataColumn.title);
   const dispatch = useDispatch<AppDispatch>();
   const [isFormTask, setIsFormTask] = useState(false);
@@ -40,7 +45,6 @@ export const Column: React.FC<{ columnId: string; dataColumn: IColumn }> = ({
 
   useEffect(() => {
     dispatch(getBoardData(idBoard as string));
-    // dispatch(getAllTasks({ boardId: idBoard as string, columnId: columnId }));
   }, [dispatch, idBoard, columnId, isFormTask, openDilog]);
 
   const handleDelete = () => {
@@ -71,20 +75,34 @@ export const Column: React.FC<{ columnId: string; dataColumn: IColumn }> = ({
   };
   const formTitleColumn = () => {
     return (
-      <Box
-        component="form"
-        onSubmit={handleSubmit(onSaveTitleColumn)}
-        sx={{ mt: 1, display: 'flex' }}
-      >
-        <TextField defaultValue={titleColumn} size="small" {...register('title')} />
-        <Box sx={{ display: 'flex' }}>
-          <IconButton aria-label="settings" type="submit">
-            <CheckIcon color="success" fontSize="small" />
-          </IconButton>
-          <IconButton aria-label="settings" onClick={() => setIsEditTitleColumn(false)}>
-            <CloseIcon color="error" fontSize="small" />
-          </IconButton>
+      <Box>
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSaveTitleColumn)}
+          sx={{ mt: 1, display: 'flex' }}
+        >
+          <TextField
+            defaultValue={titleColumn}
+            size="small"
+            {...register('title', {
+              maxLength: {
+                value: 30,
+                message: 'Title must be less than 30 characters',
+              },
+            })}
+          />
+          <Box sx={{ display: 'flex' }}>
+            <IconButton aria-label="settings" type="submit">
+              <CheckIcon color="success" fontSize="small" />
+            </IconButton>
+            <IconButton aria-label="settings" onClick={() => setIsEditTitleColumn(false)}>
+              <CloseIcon color="error" fontSize="small" />
+            </IconButton>
+          </Box>
         </Box>
+        <Typography color="error" sx={{ fontSize: 12, mt: 0.5 }}>
+          {errors?.title?.message as string}
+        </Typography>
       </Box>
     );
   };
@@ -97,7 +115,14 @@ export const Column: React.FC<{ columnId: string; dataColumn: IColumn }> = ({
         <CardHeader title={formTitleColumn()} />
       ) : (
         <CardHeader
-          title={<Typography onClick={() => setIsEditTitleColumn(true)}>{titleColumn}</Typography>}
+          title={
+            <Typography
+              onClick={() => setIsEditTitleColumn(true)}
+              sx={{ overflowWrap: 'break-word', maxWidth: 200 }}
+            >
+              {titleColumn}
+            </Typography>
+          }
           action={
             <IconButton aria-label="settings" onClick={() => handleDelete()}>
               <DeleteOutlineIcon fontSize="small" />

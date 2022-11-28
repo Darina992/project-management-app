@@ -1,15 +1,20 @@
 import { Box, IconButton, Typography } from '@mui/material';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { ITask } from 'api/typesApi';
 import { AppDispatch } from 'store';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { actionsOpenModal } from 'store/modalReducer';
+import { getBoardData } from 'store/boardReducer';
 
 export const Task: FC<{ taskData: ITask; columnId: string }> = ({ taskData, columnId }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { idBoard } = useParams();
+
+  useEffect(() => {
+    dispatch(getBoardData(idBoard as string));
+  }, [dispatch, idBoard, columnId]);
 
   const handleDelete = () => {
     const data = {
@@ -33,7 +38,9 @@ export const Task: FC<{ taskData: ITask; columnId: string }> = ({ taskData, colu
         borderRadius: 1,
       }}
     >
-      <Typography sx={{ p: 1 }}>{taskData.title}</Typography>
+      <Typography sx={{ p: 1, overflowWrap: 'break-word', maxWidth: 190, fontSize: 16 }}>
+        {taskData.title}
+      </Typography>
       <IconButton aria-label="settings" onClick={() => handleDelete()}>
         <DeleteOutlineIcon fontSize="small" />
       </IconButton>
