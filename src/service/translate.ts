@@ -51,6 +51,7 @@ const i18Obj = {
     addTaskTitleError: 'Add title',
     addTaskDescription: 'Task description',
     addColumn: 'Add column',
+    errorEditTitle: 'The field must be less than 30 characters',
   },
   ru: {
     signIn: 'Вход',
@@ -104,6 +105,7 @@ const i18Obj = {
     addTaskTitleError: 'Добавьте название',
     addTaskDescription: 'Описание задачи',
     addColumn: 'Добавить колонку',
+    errorEditTitle: 'Поле должно содержать не более 30 символов',
   },
 };
 export default i18Obj;

@@ -87,7 +87,7 @@ export const Column: React.FC<{ columnId: string; dataColumn: IColumn }> = ({
             {...register('title', {
               maxLength: {
                 value: 30,
-                message: 'Title must be less than 30 characters',
+                message: translate.errorEditTitle,
               },
             })}
           />
