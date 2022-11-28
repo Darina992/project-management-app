@@ -1,5 +1,6 @@
 import { apiPath, apiEndpoints, METHODS } from './apiPath';
 import { IUser, IToken, ITask } from './typesApi';
+import { IBodyTask } from 'types/boardPageType';
 import { getFromLocalStorage } from '../utils/utils';
 
 export const api = {
@@ -84,6 +85,24 @@ export const api = {
           },
         }
       );
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Failed get user info');
+    }
+  },
+  async getUser(id: string): Promise<IUser> {
+    try {
+      const response = await fetch(`${apiPath}${apiEndpoints.users}${id}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+        },
+      });
       if (response.ok) {
         const data = await response.json();
         return data;
@@ -483,6 +502,69 @@ export const api = {
       }
     } catch (error) {
       throw new Error('Board was not founded!');
+    }
+  },
+  async getTask(boardId: string, columnId: string, taskId: string) {
+    try {
+      const response = await fetch(
+        `${apiPath}${apiEndpoints.boards}/${boardId}/${apiEndpoints.columns}/${columnId}/${apiEndpoints.tasks}/${taskId}`,
+        {
+          method: METHODS.get,
+          headers: {
+            Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else if (response.status === 404) {
+        console.log('404', response.status);
+        return response.status;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Task was not founded!');
+    }
+  },
+  async updateTask(
+    boardId: string,
+    columnId: string,
+    taskId: string,
+    body: IBodyTask
+  ): Promise<ITask | undefined> {
+    try {
+      const response = await fetch(
+        `${apiPath}${apiEndpoints.boards}/${boardId}/${apiEndpoints.columns}/${columnId}/${apiEndpoints.tasks}/${taskId}`,
+        {
+          method: METHODS.put,
+          headers: {
+            Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: body.title,
+            order: body.order,
+            description: body.description,
+            userId: body.userId,
+            boardId: boardId,
+            columnId: columnId,
+          }),
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        console.log('updateTask', data);
+        return data;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Task is not updated');
     }
   },
   async deleteTask(boardId: string, columnId: string, taskId: string) {

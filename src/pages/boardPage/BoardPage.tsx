@@ -7,17 +7,19 @@ import { Column } from 'components/column/Column';
 import AddIcon from '@mui/icons-material/Add';
 import { NavLink, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { getBoardData } from 'store/boardReducer';
+import actionsBoardSlice, { getBoardData } from 'store/boardReducer';
 import boardBg from '../../assets/board-bg.png';
 import { ColumnCreate } from 'components/modal/ColumnCreate';
 import { actionsColumnSlice } from 'store/columnReducer';
 import { IBoard } from 'api/typesApi';
+import { TaskDescriptionData } from '../../components/modal/TaskDescriptionData';
 
 export const BoardPage = () => {
   const { idBoard } = useParams();
   const { translate } = useSelector((state: RootState) => state.langReducer);
   const { boardData } = useSelector((state: RootState) => state.board);
   const { openModal } = useSelector((state: RootState) => state.columns);
+  const { openModalTask } = useSelector((state: RootState) => state.board);
   const dispatch = useDispatch<AppDispatch>();
   const [boardState, setBoardState] = useState<IBoard>(boardData as IBoard);
   const { openDilog } = useSelector((state: RootState) => state.openModal);
@@ -29,6 +31,7 @@ export const BoardPage = () => {
 
   useEffect(() => {
     setBoardState(() => boardData as IBoard);
+    dispatch(actionsBoardSlice.actionsBoardSlice.setBoardTitle(boardData?.title));
   }, [boardData]);
 
   return openModal ? (
@@ -45,6 +48,7 @@ export const BoardPage = () => {
         backgroundPosition: 'right bottom',
       }}
     >
+      {openModalTask && <TaskDescriptionData />}
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box>
           <Typography variant="h3">{boardData?.title}</Typography>
