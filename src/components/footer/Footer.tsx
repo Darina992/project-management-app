@@ -38,7 +38,7 @@ export const Footer = () => {
           <Link href="https://rs.school/react/">
             <SvgIcon component={RssIcon} sx={{ width: 100 }} inheritViewBox color="secondary" />
           </Link>
-          <Box sx={{ display: 'flex', gap: 5 }} className="github-links">
+          <Box sx={{ display: 'flex', gap: 5 }}>
             {githubLink(translate.nameD, 'https://github.com/Darina992')}
             {githubLink(translate.nameA, 'https://github.com/alimbaeva')}
             {githubLink(translate.nameV, 'https://github.com/vpuzyrevich')}
