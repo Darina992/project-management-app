@@ -54,7 +54,6 @@ export const Task: FC<{ taskData: ITask; columnId: string }> = ({ taskData, colu
         backgroundColor: '#fff',
         borderRadius: 1,
       }}
-      // onClick={() => handleClick()}
     >
       <Typography sx={{ p: 1, width: '100%' }} onClick={() => handleClick()}>
         {taskData.title}
