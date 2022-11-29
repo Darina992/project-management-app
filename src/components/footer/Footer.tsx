@@ -4,6 +4,7 @@ import { ReactComponent as RssIcon } from '../../assets/rss.svg';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
+import './style.sass';
 
 export const Footer = () => {
   const { translate } = useSelector((state: RootState) => state.langReducer);
@@ -32,11 +33,12 @@ export const Footer = () => {
             justifyContent: 'space-between',
             padding: '20px 0',
           }}
+          className="footer-info"
         >
           <Link href="https://rs.school/react/">
             <SvgIcon component={RssIcon} sx={{ width: 100 }} inheritViewBox color="secondary" />
           </Link>
-          <Box sx={{ display: 'flex', gap: 5 }}>
+          <Box sx={{ display: 'flex', gap: 5 }} className="github-links">
             {githubLink(translate.nameD, 'https://github.com/Darina992')}
             {githubLink(translate.nameA, 'https://github.com/alimbaeva')}
             {githubLink(translate.nameV, 'https://github.com/vpuzyrevich')}
