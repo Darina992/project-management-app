@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from 'store';
 import actionsBoardSlice, { updateTask } from 'store/boardReducer';
 import { actionsOpenModal } from 'store/modalReducer';
+import './modalStyle.scss';
 
 export const TaskDescriptionData: FC = () => {
   const { translate } = useSelector((state: RootState) => state.langReducer);
@@ -53,14 +54,22 @@ export const TaskDescriptionData: FC = () => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box className="modal" sx={{ backgroundColor: 'rgb(233, 239, 243)' }}>
-        <Typography id="modal-modal-title" variant="h6" component="h6">
+      <Box
+        className="modal"
+        sx={{
+          backgroundColor: 'rgb(233, 239, 243)',
+          display: 'flex',
+          justifyContent: 'space-around',
+          flexWrap: 'wrap',
+        }}
+      >
+        <Typography id="modal-modal-title" variant="h6" component="h6" sx={{ maxWidth: '400px' }}>
           {boardTitle}/{columnTitle}
         </Typography>
-        <Typography id="modal-modal-title" variant="h6" component="h6">
+        <Typography id="modal-modal-title" variant="h6" component="h6" sx={{ maxWidth: '400px' }}>
           {translate.createdTask} {columnCreateUser}
         </Typography>
-        <Typography id="modal-modal-title" variant="h6" component="h6">
+        <Typography id="modal-modal-title" variant="h6" component="h6" sx={{ maxWidth: '400px' }}>
           {translate.titleTaskModal}
         </Typography>
         {changeTask ? (
@@ -90,7 +99,7 @@ export const TaskDescriptionData: FC = () => {
             {newDataTask.description ? newDataTask.description : task.description}
           </Typography>
         )}
-        <Box sx={{ mt: 5, display: 'flex', justifyContent: 'space-around' }}>
+        <Box sx={{ mt: 5, display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
           <Button variant="outlined" onClick={() => setChangeTask(true)}>
             {translate.change}
           </Button>
