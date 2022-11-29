@@ -177,7 +177,7 @@ export const api = {
         return await Promise.reject(new Error(response.statusText));
       }
     } catch (error) {
-      throw new Error('Registration failed');
+      throw new Error('Failed to create board');
     }
   },
   async getAllBoards() {
@@ -195,7 +195,7 @@ export const api = {
         return await Promise.reject(new Error(response.statusText));
       }
     } catch (error) {
-      throw new Error('Failed get all users');
+      throw new Error('Failed get all boards');
     }
   },
   async getBoardId(id: string) {
@@ -215,7 +215,7 @@ export const api = {
         return await Promise.reject(new Error(response.statusText));
       }
     } catch (error) {
-      throw new Error('Failed get all users');
+      throw new Error('Failed get all board');
     }
   },
   async updateBoardId(id: string, title: string, description: string) {
@@ -241,7 +241,7 @@ export const api = {
         return await Promise.reject(new Error(response.statusText));
       }
     } catch (error) {
-      throw new Error('Failed get all users');
+      throw new Error('Failed to update board');
     }
   },
   async deleteBoard(id: string) {
@@ -259,7 +259,7 @@ export const api = {
         return response.status;
       }
     } catch (error) {
-      throw new Error('User is not deleted');
+      throw new Error('Board is not deleted');
     }
   },
   async createNewColumn(boardId: string, title: string) {
@@ -284,11 +284,10 @@ export const api = {
       } else if (response.status === 404) {
         return response.status;
       } else {
-        console.log(Promise.reject(new Error(response.statusText)));
         return await Promise.reject(new Error(response.statusText));
       }
     } catch (error) {
-      throw new Error('Registration failed');
+      throw new Error('Failed to create column');
     }
   },
   async createTask(
@@ -558,7 +557,6 @@ export const api = {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log('updateTask', data);
         return data;
       } else {
         return await Promise.reject(new Error(response.statusText));
