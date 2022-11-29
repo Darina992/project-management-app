@@ -6,6 +6,7 @@ import actionsBoardSlice, { updateTask } from 'store/boardReducer';
 import { actionsOpenModal } from 'store/modalReducer';
 
 export const TaskDescriptionData: FC = () => {
+  const { translate } = useSelector((state: RootState) => state.langReducer);
   const { task, openModalTask, columnCreateUser, columnTitle, boardTitle } = useSelector(
     (state: RootState) => state.board
   );
@@ -57,15 +58,15 @@ export const TaskDescriptionData: FC = () => {
           {boardTitle}/{columnTitle}
         </Typography>
         <Typography id="modal-modal-title" variant="h6" component="h6">
-          Created: {columnCreateUser}
+          {translate.createdTask} {columnCreateUser}
         </Typography>
         <Typography id="modal-modal-title" variant="h6" component="h6">
-          Title:
+          {translate.titleTaskModal}
         </Typography>
         {changeTask ? (
           <TextField
             id="standard-basic"
-            label="Title task"
+            label={translate.inputTitleTask}
             variant="standard"
             onChange={(e) => setNewDataTask({ ...newDataTask, title: e.target.value })}
           />
@@ -75,12 +76,12 @@ export const TaskDescriptionData: FC = () => {
           </Typography>
         )}
         <Typography id="modal-modal-title" variant="h6" component="h6">
-          description:
+          {translate.descriptionTask}
         </Typography>
         {changeTask ? (
           <TextField
             id="standard-basic"
-            label="Description task"
+            label={translate.inputDescriptionTask}
             variant="standard"
             onChange={(e) => setNewDataTask({ ...newDataTask, description: e.target.value })}
           />
@@ -91,13 +92,13 @@ export const TaskDescriptionData: FC = () => {
         )}
         <Box sx={{ mt: 5, display: 'flex', justifyContent: 'space-around' }}>
           <Button variant="outlined" onClick={() => setChangeTask(true)}>
-            Change
+            {translate.change}
           </Button>
           <Button variant="outlined" color="success" onClick={() => handleSave()}>
-            Save
+            {translate.save}
           </Button>
           <Button variant="outlined" color="error" onClick={() => handleDelete()}>
-            Delete
+            {translate.delete}
           </Button>
         </Box>
       </Box>
