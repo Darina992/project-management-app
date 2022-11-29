@@ -157,7 +157,7 @@ export const api = {
   async createNewBoard(title: string, description: string) {
     try {
       const response = await fetch(`${apiPath}${apiEndpoints.boards}`, {
-        method: 'POST',
+        method: METHODS.post,
         headers: {
           Authorization: `Bearer ${getFromLocalStorage('$token')}`,
           Accept: 'application/json',
@@ -183,7 +183,7 @@ export const api = {
   async getAllBoards() {
     try {
       const response = await fetch(`${apiPath}${apiEndpoints.boards}`, {
-        method: 'GET',
+        method: METHODS.get,
         headers: {
           Authorization: `Bearer ${getFromLocalStorage('$token')}`,
         },
@@ -201,7 +201,7 @@ export const api = {
   async getBoardId(id: string) {
     try {
       const response = await fetch(`${apiPath}${apiEndpoints.boards}${id}`, {
-        method: 'GET',
+        method: METHODS.get,
         headers: {
           Authorization: `Bearer ${getFromLocalStorage('$token')}`,
         },
@@ -221,7 +221,7 @@ export const api = {
   async updateBoardId(id: string, title: string, description: string) {
     try {
       const response = await fetch(`${apiPath}${apiEndpoints.boards}/${id}`, {
-        method: 'PUT',
+        method: METHODS.put,
         headers: {
           Authorization: `Bearer ${getFromLocalStorage('$token')}`,
           Accept: 'application/json',
@@ -247,7 +247,7 @@ export const api = {
   async deleteBoard(id: string) {
     try {
       const response = await fetch(`${apiPath}${apiEndpoints.boards}/${id}`, {
-        method: 'DELETE',
+        method: METHODS.delete,
         headers: {
           Authorization: `Bearer ${getFromLocalStorage('$token')}`,
         },
@@ -267,7 +267,7 @@ export const api = {
       const response = await fetch(
         `${apiPath}${apiEndpoints.boards}/${boardId}/${apiEndpoints.columns}`,
         {
-          method: 'POST',
+          method: METHODS.post,
           headers: {
             Authorization: `Bearer ${getFromLocalStorage('$token')}`,
             Accept: 'application/json',
