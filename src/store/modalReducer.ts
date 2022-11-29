@@ -5,15 +5,19 @@ import { RootState } from './index';
 export interface SearchType {
   openModal: boolean;
   idBoard: string;
+  columnId: string;
   openDilog: boolean;
   deliteId: string;
+  actionFor: string;
 }
 
 export const initialSearch: SearchType = {
   openModal: false,
   idBoard: '',
+  columnId: '',
   openDilog: false,
   deliteId: '',
+  actionFor: '',
 };
 
 const openModal = createSlice({
@@ -29,8 +33,12 @@ const openModal = createSlice({
     setIdBoard: (state, actions) => {
       state.idBoard = actions.payload;
     },
+    setIdColumn: (state, actions) => {
+      state.columnId = actions.payload;
+    },
     setDelteId: (state, actions) => {
-      state.deliteId = actions.payload;
+      state.deliteId = actions.payload.id;
+      state.actionFor = actions.payload.actionFor;
     },
   },
 });

@@ -4,10 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from 'store';
 import { deleteBoardID } from 'store/mainReducer ';
 import { actionsOpenModal } from 'store/modalReducer';
+import { deleteColumn, deleteTask } from 'store/boardReducer';
 
 export const ModalDialogDell: FC = () => {
   const { translate } = useSelector((state: RootState) => state.langReducer);
-  const { openDilog, deliteId } = useSelector((state: RootState) => state.openModal);
+  const { openDilog, deliteId, actionFor, idBoard, columnId } = useSelector(
+    (state: RootState) => state.openModal
+  );
   const dispatch = useDispatch<AppDispatch>();
 
   const handleCloseDialog = () => {
@@ -16,8 +19,30 @@ export const ModalDialogDell: FC = () => {
 
   const handleDelete = () => {
     dispatch(actionsOpenModal.setOpenDilog(false));
-    dispatch(deleteBoardID(deliteId));
-    dispatch(actionsOpenModal.setDelteId(''));
+    if (actionFor === 'board') {
+      dispatch(deleteBoardID(deliteId));
+      dispatch(actionsOpenModal.setDelteId(''));
+    }
+    if (actionFor === 'column') {
+      dispatch(
+        deleteColumn({
+          boardId: idBoard,
+          title: '',
+          columnId: deliteId,
+        })
+      );
+      dispatch(actionsOpenModal.setDelteId(''));
+    }
+    if (actionFor === 'task') {
+      dispatch(
+        deleteTask({
+          boardId: idBoard,
+          columnId: columnId,
+          taskId: deliteId,
+        })
+      );
+      dispatch(actionsOpenModal.setDelteId(''));
+    }
   };
 
   return (

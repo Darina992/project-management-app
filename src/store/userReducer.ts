@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../api/api';
 import { IUser, INewUser, IAuthUser, IToken } from '../api/typesApi';
 import { setToLocalStorage, getFromLocalStorage } from '../utils/utils';
