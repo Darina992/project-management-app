@@ -8,7 +8,7 @@ export const initialUserState: UserState = {
   name: '',
   login: '',
   isReg: false,
-  isAuth: getFromLocalStorage('$userId') ? true : false,
+  isAuth: Boolean(JSON.parse(getFromLocalStorage('$userIsAuth') as string)) ? true : false,
   isLoading: false,
   showAlert: false,
   showConfirm: false,
@@ -65,10 +65,12 @@ export const userSlice = createSlice({
     },
     resetAuth: (state: UserState) => {
       state.isAuth = false;
+      setToLocalStorage('$userIsAuth', JSON.stringify(state.isAuth));
       state.showAlert = false;
     },
     signIn: (state: UserState) => {
       state.isAuth = true;
+      setToLocalStorage('$userIsAuth', JSON.stringify(state.isAuth));
     },
     resetSuccessEdit: (state: UserState) => {
       state.successEdit = false;
@@ -112,10 +114,11 @@ export const userSlice = createSlice({
       builder.addCase(signInUser.fulfilled, (state, action) => {
         if (action.payload === 403) {
           state.isAuth = false;
+          setToLocalStorage('$userIsAuth', JSON.stringify(state.isAuth));
           state.showAlert = true;
         } else {
           state.isAuth = true;
-          console.log(action.payload);
+          setToLocalStorage('$userIsAuth', JSON.stringify(state.isAuth));
           setToLocalStorage('$token', (action.payload as IToken).token);
         }
         state.isLoading = false;

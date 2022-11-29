@@ -7,13 +7,28 @@ import './style.sass';
 
 export const HamburgerMenu = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
+  const handleDrawer = (e: React.MouseEvent) => {
+    if (
+      (e.target as HTMLElement).closest('a') ||
+      ((e.target as HTMLElement).closest('button') &&
+        !(e.target as HTMLElement).closest('.lng-button'))
+    ) {
+      setOpenDrawer(false);
+    }
+  };
 
   return (
     <Box>
       <IconButton onClick={() => setOpenDrawer(!openDrawer)} sx={{ color: '#bb6b84' }}>
         <MenuRoundedIcon />
       </IconButton>
-      <Drawer open={openDrawer} anchor="right" onClose={() => setOpenDrawer(false)}>
+      <Drawer
+        open={openDrawer}
+        anchor="right"
+        transitionDuration={500}
+        onClose={() => setOpenDrawer(false)}
+        onClick={(e) => handleDrawer(e)}
+      >
         <Box sx={{ mb: 2 }} className="hamburger-menu">
           <IconButton onClick={() => setOpenDrawer(!openDrawer)} sx={{ color: '#bb6b84' }}>
             <CloseIcon />
