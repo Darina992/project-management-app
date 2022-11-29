@@ -54,9 +54,11 @@ export const Task: FC<{ taskData: ITask; columnId: string }> = ({ taskData, colu
         backgroundColor: '#fff',
         borderRadius: 1,
       }}
-      onClick={() => handleClick()}
+      // onClick={() => handleClick()}
     >
-      <Typography sx={{ p: 1 }}>{taskData.title}</Typography>
+      <Typography sx={{ p: 1, width: '100%' }} onClick={() => handleClick()}>
+        {taskData.title}
+      </Typography>
       <IconButton aria-label="settings" onClick={() => handleDelete()}>
         <DeleteOutlineIcon fontSize="small" />
       </IconButton>
