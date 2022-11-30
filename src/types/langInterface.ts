@@ -47,5 +47,6 @@ export interface ILang {
   addTaskTitle: string;
   addTaskTitleError: string;
   addTaskDescription: string;
+  addTaskDescriptionError: string;
   addColumn: string;
 }

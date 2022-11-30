@@ -50,6 +50,7 @@ const i18Obj = {
     addTaskTitle: 'Task title',
     addTaskTitleError: 'Add title',
     addTaskDescription: 'Task description',
+    addTaskDescriptionError: 'Add description',
     addColumn: 'Add column',
   },
   ru: {
@@ -103,6 +104,7 @@ const i18Obj = {
     addTaskTitle: 'Название задачи',
     addTaskTitleError: 'Добавьте название',
     addTaskDescription: 'Описание задачи',
+    addTaskDescriptionError: 'Добавьте описание задачи',
     addColumn: 'Добавить колонку',
   },
 };
