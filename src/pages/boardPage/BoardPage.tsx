@@ -20,6 +20,8 @@ import {
   IDragProvided,
   IDropProvided,
 } from 'types/dropAndDragTypes';
+import AddTask from 'components/addTask/addTask';
+import { setColumnId, setIsOpenAddTask } from 'store/tasksReducer';
 
 export const BoardPage = () => {
   const { idBoard } = useParams();
@@ -30,17 +32,18 @@ export const BoardPage = () => {
   const [boardState, setBoardState] = useState<IBoard>(boardData as IBoard);
   const { openDilog } = useSelector((state: RootState) => state.openModal);
   const [columnState, setColumnState] = useState<IColumn[]>(columns);
+  const { isOpenAddTask, idColumn } = useSelector((state: RootState) => state.tasks);
 
   useEffect(() => {
     dispatch(getBoardData(idBoard as string));
     dispatch(actionsColumnSlice.setIdBoard(idBoard));
     // dispatch(getAllColumns(idBoard as string));
-  }, [idBoard, dispatch, openModal, openDilog]);
+  }, [idBoard, dispatch, openModal, openDilog, isOpenAddTask, idColumn]);
 
   useEffect(() => {
     setBoardState(() => boardData as IBoard);
     setColumnState(() => columns);
-  }, [boardData, columns, dispatch, openDilog, openModal]);
+  }, [boardData, columns, dispatch, openDilog, openModal, isOpenAddTask, idColumn]);
 
   const handleOnDragEnd = async ({ source, destination, draggableId }: DropResult) => {
     if (destination === undefined) {
@@ -80,9 +83,12 @@ export const BoardPage = () => {
     };
   };
 
-  return openModal ? (
-    <ColumnCreate />
-  ) : isLoading ? (
+  const onCloseAddTask = () => {
+    dispatch(setIsOpenAddTask(false));
+    dispatch(setColumnId(''));
+  };
+
+  return isLoading ? (
     <LinearProgress variant="determinate" />
   ) : (
     <Box
@@ -130,12 +136,20 @@ export const BoardPage = () => {
                     return (
                       <Draggable key={column.id} draggableId={column.id} index={column.order}>
                         {(provided: IDragProvided, snapshot: DraggableStateSnapshot) => (
-                          <Column
-                            columnId={column.id}
-                            dataColumn={column}
-                            provided={provided}
-                            styleProp={getStyle(provided.draggableProps.style, snapshot)}
-                          />
+                          <Box>
+                            <Column
+                              columnId={column.id}
+                              dataColumn={column}
+                              provided={provided}
+                              styleProp={getStyle(provided.draggableProps.style, snapshot)}
+                            />
+                            <AddTask
+                              boardId={idBoard as string}
+                              columnId={idColumn}
+                              onClose={onCloseAddTask}
+                              isOpen={isOpenAddTask}
+                            />
+                          </Box>
                         )}
                       </Draggable>
                     );
@@ -155,6 +169,7 @@ export const BoardPage = () => {
           </Button>
         </Box>
       </DragDropContext>
+      <ColumnCreate />
     </Box>
   );
 };

@@ -19,12 +19,12 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from 'store';
 import { getBoardData, updateColumn } from 'store/boardReducer';
 import { useSelector } from 'react-redux';
-import AddTask from 'components/addTask/addTask';
 import { Task } from 'components/task/Task';
 import { IColumn } from 'api/typesApi';
 import { useParams } from 'react-router-dom';
 import { actionsOpenModal } from 'store/modalReducer';
 import { DraggingStyle, IDragProvided } from 'types/dropAndDragTypes';
+import { setColumnId, setIsOpenAddTask } from 'store/tasksReducer';
 
 export const Column: React.FC<{
   columnId: string;
@@ -42,13 +42,13 @@ export const Column: React.FC<{
   } = useForm();
   const [titleColumn, setTitleColumn] = useState(dataColumn.title);
   const dispatch = useDispatch<AppDispatch>();
-  const [isFormTask, setIsFormTask] = useState(false);
   const { translate } = useSelector((state: RootState) => state.langReducer);
   const { openDilog } = useSelector((state: RootState) => state.openModal);
+  const { isOpenAddTask, idColumn } = useSelector((state: RootState) => state.tasks);
 
   useEffect(() => {
     dispatch(getBoardData(idBoard as string));
-  }, [dispatch, idBoard, columnId, isFormTask, openDilog]);
+  }, [dispatch, idBoard, columnId, openDilog, isOpenAddTask, idColumn]);
 
   const handleDelete = () => {
     const data = {
@@ -58,10 +58,6 @@ export const Column: React.FC<{
     dispatch(actionsOpenModal.setDelteId(data));
     dispatch(actionsOpenModal.setIdBoard(idBoard));
     dispatch(actionsOpenModal.setOpenDilog(true));
-  };
-
-  const onCloseModal = () => {
-    setIsFormTask(false);
   };
 
   const onSaveTitleColumn = () => {
@@ -76,6 +72,12 @@ export const Column: React.FC<{
     );
     setIsEditTitleColumn(false);
   };
+
+  const onOpenAddTask = () => {
+    dispatch(setIsOpenAddTask(true));
+    dispatch(setColumnId(columnId));
+  };
+
   const formTitleColumn = () => {
     return (
       <Box>
@@ -110,9 +112,7 @@ export const Column: React.FC<{
     );
   };
 
-  return isFormTask ? (
-    <AddTask boardId={idBoard as string} columnId={columnId} onClose={onCloseModal} />
-  ) : (
+  return (
     <Card
       ref={provided.innerRef}
       {...provided.draggableProps}
@@ -148,7 +148,7 @@ export const Column: React.FC<{
           ))}
       </CardContent>
       <CardActions>
-        <Button variant="text" startIcon={<AddIcon />} onClick={() => setIsFormTask(true)}>
+        <Button variant="text" startIcon={<AddIcon />} onClick={onOpenAddTask}>
           {translate.addTask}
         </Button>
       </CardActions>

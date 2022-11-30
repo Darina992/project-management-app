@@ -5,6 +5,7 @@ import { reducerMainSlice } from './mainReducer ';
 import { reducerColumnSlice } from './columnReducer';
 import { reducerOpenModal } from './modalReducer';
 import boardReducer from './boardReducer';
+import tasksReducer from './tasksReducer';
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     columns: reducerColumnSlice,
     openModal: reducerOpenModal,
     board: boardReducer,
+    tasks: tasksReducer,
   },
 });
 
