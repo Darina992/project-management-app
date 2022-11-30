@@ -24,11 +24,14 @@ import { Task } from 'components/task/Task';
 import { IColumn } from 'api/typesApi';
 import { useParams } from 'react-router-dom';
 import { actionsOpenModal } from 'store/modalReducer';
+import { DraggingStyle, IDragProvided } from 'types/dropAndDragTypes';
 
-export const Column: React.FC<{ columnId: string; dataColumn: IColumn }> = ({
-  columnId,
-  dataColumn,
-}) => {
+export const Column: React.FC<{
+  columnId: string;
+  dataColumn: IColumn;
+  provided: IDragProvided;
+  styleProp: DraggingStyle;
+}> = ({ columnId, dataColumn, provided, styleProp }) => {
   const { idBoard } = useParams();
   const [isEditTitleColumn, setIsEditTitleColumn] = useState(false);
   const {
@@ -110,7 +113,13 @@ export const Column: React.FC<{ columnId: string; dataColumn: IColumn }> = ({
   return isFormTask ? (
     <AddTask boardId={idBoard as string} columnId={columnId} onClose={onCloseModal} />
   ) : (
-    <Card sx={{ width: 265, backgroundColor: 'rgb(233, 239, 243)' }}>
+    <Card
+      ref={provided.innerRef}
+      {...provided.draggableProps}
+      {...provided.dragHandleProps}
+      style={styleProp}
+      sx={{ width: 265, backgroundColor: 'rgb(233, 239, 243)' }}
+    >
       {isEditTitleColumn ? (
         <CardHeader title={formTitleColumn()} />
       ) : (

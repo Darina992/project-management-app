@@ -1,13 +1,15 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { api } from 'api/api';
 import { IBoard, IColumn, ITask } from 'api/typesApi';
 import { IGetColumn } from 'types/boardPageType';
+import { sorted } from 'utils/utils';
 
 export const initialBoardState: IBoardState = {
   boardData: null,
   columns: [],
   column: null,
   tasks: [],
+  isLoading: false,
 };
 
 export interface IBoardState {
@@ -15,6 +17,7 @@ export interface IBoardState {
   columns: IColumn[];
   column: IColumn | null;
   tasks: ITask[];
+  isLoading: boolean;
 }
 
 export const getBoardData = createAsyncThunk('board/getBoardData', async (idBoard: string) => {
@@ -48,6 +51,7 @@ export const updateColumn = createAsyncThunk(
       options.columnId,
       options.order
     );
+    console.log(data);
     return data;
   }
 );
@@ -87,15 +91,28 @@ export const boardSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getBoardData.fulfilled, (state, action) => {
+      // .addCase(getBoardData.pending, (state) => {
+      //   state.isLoading = true;
+      // })
+      .addCase(getBoardData.fulfilled, (state, action: PayloadAction<IBoard>) => {
         state.boardData = JSON.parse(JSON.stringify(action.payload));
+        // state.isLoading = false;
+        state.columns = state.columns && JSON.parse(JSON.stringify(sorted(action.payload.columns)));
       })
       .addCase(getAllTasks.fulfilled, (state, action) => {
         state.tasks = JSON.parse(JSON.stringify(action.payload));
+        // state.isLoading = true;
       })
-      .addCase(getAllColumns.fulfilled, (state, action) => {
-        state.columns = JSON.parse(JSON.stringify(action.payload));
-      })
+      // .addCase(getAllTasks.pending, (state) => {
+      //   state.isLoading = false;
+      // })
+      // .addCase(getAllColumns.pending, (state) => {
+      //   state.isLoading = true;
+      // })
+      // .addCase(getAllColumns.fulfilled, (state, action) => {
+      //   state.columns = JSON.parse(JSON.stringify(sortedColumns(action.payload)));
+      //   // state.isLoading = false;
+      // })
       .addCase(getColumn.fulfilled, (state, action) => {
         state.column = action.payload;
       })
