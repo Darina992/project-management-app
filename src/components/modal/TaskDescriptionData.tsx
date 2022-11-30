@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from 'store';
 import actionsBoardSlice, { updateTask } from 'store/boardReducer';
 import { actionsOpenModal } from 'store/modalReducer';
-import './modalStyle.scss';
+// import './modalStyle.scss';
 
 export const TaskDescriptionData: FC = () => {
   const { translate } = useSelector((state: RootState) => state.langReducer);
@@ -63,25 +63,13 @@ export const TaskDescriptionData: FC = () => {
           flexWrap: 'wrap',
         }}
       >
-        <Typography
-          noWrap
-          id="modal-modal-title"
-          variant="h6"
-          component="h6"
-          sx={{ maxWidth: '400px' }}
-        >
+        <Typography noWrap id="modal-modal-title" variant="h6" component="h6" sx={{ width: '90%' }}>
           {boardTitle}/{columnTitle}
         </Typography>
-        <Typography
-          noWrap
-          id="modal-modal-title"
-          variant="h6"
-          component="h6"
-          sx={{ maxWidth: '400px' }}
-        >
+        <Typography noWrap id="modal-modal-title" variant="h6" component="h6" sx={{ width: '90%' }}>
           {translate.createdTask} {columnCreateUser}
         </Typography>
-        <Typography id="modal-modal-title" variant="h6" component="h6" sx={{ maxWidth: '400px' }}>
+        <Typography id="modal-modal-title" variant="h6" component="h6" sx={{ width: '90%' }}>
           {translate.titleTaskModal}
         </Typography>
         {changeTask ? (
@@ -92,7 +80,7 @@ export const TaskDescriptionData: FC = () => {
             onChange={(e) => setNewDataTask({ ...newDataTask, title: e.target.value })}
           />
         ) : (
-          <Typography noWrap id="modal-modal-description" sx={{ pl: 7, width: '90%' }}>
+          <Typography noWrap id="modal-modal-description" sx={{ pl: 4, width: '90%' }}>
             {newDataTask.title ? newDataTask.title : task.title}
           </Typography>
         )}
@@ -107,7 +95,7 @@ export const TaskDescriptionData: FC = () => {
             onChange={(e) => setNewDataTask({ ...newDataTask, description: e.target.value })}
           />
         ) : (
-          <Typography noWrap id="modal-modal-description" sx={{ pl: 7, width: '90%' }}>
+          <Typography noWrap id="modal-modal-description" sx={{ pl: 4, width: '90%' }}>
             {newDataTask.description ? newDataTask.description : task.description}
           </Typography>
         )}
