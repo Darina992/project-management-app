@@ -56,4 +56,5 @@ export interface ILang {
   change: string;
   save: string;
   delete: string;
+  text404: string;
 }

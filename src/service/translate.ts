@@ -59,6 +59,7 @@ const i18Obj = {
     change: 'Change',
     save: 'Save',
     delete: 'Delete',
+    text404: 'This page does not exist, please go to the main page.',
   },
   ru: {
     signIn: 'Вход',
@@ -120,6 +121,7 @@ const i18Obj = {
     change: 'Изменить',
     save: 'Сохранить',
     delete: 'Удалить',
+    text404: 'Такой страницы не сушествует, прошу перейти на главную страницу.',
   },
 };
 export default i18Obj;
