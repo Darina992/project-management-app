@@ -6,8 +6,13 @@ import { AppDispatch } from 'store';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { actionsOpenModal } from 'store/modalReducer';
+import { IDragProvided } from 'types/dropAndDragTypes';
 
-export const Task: FC<{ taskData: ITask; columnId: string }> = ({ taskData, columnId }) => {
+export const Task: FC<{ taskData: ITask; columnId: string; provided: IDragProvided }> = ({
+  taskData,
+  columnId,
+  provided,
+}) => {
   const dispatch = useDispatch<AppDispatch>();
   const { idBoard } = useParams();
 
@@ -32,6 +37,9 @@ export const Task: FC<{ taskData: ITask; columnId: string }> = ({ taskData, colu
         backgroundColor: '#fff',
         borderRadius: 1,
       }}
+      ref={provided.innerRef}
+      {...provided.draggableProps}
+      {...provided.dragHandleProps}
     >
       <Typography sx={{ p: 1, overflowWrap: 'break-word', maxWidth: 190, fontSize: 16 }}>
         {taskData.title}

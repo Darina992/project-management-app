@@ -20,11 +20,12 @@ import { AppDispatch, RootState } from 'store';
 import { getBoardData, updateColumn } from 'store/boardReducer';
 import { useSelector } from 'react-redux';
 import { Task } from 'components/task/Task';
-import { IColumn } from 'api/typesApi';
+import { IColumn, ITask } from 'api/typesApi';
 import { useParams } from 'react-router-dom';
 import { actionsOpenModal } from 'store/modalReducer';
-import { DraggingStyle, IDragProvided } from 'types/dropAndDragTypes';
+import { DraggingStyle, DropResult, IDragProvided, IDropProvided } from 'types/dropAndDragTypes';
 import { setColumnId, setIsOpenAddTask } from 'store/tasksReducer';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 export const Column: React.FC<{
   columnId: string;
@@ -45,10 +46,15 @@ export const Column: React.FC<{
   const { translate } = useSelector((state: RootState) => state.langReducer);
   const { openDilog } = useSelector((state: RootState) => state.openModal);
   const { isOpenAddTask, idColumn } = useSelector((state: RootState) => state.tasks);
+  const [tasksState, setTasksState] = useState(dataColumn.tasks);
 
   useEffect(() => {
     dispatch(getBoardData(idBoard as string));
   }, [dispatch, idBoard, columnId, openDilog, isOpenAddTask, idColumn]);
+
+  useEffect(() => {
+    setTasksState(() => dataColumn.tasks);
+  }, [dispatch, idBoard, columnId, openDilog, isOpenAddTask, idColumn, dataColumn.tasks]);
 
   const handleDelete = () => {
     const data = {
@@ -76,6 +82,35 @@ export const Column: React.FC<{
   const onOpenAddTask = () => {
     dispatch(setIsOpenAddTask(true));
     dispatch(setColumnId(columnId));
+  };
+
+  const handleOnDragEnd = async ({ source, destination, draggableId }: DropResult) => {
+    if (destination === undefined) {
+      return;
+    }
+
+    if (destination.index === source.index) {
+      return;
+    }
+    // const currentIndex = source.index;
+    const targetIndex = destination.index;
+    const id = draggableId;
+    let title = '';
+    tasksState &&
+      tasksState.map((task) => {
+        if (task.id === id) {
+          title = task.title;
+        }
+      });
+    const items = Array.from(tasksState as ITask[]);
+    const [reorderedItem] = items.splice(source.index - 1, 1);
+    items.splice(destination.index - 1, 0, reorderedItem);
+
+    setTasksState(() => items);
+
+    // await dispatch(
+    //   updateColumn({ boardId: idBoard as string, columnId: id, title: title, order: targetIndex })
+    // );
   };
 
   const formTitleColumn = () => {
@@ -141,12 +176,34 @@ export const Column: React.FC<{
           sx={{ fontSize: 22, fontFamily: 'Montserrat' }}
         />
       )}
-      <CardContent sx={{ maxHeight: 350, overflowY: 'auto' }}>
-        {dataColumn.tasks &&
-          dataColumn.tasks.map((task) => (
-            <Task key={task.id} taskData={task} columnId={columnId} />
-          ))}
-      </CardContent>
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <Droppable droppableId="columns">
+          {(provided: IDropProvided) => (
+            <CardContent
+              sx={{ maxHeight: 350, overflowY: 'auto' }}
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {tasksState &&
+                tasksState.map((task) => {
+                  return (
+                    <Draggable key={task.id} draggableId={task.id} index={task.order}>
+                      {(provided: IDragProvided) => (
+                        <Task
+                          key={task.id}
+                          taskData={task}
+                          columnId={columnId}
+                          provided={provided}
+                        />
+                      )}
+                    </Draggable>
+                  );
+                })}
+              {provided.placeholder}
+            </CardContent>
+          )}
+        </Droppable>
+      </DragDropContext>
       <CardActions>
         <Button variant="text" startIcon={<AddIcon />} onClick={onOpenAddTask}>
           {translate.addTask}

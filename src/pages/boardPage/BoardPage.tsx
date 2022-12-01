@@ -65,9 +65,9 @@ export const BoardPage = () => {
     const items = Array.from(columnState);
     const [reorderedItem] = items.splice(source.index - 1, 1);
     items.splice(destination.index - 1, 0, reorderedItem);
-    console.log(items);
+
     setColumnState(() => items);
-    console.log(columnState);
+
     await dispatch(
       updateColumn({ boardId: idBoard as string, columnId: id, title: title, order: targetIndex })
     );
