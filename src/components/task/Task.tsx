@@ -6,7 +6,12 @@ import { AppDispatch, RootState } from 'store';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { actionsOpenModal } from 'store/modalReducer';
-import actionsBoardSlice, { getTask } from 'store/boardReducer';
+import actionsBoardSlice, {
+  getTask,
+  setColumnCreateUser,
+  setColumnTitle,
+  setOpen,
+} from 'store/boardReducer';
 import { api } from 'api/api';
 import { IDragProvided } from 'types/dropAndDragTypes';
 
@@ -39,14 +44,10 @@ export const Task: FC<{ taskData: ITask; columnId: string; provided: IDragProvid
       })
     );
     if (idBoard) {
-      await api
-        .getColumn(idBoard, columnId)
-        .then((el) => dispatch(actionsBoardSlice.actionsBoardSlice.setColumnTitle(el.title)));
-      await api
-        .getUser(task.userId)
-        .then((el) => dispatch(actionsBoardSlice.actionsBoardSlice.setColumnCreateUser(el.name)));
+      await api.getColumn(idBoard, columnId).then((el) => dispatch(setColumnTitle(el.title)));
+      await api.getUser(task.userId).then((el) => dispatch(setColumnCreateUser(el.name)));
     }
-    dispatch(actionsBoardSlice.actionsBoardSlice.setOpen(true));
+    dispatch(setOpen(true));
   };
 
   return (

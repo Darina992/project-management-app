@@ -7,7 +7,7 @@ import { Column } from 'components/column/Column';
 import AddIcon from '@mui/icons-material/Add';
 import { NavLink, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import actionsBoardSlice, { getBoardData, updateColumn } from 'store/boardReducer';
+import { getBoardData, setBoardTitle, updateColumn } from 'store/boardReducer';
 import boardBg from '../../assets/board-bg.png';
 import { ColumnCreate } from 'components/modal/ColumnCreate';
 import { actionsColumnSlice } from 'store/columnReducer';
@@ -44,7 +44,7 @@ export const BoardPage = () => {
 
   useEffect(() => {
     setBoardState(() => boardData as IBoard);
-    dispatch(actionsBoardSlice.actionsBoardSlice.setBoardTitle(boardData?.title));
+    dispatch(setBoardTitle(boardData?.title));
     setColumnState(() => columns);
   }, [boardData, columns, dispatch, openDilog, openModal, isOpenAddTask, idColumn]);
 
@@ -90,8 +90,6 @@ export const BoardPage = () => {
     dispatch(setIsOpenAddTask(false));
     dispatch(setColumnId(''));
   };
-
-
 
   return isLoading ? (
     <LinearProgress variant="determinate" />

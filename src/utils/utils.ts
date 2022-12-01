@@ -1,5 +1,4 @@
-import { isExpired, decodeToken } from 'react-jwt';
-import { useJwt } from 'react-jwt';
+import { decodeToken } from 'react-jwt';
 
 import { IColumn, ITask } from 'api/typesApi';
 

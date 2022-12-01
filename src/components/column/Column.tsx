@@ -45,7 +45,7 @@ export const Column: React.FC<{
   const dispatch = useDispatch<AppDispatch>();
   const { translate } = useSelector((state: RootState) => state.langReducer);
   const { openDilog } = useSelector((state: RootState) => state.openModal);
-  const { openModalTask } = useSelector((state: RootState) => state.board);
+  // const { openModalTask } = useSelector((state: RootState) => state.board);
   const { isOpenAddTask, idColumn } = useSelector((state: RootState) => state.tasks);
   const [tasksState, setTasksState] = useState(dataColumn.tasks);
 

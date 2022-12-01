@@ -195,6 +195,7 @@ export const boardSlice = createSlice({
   },
 });
 
-const { actions: actionsBoardSlice, reducer } = boardSlice;
+const { reducer, actions } = boardSlice;
 
-export default { actionsBoardSlice, reducer };
+export default reducer;
+export const { setOpen, setBoardTitle, setColumnCreateUser, setColumnTitle } = actions;

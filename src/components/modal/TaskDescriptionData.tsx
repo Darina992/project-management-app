@@ -2,7 +2,7 @@ import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import React, { FC, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from 'store';
-import actionsBoardSlice, { updateTask } from 'store/boardReducer';
+import { setOpen, updateTask } from 'store/boardReducer';
 import { actionsOpenModal } from 'store/modalReducer';
 // import './modalStyle.scss';
 
@@ -18,7 +18,7 @@ export const TaskDescriptionData: FC = () => {
     description: '',
   });
 
-  const handleClose = () => dispatch(actionsBoardSlice.actionsBoardSlice.setOpen(false));
+  const handleClose = () => dispatch(setOpen(false));
 
   const handleSave = () => {
     const data = {

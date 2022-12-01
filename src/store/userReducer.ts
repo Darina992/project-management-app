@@ -169,7 +169,7 @@ export const userSlice = createSlice({
           state.isLoading = false;
         }
       });
-    builder.addCase(getUserById.pending, (state: UserState) => {}),
+    builder.addCase(getUserById.pending, () => {}),
       builder.addCase(getUserById.fulfilled, (state: UserState, action) => {
         state.name = (action.payload as IUser).name;
         state.login = (action.payload as IUser).login;
