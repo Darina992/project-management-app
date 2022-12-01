@@ -1,14 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../api/api';
 import { IUser, INewUser, IAuthUser, IToken } from '../api/typesApi';
-import { setToLocalStorage, getFromLocalStorage } from '../utils/utils';
+import {
+  setToLocalStorage,
+  getFromLocalStorage,
+  isValidToken,
+  updateUserIdFromToken,
+} from '../utils/utils';
 
 export const initialUserState: UserState = {
   id: getFromLocalStorage('$userId') as string,
   name: '',
   login: '',
   isReg: false,
-  isAuth: Boolean(JSON.parse(getFromLocalStorage('$userIsAuth') as string)) ? true : false,
+  isAuth: getFromLocalStorage('$userIsAuth') === 'true' && isValidToken() ? true : false,
   isLoading: false,
   showAlert: false,
   showConfirm: false,
@@ -51,6 +56,12 @@ export const editUser = createAsyncThunk('main/editUser', async (options: INewUs
 
 export const deleteUser = createAsyncThunk('main/deleteUser', async () => {
   const data = await api.deleteUser();
+  return data;
+});
+
+export const getUserById = createAsyncThunk('main/getUserById', async (id: string) => {
+  const data = await api.getUserById();
+  console.log(data);
   return data;
 });
 
@@ -120,6 +131,7 @@ export const userSlice = createSlice({
           state.isAuth = true;
           setToLocalStorage('$userIsAuth', JSON.stringify(state.isAuth));
           setToLocalStorage('$token', (action.payload as IToken).token);
+          state.id = updateUserIdFromToken();
         }
         state.isLoading = false;
       });
@@ -140,21 +152,29 @@ export const userSlice = createSlice({
       state.isLoading = true;
     }),
       builder.addCase(deleteUser.fulfilled, (state, action) => {
-        console.log(action.payload);
         if (action.payload === 204) {
           state.showConfirm = false;
           state.id = '';
           state.name = '';
           state.login = '';
           setToLocalStorage('$userId', '');
+          //setToLocalStorage('$token', '');
           setToLocalStorage('$name', '');
           setToLocalStorage('$login', '');
           state.successDelete = true;
+          state.isAuth = false;
           state.isLoading = false;
         } else {
           state.unsuccessDelete = true;
           state.isLoading = false;
         }
+      });
+    builder.addCase(getUserById.pending, (state: UserState) => {}),
+      builder.addCase(getUserById.fulfilled, (state: UserState, action) => {
+        state.name = (action.payload as IUser).name;
+        state.login = (action.payload as IUser).login;
+        setToLocalStorage('$name', state.name);
+        setToLocalStorage('$login', state.login);
       });
   },
 });

@@ -14,7 +14,7 @@ import Container from '@mui/material/Container';
 import { useSelector, useDispatch } from 'react-redux';
 import { store, RootState } from '../../store/index';
 import { UserState } from '../../store/userReducer';
-import { signInUser, resetAuth } from '../../store/userReducer';
+import { signInUser, resetAuth, getUserById } from '../../store/userReducer';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { SignInFormData } from '../../types/userTypes';
@@ -42,6 +42,12 @@ export default function SignIn() {
       navigate('/main');
     }
   }, [state.isAuth]);
+
+  React.useEffect(() => {
+    if (state.id) {
+      store.dispatch(getUserById(state.id));
+    }
+  }, [state.id]);
 
   return (
     <Container component="main" maxWidth="xs">
