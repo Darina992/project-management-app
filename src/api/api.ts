@@ -1,5 +1,6 @@
 import { apiPath, apiEndpoints, METHODS } from './apiPath';
 import { IUser, IToken, ITask } from './typesApi';
+import { IBodyTask } from 'types/boardPageType';
 import { getFromLocalStorage } from '../utils/utils';
 
 export const api = {
@@ -94,6 +95,24 @@ export const api = {
       throw new Error('Failed get user info');
     }
   },
+  async getUser(id: string): Promise<IUser> {
+    try {
+      const response = await fetch(`${apiPath}${apiEndpoints.users}${id}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Failed get user info');
+    }
+  },
   async deleteUser(): Promise<number | undefined> {
     try {
       const response = await fetch(
@@ -139,7 +158,7 @@ export const api = {
   async createNewBoard(title: string, description: string) {
     try {
       const response = await fetch(`${apiPath}${apiEndpoints.boards}`, {
-        method: 'POST',
+        method: METHODS.post,
         headers: {
           Authorization: `Bearer ${getFromLocalStorage('$token')}`,
           Accept: 'application/json',
@@ -159,13 +178,13 @@ export const api = {
         return await Promise.reject(new Error(response.statusText));
       }
     } catch (error) {
-      throw new Error('Registration failed');
+      throw new Error('Failed to create board');
     }
   },
   async getAllBoards() {
     try {
       const response = await fetch(`${apiPath}${apiEndpoints.boards}`, {
-        method: 'GET',
+        method: METHODS.get,
         headers: {
           Authorization: `Bearer ${getFromLocalStorage('$token')}`,
         },
@@ -177,13 +196,13 @@ export const api = {
         return await Promise.reject(new Error(response.statusText));
       }
     } catch (error) {
-      throw new Error('Failed get all users');
+      throw new Error('Failed get all boards');
     }
   },
   async getBoardId(id: string) {
     try {
       const response = await fetch(`${apiPath}${apiEndpoints.boards}${id}`, {
-        method: 'GET',
+        method: METHODS.get,
         headers: {
           Authorization: `Bearer ${getFromLocalStorage('$token')}`,
         },
@@ -197,13 +216,13 @@ export const api = {
         return await Promise.reject(new Error(response.statusText));
       }
     } catch (error) {
-      throw new Error('Failed get all users');
+      throw new Error('Failed get all board');
     }
   },
   async updateBoardId(id: string, title: string, description: string) {
     try {
       const response = await fetch(`${apiPath}${apiEndpoints.boards}/${id}`, {
-        method: 'PUT',
+        method: METHODS.put,
         headers: {
           Authorization: `Bearer ${getFromLocalStorage('$token')}`,
           Accept: 'application/json',
@@ -223,13 +242,13 @@ export const api = {
         return await Promise.reject(new Error(response.statusText));
       }
     } catch (error) {
-      throw new Error('Failed get all users');
+      throw new Error('Failed to update board');
     }
   },
   async deleteBoard(id: string) {
     try {
       const response = await fetch(`${apiPath}${apiEndpoints.boards}/${id}`, {
-        method: 'DELETE',
+        method: METHODS.delete,
         headers: {
           Authorization: `Bearer ${getFromLocalStorage('$token')}`,
         },
@@ -241,7 +260,7 @@ export const api = {
         return response.status;
       }
     } catch (error) {
-      throw new Error('User is not deleted');
+      throw new Error('Board is not deleted');
     }
   },
   async createNewColumn(boardId: string, title: string) {
@@ -249,7 +268,7 @@ export const api = {
       const response = await fetch(
         `${apiPath}${apiEndpoints.boards}/${boardId}/${apiEndpoints.columns}`,
         {
-          method: 'POST',
+          method: METHODS.post,
           headers: {
             Authorization: `Bearer ${getFromLocalStorage('$token')}`,
             Accept: 'application/json',
@@ -266,11 +285,10 @@ export const api = {
       } else if (response.status === 404) {
         return response.status;
       } else {
-        console.log(Promise.reject(new Error(response.statusText)));
         return await Promise.reject(new Error(response.statusText));
       }
     } catch (error) {
-      throw new Error('Registration failed');
+      throw new Error('Failed to create column');
     }
   },
   async createTask(
@@ -484,6 +502,68 @@ export const api = {
       }
     } catch (error) {
       throw new Error('Board was not founded!');
+    }
+  },
+  async getTask(boardId: string, columnId: string, taskId: string) {
+    try {
+      const response = await fetch(
+        `${apiPath}${apiEndpoints.boards}/${boardId}/${apiEndpoints.columns}/${columnId}/${apiEndpoints.tasks}/${taskId}`,
+        {
+          method: METHODS.get,
+          headers: {
+            Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else if (response.status === 404) {
+        console.log('404', response.status);
+        return response.status;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Task was not founded!');
+    }
+  },
+  async updateTask(
+    boardId: string,
+    columnId: string,
+    taskId: string,
+    body: IBodyTask
+  ): Promise<ITask | undefined> {
+    try {
+      const response = await fetch(
+        `${apiPath}${apiEndpoints.boards}/${boardId}/${apiEndpoints.columns}/${columnId}/${apiEndpoints.tasks}/${taskId}`,
+        {
+          method: METHODS.put,
+          headers: {
+            Authorization: `Bearer ${getFromLocalStorage('$token')}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            title: body.title,
+            order: body.order,
+            description: body.description,
+            userId: body.userId,
+            boardId: boardId,
+            columnId: columnId,
+          }),
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        return await Promise.reject(new Error(response.statusText));
+      }
+    } catch (error) {
+      throw new Error('Task is not updated');
     }
   },
   async deleteTask(boardId: string, columnId: string, taskId: string) {

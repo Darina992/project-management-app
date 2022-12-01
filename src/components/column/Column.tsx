@@ -37,11 +37,12 @@ export const Column: React.FC<{ columnId: string; dataColumn: IColumn }> = ({
   const [isFormTask, setIsFormTask] = useState(false);
   const { translate } = useSelector((state: RootState) => state.langReducer);
   const { openDilog } = useSelector((state: RootState) => state.openModal);
+  const { openModalTask } = useSelector((state: RootState) => state.board);
 
   useEffect(() => {
     dispatch(getBoardData(idBoard as string));
     // dispatch(getAllTasks({ boardId: idBoard as string, columnId: columnId }));
-  }, [dispatch, idBoard, columnId, isFormTask, openDilog]);
+  }, [dispatch, idBoard, columnId, isFormTask, openDilog, openModalTask]);
 
   const handleDelete = () => {
     const data = {
