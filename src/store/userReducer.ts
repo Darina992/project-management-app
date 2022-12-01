@@ -61,7 +61,6 @@ export const deleteUser = createAsyncThunk('main/deleteUser', async () => {
 
 export const getUserById = createAsyncThunk('main/getUserById', async (id: string) => {
   const data = await api.getUserById();
-  console.log(data);
   return data;
 });
 
@@ -78,6 +77,7 @@ export const userSlice = createSlice({
       state.isAuth = false;
       setToLocalStorage('$userIsAuth', JSON.stringify(state.isAuth));
       state.showAlert = false;
+      state.successReg = false;
     },
     signIn: (state: UserState) => {
       state.isAuth = true;
