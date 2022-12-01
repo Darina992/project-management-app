@@ -68,11 +68,14 @@ export default function AddTask({ boardId, columnId, onClose }: MyProps) {
           />
           <TextField
             margin="normal"
+            required
             fullWidth
             label={translate.addTaskDescription}
             id="taskDescription"
             autoComplete="current-password"
-            {...register('addDescription')}
+            {...register('addDescription', { required: true })}
+            error={errors.addDescription && true}
+            helperText={errors.addDescription && translate.addTaskDescription}
           />
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             {translate.addTask}
