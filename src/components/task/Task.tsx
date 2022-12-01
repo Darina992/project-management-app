@@ -2,10 +2,12 @@ import { Box, IconButton, Typography } from '@mui/material';
 import React, { FC } from 'react';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { ITask } from 'api/typesApi';
-import { AppDispatch } from 'store';
-import { useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from 'store';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { actionsOpenModal } from 'store/modalReducer';
+import actionsBoardSlice, { getTask } from 'store/boardReducer';
+import { api } from 'api/api';
 import { IDragProvided } from 'types/dropAndDragTypes';
 
 export const Task: FC<{ taskData: ITask; columnId: string; provided: IDragProvided }> = ({
@@ -13,6 +15,7 @@ export const Task: FC<{ taskData: ITask; columnId: string; provided: IDragProvid
   columnId,
   provided,
 }) => {
+  const { task } = useSelector((state: RootState) => state.board);
   const dispatch = useDispatch<AppDispatch>();
   const { idBoard } = useParams();
 
@@ -25,6 +28,25 @@ export const Task: FC<{ taskData: ITask; columnId: string; provided: IDragProvid
     dispatch(actionsOpenModal.setIdBoard(idBoard));
     dispatch(actionsOpenModal.setIdColumn(columnId));
     dispatch(actionsOpenModal.setOpenDilog(true));
+  };
+
+  const handleClick = async () => {
+    dispatch(
+      getTask({
+        boardId: idBoard as string,
+        columnId: columnId as string,
+        taskId: taskData.id,
+      })
+    );
+    if (idBoard) {
+      await api
+        .getColumn(idBoard, columnId)
+        .then((el) => dispatch(actionsBoardSlice.actionsBoardSlice.setColumnTitle(el.title)));
+      await api
+        .getUser(task.userId)
+        .then((el) => dispatch(actionsBoardSlice.actionsBoardSlice.setColumnCreateUser(el.name)));
+    }
+    dispatch(actionsBoardSlice.actionsBoardSlice.setOpen(true));
   };
 
   return (

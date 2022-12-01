@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { api } from 'api/api';
 import { IBoard, IColumn, ITask } from 'api/typesApi';
-import { IGetColumn } from 'types/boardPageType';
+import { IGetColumn, IBodyTask } from 'types/boardPageType';
 import { sorted } from 'utils/utils';
 
 export const initialBoardState: IBoardState = {
@@ -9,6 +9,25 @@ export const initialBoardState: IBoardState = {
   columns: [],
   column: null,
   tasks: [],
+  openModalTask: false,
+  columnTitle: '',
+  columnCreateUser: '',
+  task: {
+    id: '',
+    title: '',
+    order: 0,
+    description: '',
+    userId: '',
+    boardId: '',
+    columnId: '',
+    files: [
+      {
+        filename: '',
+        fileSize: 0,
+      },
+    ],
+  },
+  boardTitle: '',
   isLoading: false,
 };
 
@@ -17,6 +36,25 @@ export interface IBoardState {
   columns: IColumn[];
   column: IColumn | null;
   tasks: ITask[];
+  openModalTask: boolean;
+  columnTitle: string;
+  columnCreateUser: string;
+  task: {
+    id: string;
+    title: string;
+    order: number;
+    description: string;
+    userId: string;
+    boardId: string;
+    columnId: string;
+    files: [
+      {
+        filename: string;
+        fileSize: number;
+      }
+    ];
+  };
+  boardTitle: string;
   isLoading: boolean;
 }
 
@@ -77,6 +115,27 @@ export const getAllTasks = createAsyncThunk(
   }
 );
 
+export const getTask = createAsyncThunk(
+  'board/getTask',
+  async (options: { boardId: string; columnId: string; taskId: string }) => {
+    const data = await api.getTask(options.boardId, options.columnId, options.taskId);
+    return data;
+  }
+);
+
+export const updateTask = createAsyncThunk(
+  'board/updateTask',
+  async (options: { boardId: string; columnId: string; taskId: string; body: IBodyTask }) => {
+    const data = await api.updateTask(
+      options.boardId,
+      options.columnId,
+      options.taskId,
+      options.body
+    );
+    return data;
+  }
+);
+
 export const deleteTask = createAsyncThunk(
   'board/deleteTask',
   async (options: { boardId: string; columnId: string; taskId: string }) => {
@@ -88,7 +147,20 @@ export const deleteTask = createAsyncThunk(
 export const boardSlice = createSlice({
   name: 'board',
   initialState: initialBoardState,
-  reducers: {},
+  reducers: {
+    setOpen: (state, actions) => {
+      state.openModalTask = actions.payload;
+    },
+    setBoardTitle: (state, actions) => {
+      state.boardTitle = actions.payload;
+    },
+    setColumnTitle: (state, actions) => {
+      state.columnTitle = actions.payload;
+    },
+    setColumnCreateUser: (state, actions) => {
+      state.columnCreateUser = actions.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // .addCase(getBoardData.pending, (state) => {
@@ -116,10 +188,13 @@ export const boardSlice = createSlice({
       .addCase(getColumn.fulfilled, (state, action) => {
         state.column = action.payload;
       })
+      .addCase(getTask.fulfilled, (state, action) => {
+        state.task = action.payload;
+      })
       .addDefaultCase(() => {});
   },
 });
 
-const { reducer } = boardSlice;
+const { actions: actionsBoardSlice, reducer } = boardSlice;
 
-export default reducer;
+export default { actionsBoardSlice, reducer };
