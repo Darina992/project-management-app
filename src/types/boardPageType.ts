@@ -28,3 +28,10 @@ export interface IGetColumn {
   boardId: string;
   columnId: string;
 }
+
+export interface IBodyTask {
+  title: string;
+  order: number;
+  description: string;
+  userId: string;
+}

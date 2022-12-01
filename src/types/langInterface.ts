@@ -48,4 +48,12 @@ export interface ILang {
   addTaskTitleError: string;
   addTaskDescription: string;
   addColumn: string;
+  createdTask: string;
+  titleTaskModal: string;
+  inputTitleTask: string;
+  descriptionTask: string;
+  inputDescriptionTask: string;
+  change: string;
+  save: string;
+  delete: string;
 }

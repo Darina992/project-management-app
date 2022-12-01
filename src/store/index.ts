@@ -13,7 +13,7 @@ export const store = configureStore({
     boards: reducerMainSlice,
     columns: reducerColumnSlice,
     openModal: reducerOpenModal,
-    board: boardReducer,
+    board: boardReducer.reducer,
   },
 });
 
