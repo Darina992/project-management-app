@@ -10,6 +10,7 @@ import { createNewTask } from '../../store/tasksReducer';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { AddTaskForm } from '../../types/userTypes';
 import { style } from './styles';
+import './addTaskStyle.scss';
 
 type MyProps = {
   boardId: string;
@@ -44,7 +45,7 @@ export default function AddTask({ boardId, columnId, onClose }: MyProps) {
 
   return (
     <Modal open={true} onClose={onClose}>
-      <Box sx={style.modal}>
+      <Box className="add-task" sx={style.modal}>
         <Typography id="modalAddTask-title" variant="h5" component="h2" sx={style.modalTitle}>
           <strong>{translate.addTask}</strong>
         </Typography>
