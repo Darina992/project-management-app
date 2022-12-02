@@ -7,11 +7,18 @@ import { Column } from 'components/column/Column';
 import AddIcon from '@mui/icons-material/Add';
 import { NavLink, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { getBoardData, setBoardTitle, updateColumn } from 'store/boardReducer';
+import {
+  deleteTask,
+  getBoardData,
+  setBoardTitle,
+  setColumns,
+  updateColumn,
+  updateTask,
+} from 'store/boardReducer';
 import boardBg from '../../assets/board-bg.png';
 import { ColumnCreate } from 'components/modal/ColumnCreate';
 import { actionsColumnSlice } from 'store/columnReducer';
-import { IBoard, IColumn } from 'api/typesApi';
+import { IBoard, IColumn, INewTask, ITask } from 'api/typesApi';
 import { TaskDescriptionData } from '../../components/modal/TaskDescriptionData';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import {
@@ -20,9 +27,11 @@ import {
   DropResult,
   IDragProvided,
   IDropProvided,
+  TYPES,
 } from 'types/dropAndDragTypes';
 import AddTask from 'components/addTask/addTask';
-import { setColumnId, setIsOpenAddTask } from 'store/tasksReducer';
+import { createNewTask, setColumnId, setIsOpenAddTask } from 'store/tasksReducer';
+import { sorted } from 'utils/utils';
 
 export const BoardPage = () => {
   const { idBoard } = useParams();
@@ -39,7 +48,6 @@ export const BoardPage = () => {
   useEffect(() => {
     dispatch(getBoardData(idBoard as string));
     dispatch(actionsColumnSlice.setIdBoard(idBoard));
-    // dispatch(getAllColumns(idBoard as string));
   }, [idBoard, dispatch, openModal, openDilog, isOpenAddTask, idColumn]);
 
   useEffect(() => {
@@ -48,23 +56,24 @@ export const BoardPage = () => {
     setColumnState(() => columns);
   }, [boardData, columns, dispatch, openDilog, openModal, isOpenAddTask, idColumn]);
 
-  const handleOnDragEnd = async ({ source, destination, draggableId }: DropResult) => {
-    if (destination === undefined) {
-      return;
+  const onDragEnd = (result: DropResult) => {
+    console.log(result);
+    if (result.type === TYPES.columns) {
+      handleOnDragEndColumn(result);
     }
+    if (result.type === TYPES.tasks) {
+      handleOnDragEndTasks(result);
+    }
+  };
+
+  const handleOnDragEndColumn = async ({ source, destination, draggableId }: DropResult) => {
+    if (!destination) return;
 
     if (destination.index === source.index) {
       return;
     }
-    // const currentIndex = source.index;
-    const targetIndex = destination.index;
-    const id = draggableId;
-    let title = '';
-    columnState.map((column) => {
-      if (column.id === id) {
-        title = column.title;
-      }
-    });
+
+    const column = columnState.find((column) => column.id === draggableId);
     const items = Array.from(columnState);
     const [reorderedItem] = items.splice(source.index - 1, 1);
     items.splice(destination.index - 1, 0, reorderedItem);
@@ -72,8 +81,66 @@ export const BoardPage = () => {
     setColumnState(() => items);
 
     await dispatch(
-      updateColumn({ boardId: idBoard as string, columnId: id, title: title, order: targetIndex })
+      updateColumn({
+        boardId: idBoard as string,
+        columnId: draggableId,
+        title: column?.title as string,
+        order: destination.index,
+      })
     );
+  };
+
+  const handleOnDragEndTasks = async ({ source, destination, draggableId }: DropResult) => {
+    if (!destination) return;
+    const columnIdFrom = source.droppableId;
+    const columnIdTo = destination.droppableId;
+
+    if (destination.index === source.index && columnIdFrom === columnIdTo) {
+      return;
+    }
+    // const currentIndex = source.index;
+    // const targetIndex = destination.index;
+
+    const columnsCopy: IColumn[] = JSON.parse(JSON.stringify(columnState));
+    const columnFrom = columnsCopy.find((column) => column.id === columnIdFrom);
+    const columnTo = columnsCopy.find((column) => column.id === columnIdTo);
+
+    const [reorderedItemFrom] = columnFrom?.tasks?.splice(source.index, 1) as ITask[];
+    columnTo?.tasks?.splice(destination.index, 0, reorderedItemFrom) as ITask[];
+    console.log(reorderedItemFrom);
+
+    await dispatch(setColumns(sorted(columnsCopy)));
+    await dispatch(
+      deleteTask({
+        boardId: idBoard as string,
+        columnId: columnIdFrom,
+        taskId: draggableId,
+      })
+    );
+    await dispatch(
+      createNewTask({
+        boardId: idBoard as string,
+        columnId: columnIdTo,
+        title: reorderedItemFrom.title,
+        description: reorderedItemFrom.description,
+        userId: reorderedItemFrom.userId,
+      })
+    ).then((data) => {
+      console.log('create');
+      dispatch(
+        updateTask({
+          boardId: idBoard as string,
+          columnId: columnIdTo,
+          taskId: (data.payload as INewTask).id as string,
+          body: {
+            title: reorderedItemFrom.title,
+            order: destination.index + 1,
+            description: reorderedItemFrom.description,
+            userId: reorderedItemFrom.userId,
+          },
+        })
+      );
+    });
   };
 
   const getStyle = (style: DraggingStyle, snapshot: DraggableStateSnapshot) => {
@@ -122,9 +189,9 @@ export const BoardPage = () => {
           {translate.backButton}
         </Button>
       </Box>
-      <DragDropContext onDragEnd={handleOnDragEnd}>
+      <DragDropContext onDragEnd={onDragEnd}>
         <Box sx={{ display: 'flex', gap: 5, mt: 5, p: 2, overflowX: 'auto' }}>
-          <Droppable droppableId="columns" direction="horizontal">
+          <Droppable droppableId="columns" direction="horizontal" type={TYPES.columns}>
             {(provided: IDropProvided) => (
               <Box
                 {...provided.droppableProps}
@@ -132,13 +199,17 @@ export const BoardPage = () => {
                 sx={{
                   display: 'flex',
                   gap: 3,
-                  // backgroundColor: snapshot.isDraggingOver ? 'blue' : '',
                 }}
               >
                 {columnState &&
                   columnState.map((column) => {
                     return (
-                      <Draggable key={column.id} draggableId={column.id} index={column.order}>
+                      <Draggable
+                        key={column.id}
+                        draggableId={column.id}
+                        index={column.order}
+                        type={TYPES.columns}
+                      >
                         {(provided: IDragProvided, snapshot: DraggableStateSnapshot) => (
                           <Box>
                             <Column
@@ -147,6 +218,7 @@ export const BoardPage = () => {
                               provided={provided}
                               styleProp={getStyle(provided.draggableProps.style, snapshot)}
                             />
+
                             <AddTask
                               boardId={idBoard as string}
                               columnId={idColumn}
@@ -166,7 +238,7 @@ export const BoardPage = () => {
             variant="outlined"
             size="small"
             startIcon={<AddIcon />}
-            sx={{ height: '100%', minWidth: 170 }}
+            sx={{ height: '100%', minWidth: 170, backgroundColor: '#fff' }}
             onClick={() => dispatch(actionsColumnSlice.setOpen(true))}
           >
             {translate.addColumn}

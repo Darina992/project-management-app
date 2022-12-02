@@ -40,8 +40,12 @@ export type DragHandleProps = {
   draggable: boolean;
   onDragStart: DragEventHandler<HTMLDivElement>;
 };
-type MovementMode = 'FLUID' | 'SNAP';
+export type MovementMode = 'FLUID' | 'SNAP';
 type DropReason = 'DROP' | 'CANCEL';
+export enum TYPES {
+  tasks = 'TASKS',
+  columns = 'COLUMNS',
+}
 
 export type DropResult = {
   draggableId: string;
@@ -87,4 +91,10 @@ export type DraggingStyle = {
   zIndex: number;
   opacity: number;
   pointerEvents: 'none';
+};
+export type DragStart = {
+  draggableId: string;
+  type: TYPES;
+  source: DraggableLocation;
+  mode: MovementMode;
 };

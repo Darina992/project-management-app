@@ -160,6 +160,9 @@ export const boardSlice = createSlice({
     setColumnCreateUser: (state, actions) => {
       state.columnCreateUser = actions.payload;
     },
+    setColumns: (state, action) => {
+      state.columns = JSON.parse(JSON.stringify(action.payload));
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -175,16 +178,6 @@ export const boardSlice = createSlice({
         state.tasks = JSON.parse(JSON.stringify(action.payload));
         // state.isLoading = true;
       })
-      // .addCase(getAllTasks.pending, (state) => {
-      //   state.isLoading = false;
-      // })
-      // .addCase(getAllColumns.pending, (state) => {
-      //   state.isLoading = true;
-      // })
-      // .addCase(getAllColumns.fulfilled, (state, action) => {
-      //   state.columns = JSON.parse(JSON.stringify(sortedColumns(action.payload)));
-      //   // state.isLoading = false;
-      // })
       .addCase(getColumn.fulfilled, (state, action) => {
         state.column = action.payload;
       })
@@ -198,4 +191,4 @@ export const boardSlice = createSlice({
 const { reducer, actions } = boardSlice;
 
 export default reducer;
-export const { setOpen, setBoardTitle, setColumnCreateUser, setColumnTitle } = actions;
+export const { setOpen, setBoardTitle, setColumnCreateUser, setColumnTitle, setColumns } = actions;

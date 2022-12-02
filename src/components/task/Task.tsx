@@ -6,12 +6,7 @@ import { AppDispatch, RootState } from 'store';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { actionsOpenModal } from 'store/modalReducer';
-import actionsBoardSlice, {
-  getTask,
-  setColumnCreateUser,
-  setColumnTitle,
-  setOpen,
-} from 'store/boardReducer';
+import { getTask, setColumnCreateUser, setColumnTitle, setOpen } from 'store/boardReducer';
 import { api } from 'api/api';
 import { IDragProvided } from 'types/dropAndDragTypes';
 
@@ -64,7 +59,10 @@ export const Task: FC<{ taskData: ITask; columnId: string; provided: IDragProvid
       {...provided.draggableProps}
       {...provided.dragHandleProps}
     >
-      <Typography sx={{ p: 1, overflowWrap: 'break-word', maxWidth: 190, fontSize: 16 }}>
+      <Typography
+        sx={{ p: 1, overflowWrap: 'break-word', maxWidth: 190, fontSize: 16 }}
+        onClick={() => handleClick()}
+      >
         {taskData.title}
       </Typography>
       <IconButton aria-label="settings" onClick={() => handleDelete()}>

@@ -11,7 +11,9 @@ export function getFromLocalStorage(key: string) {
 }
 
 export const sorted = (arr: IColumn[] | ITask[]) => {
-  return arr.sort((el1: IColumn, el2: IColumn) => (el1['order'] > el2['order'] ? 1 : -1));
+  return arr.sort((el1: IColumn | ITask, el2: IColumn | ITask) =>
+    el1['order'] > el2['order'] ? 1 : -1
+  );
 };
 
 type DecodedToken = {
