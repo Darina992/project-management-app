@@ -113,7 +113,7 @@ export const api = {
       throw new Error('Failed get user info');
     }
   },
-  async deleteUser() {
+  async deleteUser(): Promise<number | undefined> {
     try {
       const response = await fetch(
         `${apiPath}${apiEndpoints.users}${getFromLocalStorage('$userId')}`,
@@ -124,6 +124,7 @@ export const api = {
           },
         }
       );
+      return response.status;
     } catch (error) {
       throw new Error('User is not deleted');
     }
