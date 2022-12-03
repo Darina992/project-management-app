@@ -21,10 +21,8 @@ export function isValidToken() {
   const currentTime = new Date().getTime();
   const expTokenTime12Hours = new Date(myDecodedToken!.iat * 1000).getTime() + 43200000;
   if (currentTime > expTokenTime12Hours) {
-    console.log('Token expired.');
     return false;
   } else {
-    console.log('Valid token');
     return true;
   }
 }
