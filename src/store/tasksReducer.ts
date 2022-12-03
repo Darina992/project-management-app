@@ -4,14 +4,12 @@ import { INewTask } from '../api/typesApi';
 
 export const initialTasksState: TasksState = {
   id: '',
-  isLoading: false,
   isOpenAddTask: false,
   idColumn: '',
 };
 
 export interface TasksState {
   id: string;
-  isLoading: boolean;
   isOpenAddTask: boolean;
   idColumn: string;
 }
@@ -39,13 +37,9 @@ export const tasksSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(createNewTask.pending, (state: TasksState) => {
-      state.isLoading = true;
-    }),
-      builder.addCase(createNewTask.fulfilled, (state, action) => {
-        state.id = action.payload!.id;
-        state.isLoading = false;
-      });
+    builder.addCase(createNewTask.fulfilled, (state, action) => {
+      state.id = action.payload!.id;
+    });
   },
 });
 

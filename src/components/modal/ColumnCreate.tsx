@@ -17,15 +17,15 @@ export const ColumnCreate: FC = () => {
     formState: { errors },
   } = useForm<IFormInput>();
 
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     const dataColumn = {
       title: data.name,
       idBoard,
     };
 
     dispatch(actionsColumnSlice.setOpen(false));
-    dispatch(createNewColumn(dataColumn));
-    dispatch(getBoardData(idBoard as string));
+    await dispatch(createNewColumn(dataColumn));
+    await dispatch(getBoardData(idBoard as string));
   };
 
   const handleClose = () => dispatch(actionsColumnSlice.setOpen(false));
