@@ -5,6 +5,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { AppDispatch, RootState } from 'store';
 import { actionsColumnSlice, createNewColumn } from 'store/columnReducer';
 import { IFormInput } from '../../types/boardPageType';
+import { getBoardData } from 'store/boardReducer';
 
 export const ColumnCreate: FC = () => {
   const { translate } = useSelector((state: RootState) => state.langReducer);
@@ -24,6 +25,7 @@ export const ColumnCreate: FC = () => {
 
     dispatch(actionsColumnSlice.setOpen(false));
     dispatch(createNewColumn(dataColumn));
+    dispatch(getBoardData(idBoard as string));
   };
 
   const handleClose = () => dispatch(actionsColumnSlice.setOpen(false));

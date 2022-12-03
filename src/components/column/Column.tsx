@@ -23,9 +23,16 @@ import { Task } from 'components/task/Task';
 import { IColumn, ITask } from 'api/typesApi';
 import { useParams } from 'react-router-dom';
 import { actionsOpenModal } from 'store/modalReducer';
-import { DraggingStyle, IDragProvided, IDropProvided, TYPES } from 'types/dropAndDragTypes';
+import {
+  DraggableStateSnapshot,
+  DraggingStyle,
+  IDragProvided,
+  IDropProvided,
+  TYPES,
+} from 'types/dropAndDragTypes';
 import { setColumnId, setIsOpenAddTask } from 'store/tasksReducer';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { getStyle } from 'utils/utils';
 
 export const Column: React.FC<{
   columnId: string;
@@ -53,8 +60,8 @@ export const Column: React.FC<{
   }, [dispatch, idBoard, columnId, openDilog, isOpenAddTask, idColumn]);
 
   useEffect(() => {
-    const columnsState: ITask[] = JSON.parse(JSON.stringify(dataColumn.tasks));
-    setTasksState(() => columnsState);
+    const tasks: ITask[] = JSON.parse(JSON.stringify(dataColumn.tasks));
+    setTasksState(() => tasks);
   }, [dispatch, idBoard, columnId, openDilog, isOpenAddTask, idColumn, dataColumn.tasks]);
 
   const handleDelete = () => {
@@ -151,7 +158,7 @@ export const Column: React.FC<{
       <Droppable droppableId={columnId} type={TYPES.tasks} direction="vertical">
         {(providedTask: IDropProvided) => (
           <CardContent
-            sx={{ maxHeight: 300, overflowY: 'auto' }}
+            sx={{ maxHeight: 300, overflowY: 'auto', minHeight: 30, minWidth: '100%' }}
             {...providedTask.droppableProps}
             ref={providedTask.innerRef}
           >
@@ -159,12 +166,13 @@ export const Column: React.FC<{
               tasksState.map((task, index) => {
                 return (
                   <Draggable key={task.id} draggableId={task.id} index={index} type={TYPES.tasks}>
-                    {(providedTask: IDragProvided) => (
+                    {(providedTask: IDragProvided, snapshot: DraggableStateSnapshot) => (
                       <Task
                         key={task.id}
                         taskData={task}
                         columnId={columnId}
                         provided={providedTask}
+                        styleProp={getStyle(providedTask.draggableProps.style, snapshot)}
                       />
                     )}
                   </Draggable>

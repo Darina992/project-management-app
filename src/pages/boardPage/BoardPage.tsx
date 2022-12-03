@@ -23,7 +23,6 @@ import { TaskDescriptionData } from '../../components/modal/TaskDescriptionData'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import {
   DraggableStateSnapshot,
-  DraggingStyle,
   DropResult,
   IDragProvided,
   IDropProvided,
@@ -32,6 +31,7 @@ import {
 import AddTask from 'components/addTask/addTask';
 import { createNewTask, setColumnId, setIsOpenAddTask } from 'store/tasksReducer';
 import './boardPage.scss';
+import { getStyle } from 'utils/utils';
 
 export const BoardPage = () => {
   const { idBoard } = useParams();
@@ -53,8 +53,12 @@ export const BoardPage = () => {
   useEffect(() => {
     setBoardState(() => boardData as IBoard);
     dispatch(setBoardTitle(boardData?.title));
-    setColumnState(() => columns);
   }, [boardData, columns, dispatch, openDilog, openModal, isOpenAddTask, idColumn]);
+
+  useEffect(() => {
+    const columnsState: ITask[] = JSON.parse(JSON.stringify(columns));
+    setColumnState(() => columnsState);
+  }, [dispatch, columns, openModal]);
 
   const onDragEnd = (result: DropResult) => {
     if (result.type === TYPES.columns) {
@@ -72,19 +76,19 @@ export const BoardPage = () => {
       return;
     }
 
-    const column = columnState.find((column) => column.id === draggableId);
-    const items = Array.from(columnState);
-    const [reorderedItem] = items.splice(source.index - 1, 1);
-    items.splice(destination.index - 1, 0, reorderedItem);
+    const columnsCopy: IColumn[] = JSON.parse(JSON.stringify(columnState));
+    const column = columnsCopy.find((column) => column.id === draggableId);
+    const [reorderedItem] = columnsCopy.splice(source.index, 1);
+    columnsCopy.splice(destination.index, 0, reorderedItem);
 
-    setColumnState(() => items);
+    await dispatch(setColumns(columnsCopy));
 
     await dispatch(
       updateColumn({
         boardId: idBoard as string,
         columnId: draggableId,
         title: column?.title as string,
-        order: destination.index,
+        order: destination.index + 1,
       })
     );
   };
@@ -137,16 +141,6 @@ export const BoardPage = () => {
     });
   };
 
-  const getStyle = (style: DraggingStyle, snapshot: DraggableStateSnapshot) => {
-    if (!snapshot.isDropAnimating) {
-      return style;
-    }
-    return {
-      ...style,
-      transitionDuration: `0.8s`,
-    };
-  };
-
   const onCloseAddTask = () => {
     dispatch(setIsOpenAddTask(false));
     dispatch(setColumnId(''));
@@ -196,12 +190,12 @@ export const BoardPage = () => {
                 }}
               >
                 {columnState &&
-                  columnState.map((column) => {
+                  columnState.map((column, index) => {
                     return (
                       <Draggable
                         key={column.id}
                         draggableId={column.id}
-                        index={column.order}
+                        index={index}
                         type={TYPES.columns}
                       >
                         {(provided: IDragProvided, snapshot: DraggableStateSnapshot) => (
@@ -212,7 +206,6 @@ export const BoardPage = () => {
                               provided={provided}
                               styleProp={getStyle(provided.draggableProps.style, snapshot)}
                             />
-
                             <AddTask
                               boardId={idBoard as string}
                               columnId={idColumn}
