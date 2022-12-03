@@ -13,6 +13,7 @@ import { ColumnCreate } from 'components/modal/ColumnCreate';
 import { actionsColumnSlice } from 'store/columnReducer';
 import { IBoard } from 'api/typesApi';
 import { TaskDescriptionData } from '../../components/modal/TaskDescriptionData';
+import './boardPage.scss';
 
 export const BoardPage = () => {
   const { idBoard } = useParams();
@@ -49,7 +50,7 @@ export const BoardPage = () => {
       }}
     >
       {openModalTask && <TaskDescriptionData />}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Box className="board-page" sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box>
           <Typography variant="h3">{boardData?.title}</Typography>
           <Typography>{boardData?.description}</Typography>

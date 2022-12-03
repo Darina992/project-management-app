@@ -17,6 +17,11 @@ const InnerContainer = styled(Box)`
   flex: 1;
   overflow: hidden;
   height: inherit;
+  @media (max-width: 335px) {
+    .css-1f9rha4-MuiContainer-root {
+      padding: 40px 10px;
+    }
+  }
 `;
 
 export const Layout = () => {
