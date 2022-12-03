@@ -31,7 +31,6 @@ import {
 } from 'types/dropAndDragTypes';
 import AddTask from 'components/addTask/addTask';
 import { createNewTask, setColumnId, setIsOpenAddTask } from 'store/tasksReducer';
-import { sorted } from 'utils/utils';
 
 export const BoardPage = () => {
   const { idBoard } = useParams();
@@ -57,7 +56,6 @@ export const BoardPage = () => {
   }, [boardData, columns, dispatch, openDilog, openModal, isOpenAddTask, idColumn]);
 
   const onDragEnd = (result: DropResult) => {
-    console.log(result);
     if (result.type === TYPES.columns) {
       handleOnDragEndColumn(result);
     }
@@ -98,18 +96,14 @@ export const BoardPage = () => {
     if (destination.index === source.index && columnIdFrom === columnIdTo) {
       return;
     }
-    // const currentIndex = source.index;
-    // const targetIndex = destination.index;
-
     const columnsCopy: IColumn[] = JSON.parse(JSON.stringify(columnState));
     const columnFrom = columnsCopy.find((column) => column.id === columnIdFrom);
     const columnTo = columnsCopy.find((column) => column.id === columnIdTo);
 
     const [reorderedItemFrom] = columnFrom?.tasks?.splice(source.index, 1) as ITask[];
     columnTo?.tasks?.splice(destination.index, 0, reorderedItemFrom) as ITask[];
-    console.log(reorderedItemFrom);
 
-    await dispatch(setColumns(sorted(columnsCopy)));
+    await dispatch(setColumns(columnsCopy));
     await dispatch(
       deleteTask({
         boardId: idBoard as string,
@@ -126,7 +120,6 @@ export const BoardPage = () => {
         userId: reorderedItemFrom.userId,
       })
     ).then((data) => {
-      console.log('create');
       dispatch(
         updateTask({
           boardId: idBoard as string,

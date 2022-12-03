@@ -54,7 +54,6 @@ export const Column: React.FC<{
 
   useEffect(() => {
     const columnsState: ITask[] = JSON.parse(JSON.stringify(dataColumn.tasks));
-    // setTasksState(() => sorted(columnsState) as ITask[]);
     setTasksState(() => columnsState);
   }, [dispatch, idBoard, columnId, openDilog, isOpenAddTask, idColumn, dataColumn.tasks]);
 

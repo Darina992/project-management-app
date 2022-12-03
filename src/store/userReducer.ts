@@ -49,7 +49,6 @@ export const signInUser = createAsyncThunk('main/signInUser', async (options: IA
 });
 
 export const editUser = createAsyncThunk('main/editUser', async (options: INewUser) => {
-  console.log(options);
   const data = await api.editUser(options.name, options.login, options.password);
   return data;
 });
@@ -61,7 +60,6 @@ export const deleteUser = createAsyncThunk('main/deleteUser', async () => {
 
 export const getUserById = createAsyncThunk('main/getUserById', async (id: string) => {
   const data = await api.getUserById();
-  console.log(data);
   return data;
 });
 
