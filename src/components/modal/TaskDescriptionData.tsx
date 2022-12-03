@@ -2,7 +2,7 @@ import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import React, { FC, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from 'store';
-import actionsBoardSlice, { updateTask } from 'store/boardReducer';
+import { setOpen, updateTask } from 'store/boardReducer';
 import { actionsOpenModal } from 'store/modalReducer';
 // import './modalStyle.scss';
 
@@ -13,12 +13,13 @@ export const TaskDescriptionData: FC = () => {
   );
   const dispatch = useDispatch<AppDispatch>();
   const [changeTask, setChangeTask] = useState<boolean>(false);
+  const [btnBlock, setBtnBlock] = useState<boolean>(false);
   const [newDataTask, setNewDataTask] = useState<{ title: string; description: string }>({
     title: '',
     description: '',
   });
 
-  const handleClose = () => dispatch(actionsBoardSlice.actionsBoardSlice.setOpen(false));
+  const handleClose = () => dispatch(setOpen(false));
 
   const handleSave = () => {
     const data = {
@@ -100,12 +101,28 @@ export const TaskDescriptionData: FC = () => {
           </Typography>
         )}
         <Box sx={{ mt: 5, display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
-          <Button variant="outlined" onClick={() => setChangeTask(true)}>
-            {translate.change}
-          </Button>
-          <Button variant="outlined" color="success" onClick={() => handleSave()}>
-            {translate.save}
-          </Button>
+          {btnBlock ? (
+            <Button
+              variant="outlined"
+              color="success"
+              onClick={() => {
+                handleSave();
+                setBtnBlock(false);
+              }}
+            >
+              {translate.save}
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setChangeTask(true);
+                setBtnBlock(true);
+              }}
+            >
+              {translate.change}
+            </Button>
+          )}
           <Button variant="outlined" color="error" onClick={() => handleDelete()}>
             {translate.delete}
           </Button>

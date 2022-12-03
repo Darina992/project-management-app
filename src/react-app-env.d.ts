@@ -5,3 +5,4 @@ declare module '@mui/material/styles' {
     typography?: { fontFamily: string; fontSize: number };
   }
 }
+declare module 'react-beautiful-dnd';

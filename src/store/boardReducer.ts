@@ -1,7 +1,8 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { api } from 'api/api';
 import { IBoard, IColumn, ITask } from 'api/typesApi';
 import { IGetColumn, IBodyTask } from 'types/boardPageType';
+import { sorted } from 'utils/utils';
 
 export const initialBoardState: IBoardState = {
   boardData: null,
@@ -27,6 +28,7 @@ export const initialBoardState: IBoardState = {
     ],
   },
   boardTitle: '',
+  isLoading: false,
 };
 
 export interface IBoardState {
@@ -53,11 +55,11 @@ export interface IBoardState {
     ];
   };
   boardTitle: string;
+  isLoading: boolean;
 }
 
 export const getBoardData = createAsyncThunk('board/getBoardData', async (idBoard: string) => {
   const data = await api.getBoard(idBoard);
-  console.log(data);
   return data;
 });
 
@@ -92,13 +94,11 @@ export const updateColumn = createAsyncThunk(
 
 export const getAllColumns = createAsyncThunk('board/getAllColumns', async (idBoard: string) => {
   const data = await api.getAllColumns(idBoard);
-  console.log(data);
   return data;
 });
 
 export const getColumn = createAsyncThunk('board/getColumns', async (options: IGetColumn) => {
   const data = await api.getColumn(options.boardId, options.columnId);
-  console.log(data);
   return data;
 });
 
@@ -106,7 +106,6 @@ export const getAllTasks = createAsyncThunk(
   'board/getAllTasks',
   async (options: { boardId: string; columnId: string }) => {
     const data = await api.getAllTasks(options.boardId, options.columnId);
-    console.log(data);
     return data;
   }
 );
@@ -156,17 +155,22 @@ export const boardSlice = createSlice({
     setColumnCreateUser: (state, actions) => {
       state.columnCreateUser = actions.payload;
     },
+    setColumns: (state, action) => {
+      state.columns = JSON.parse(JSON.stringify(action.payload));
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getBoardData.fulfilled, (state, action) => {
+      .addCase(getBoardData.fulfilled, (state, action: PayloadAction<IBoard>) => {
         state.boardData = JSON.parse(JSON.stringify(action.payload));
+        const copyColumns: IColumn[] = JSON.parse(JSON.stringify(sorted(action.payload.columns)));
+        copyColumns.map((column) => {
+          return sorted(column.tasks as ITask[]);
+        });
+        state.columns = state.columns && JSON.parse(JSON.stringify(sorted(copyColumns)));
       })
       .addCase(getAllTasks.fulfilled, (state, action) => {
         state.tasks = JSON.parse(JSON.stringify(action.payload));
-      })
-      .addCase(getAllColumns.fulfilled, (state, action) => {
-        state.columns = JSON.parse(JSON.stringify(action.payload));
       })
       .addCase(getColumn.fulfilled, (state, action) => {
         state.column = action.payload;
@@ -178,6 +182,7 @@ export const boardSlice = createSlice({
   },
 });
 
-const { actions: actionsBoardSlice, reducer } = boardSlice;
+const { reducer, actions } = boardSlice;
 
-export default { actionsBoardSlice, reducer };
+export default reducer;
+export const { setOpen, setBoardTitle, setColumnCreateUser, setColumnTitle, setColumns } = actions;

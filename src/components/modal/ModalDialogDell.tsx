@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from 'store';
 import { deleteBoardID } from 'store/mainReducer ';
 import { actionsOpenModal } from 'store/modalReducer';
-import actionsBoardSlice, { deleteColumn, deleteTask } from 'store/boardReducer';
+import { deleteColumn, deleteTask, setOpen } from 'store/boardReducer';
 
 export const ModalDialogDell: FC = () => {
   const { translate } = useSelector((state: RootState) => state.langReducer);
@@ -42,7 +42,7 @@ export const ModalDialogDell: FC = () => {
         })
       );
       dispatch(actionsOpenModal.setDelteId(''));
-      dispatch(actionsBoardSlice.actionsBoardSlice.setOpen(false));
+      dispatch(setOpen(false));
     }
   };
 

@@ -43,7 +43,6 @@ export default function Profile() {
   const dispatch = useDispatch();
 
   const onSubmit: SubmitHandler<SignUpFormData> = (data) => {
-    console.log(data);
     store.dispatch(editUser(data));
   };
 
