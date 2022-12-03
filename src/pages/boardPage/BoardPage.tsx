@@ -31,6 +31,7 @@ import {
 } from 'types/dropAndDragTypes';
 import AddTask from 'components/addTask/addTask';
 import { createNewTask, setColumnId, setIsOpenAddTask } from 'store/tasksReducer';
+import './boardPage.scss';
 
 export const BoardPage = () => {
   const { idBoard } = useParams();
@@ -166,7 +167,7 @@ export const BoardPage = () => {
       }}
     >
       {openModalTask && <TaskDescriptionData />}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Box className="board-page" sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box>
           <Typography variant="h3">{boardState?.title}</Typography>
           <Typography>{boardState?.description}</Typography>

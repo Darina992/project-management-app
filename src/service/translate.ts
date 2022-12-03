@@ -63,6 +63,7 @@ const i18Obj = {
     save: 'Save',
     delete: 'Delete',
     errorEditTitle: 'The field must be less than 30 characters',
+    text404: 'This page does not exist, please go to the main page.',
   },
   ru: {
     signIn: 'Вход',
@@ -127,6 +128,7 @@ const i18Obj = {
     change: 'Изменить',
     save: 'Сохранить',
     delete: 'Удалить',
+    text404: 'Такой страницы не сушествует, прошу перейти на главную страницу.',
     errorEditTitle: 'Поле должно содержать не более 30 символов',
   },
 };
