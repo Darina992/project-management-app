@@ -60,4 +60,5 @@ export interface ILang {
   save: string;
   delete: string;
   text404: string;
+  errorEditTitle: string;
 }

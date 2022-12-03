@@ -6,10 +6,15 @@ import { AppDispatch, RootState } from 'store';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { actionsOpenModal } from 'store/modalReducer';
-import actionsBoardSlice, { getTask } from 'store/boardReducer';
+import { getTask, setColumnCreateUser, setColumnTitle, setOpen } from 'store/boardReducer';
 import { api } from 'api/api';
+import { IDragProvided } from 'types/dropAndDragTypes';
 
-export const Task: FC<{ taskData: ITask; columnId: string }> = ({ taskData, columnId }) => {
+export const Task: FC<{ taskData: ITask; columnId: string; provided: IDragProvided }> = ({
+  taskData,
+  columnId,
+  provided,
+}) => {
   const { task } = useSelector((state: RootState) => state.board);
   const dispatch = useDispatch<AppDispatch>();
   const { idBoard } = useParams();
@@ -34,14 +39,10 @@ export const Task: FC<{ taskData: ITask; columnId: string }> = ({ taskData, colu
       })
     );
     if (idBoard) {
-      await api
-        .getColumn(idBoard, columnId)
-        .then((el) => dispatch(actionsBoardSlice.actionsBoardSlice.setColumnTitle(el.title)));
-      await api
-        .getUser(task.userId)
-        .then((el) => dispatch(actionsBoardSlice.actionsBoardSlice.setColumnCreateUser(el.name)));
+      await api.getColumn(idBoard, columnId).then((el) => dispatch(setColumnTitle(el.title)));
+      await api.getUser(task.userId).then((el) => dispatch(setColumnCreateUser(el.name)));
     }
-    dispatch(actionsBoardSlice.actionsBoardSlice.setOpen(true));
+    dispatch(setOpen(true));
   };
 
   return (
@@ -54,8 +55,14 @@ export const Task: FC<{ taskData: ITask; columnId: string }> = ({ taskData, colu
         backgroundColor: '#fff',
         borderRadius: 1,
       }}
+      ref={provided.innerRef}
+      {...provided.draggableProps}
+      {...provided.dragHandleProps}
     >
-      <Typography sx={{ p: 1, width: '100%' }} onClick={() => handleClick()}>
+      <Typography
+        sx={{ p: 1, overflowWrap: 'break-word', maxWidth: 190, fontSize: 16 }}
+        onClick={() => handleClick()}
+      >
         {taskData.title}
       </Typography>
       <IconButton aria-label="settings" onClick={() => handleDelete()}>

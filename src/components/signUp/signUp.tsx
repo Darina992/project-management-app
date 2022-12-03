@@ -41,7 +41,6 @@ export default function SignUp() {
   const onErrors: SubmitErrorHandler<SignUpFormData> = (errors) => console.error(errors);
 
   React.useEffect(() => {
-    console.log(state);
     if (state.successReg) {
       setSuccessReg(true);
       setTimeout(() => {

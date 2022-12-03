@@ -16,9 +16,10 @@ type MyProps = {
   boardId: string;
   columnId: string;
   onClose: () => void;
+  isOpen: boolean;
 };
 
-export default function AddTask({ boardId, columnId, onClose }: MyProps) {
+export default function AddTask({ boardId, columnId, onClose, isOpen }: MyProps) {
   const user = useSelector((state: RootState) => state.user);
   const { translate } = useSelector((state: RootState) => state.langReducer);
 
@@ -44,7 +45,7 @@ export default function AddTask({ boardId, columnId, onClose }: MyProps) {
   const onErrors: SubmitErrorHandler<AddTaskForm> = (errors) => console.error(errors);
 
   return (
-    <Modal open={true} onClose={onClose}>
+    <Modal open={isOpen} onClose={onClose}>
       <Box className="add-task" sx={style.modal}>
         <Typography id="modalAddTask-title" variant="h5" component="h2" sx={style.modalTitle}>
           <strong>{translate.addTask}</strong>

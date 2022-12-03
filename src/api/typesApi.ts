@@ -25,6 +25,8 @@ export type INewTask = {
   title: string;
   description: string;
   userId: string;
+  order?: number;
+  id?: string;
 };
 
 export interface IBoard {
