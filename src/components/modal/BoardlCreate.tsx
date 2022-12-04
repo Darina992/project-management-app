@@ -51,6 +51,7 @@ export const BoardlCreate: FC = () => {
     >
       <Box className="modal" component="form" onSubmit={handleSubmit(onSubmit)}>
         <TextField
+          autoFocus={true}
           id="standard-basic"
           label={translate.boardSearchInput}
           variant="standard"
