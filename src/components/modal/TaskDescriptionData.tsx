@@ -98,6 +98,7 @@ export const TaskDescriptionData: FC = () => {
         </Typography>
         {changeTask ? (
           <TextField
+            autoFocus={true}
             id="standard-basic"
             label={translate.inputTitleTask}
             variant="standard"
