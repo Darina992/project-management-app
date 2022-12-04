@@ -156,11 +156,14 @@ export const boardSlice = createSlice({
       state.columnCreateUser = actions.payload;
     },
     setColumns: (state, action) => {
-      state.columns = JSON.parse(JSON.stringify(action.payload));
+      state.columns = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getBoardData.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(getBoardData.fulfilled, (state, action: PayloadAction<IBoard>) => {
         state.boardData = JSON.parse(JSON.stringify(action.payload));
         const copyColumns: IColumn[] = JSON.parse(JSON.stringify(sorted(action.payload.columns)));
@@ -168,9 +171,13 @@ export const boardSlice = createSlice({
           return sorted(column.tasks as ITask[]);
         });
         state.columns = state.columns && JSON.parse(JSON.stringify(sorted(copyColumns)));
+        state.isLoading = false;
       })
       .addCase(getAllTasks.fulfilled, (state, action) => {
         state.tasks = JSON.parse(JSON.stringify(action.payload));
+      })
+      .addCase(getAllColumns.fulfilled, (state, action) => {
+        state.columns = JSON.parse(JSON.stringify(action.payload));
       })
       .addCase(getColumn.fulfilled, (state, action) => {
         state.column = action.payload;
