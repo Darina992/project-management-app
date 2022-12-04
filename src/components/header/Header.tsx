@@ -2,6 +2,9 @@ import { AppBar, Container, Toolbar, IconButton } from '@mui/material';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import Snackbar from '@mui/material/Snackbar';
+import Slide, { SlideProps } from '@mui/material/Slide';
+import Alert from '@mui/material/Alert';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from 'store';
 import { setTranslate } from 'store/langReducer';
@@ -51,6 +54,17 @@ export const Header: FC = () => {
     window.addEventListener('resize', handleResize);
   });
 
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    if (!userState.isValidToken) {
+      setOpen(true);
+    }
+  }, [userState.isValidToken]);
+
+  function transitionRight(props: Omit<SlideProps, 'direction'>) {
+    return <Slide {...props} direction="left" />;
+  }
+
   return (
     <AppBar
       position="fixed"
@@ -61,6 +75,16 @@ export const Header: FC = () => {
       }}
     >
       <Container>
+        <Snackbar
+          open={open}
+          autoHideDuration={3500}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          onClose={() => setOpen(false)}
+          TransitionComponent={transitionRight}
+          sx={{ marginTop: '50px', marginRight: '24px' }}
+        >
+          <Alert severity="error">Token expired.</Alert>
+        </Snackbar>
         {openModal && <BoardlCreate />}
         {openDilog && <ModalDialogDell />}
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
