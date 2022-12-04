@@ -204,7 +204,6 @@ export const BoardPage = () => {
                   ref={provided.innerRef}
                   sx={{
                     display: 'flex',
-                    gap: 3,
                   }}
                 >
                   {columnState &&
@@ -252,7 +251,7 @@ export const BoardPage = () => {
         </DragDropContext>
       )}
       {openModalTask && <TaskDescriptionData />}
-      <ColumnCreate />
+      {openModal && <ColumnCreate />}
     </Box>
   );
 };
