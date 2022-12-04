@@ -19,6 +19,15 @@ export const Task: FC<{
   const { task } = useSelector((state: RootState) => state.board);
   const dispatch = useDispatch<AppDispatch>();
   const { idBoard } = useParams();
+  if (!task.id) {
+    dispatch(
+      getTask({
+        boardId: idBoard as string,
+        columnId: columnId as string,
+        taskId: taskData.id,
+      })
+    );
+  }
 
   const handleDelete = () => {
     const data = {

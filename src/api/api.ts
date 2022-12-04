@@ -521,7 +521,6 @@ export const api = {
         const data = await response.json();
         return data;
       } else if (response.status === 404) {
-        console.log('404', response.status);
         return response.status;
       } else {
         return await Promise.reject(new Error(response.statusText));

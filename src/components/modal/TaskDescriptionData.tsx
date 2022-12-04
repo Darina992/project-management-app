@@ -27,9 +27,9 @@ export const TaskDescriptionData: FC = () => {
       columnId: task.columnId,
       taskId: task.id,
       body: {
-        title: newDataTask.title,
+        title: newDataTask.title ? newDataTask.title : task.title,
         order: task.order,
-        description: newDataTask.description,
+        description: newDataTask.description ? newDataTask.description : task.description,
         userId: task.userId,
       },
     };
@@ -64,10 +64,33 @@ export const TaskDescriptionData: FC = () => {
           flexWrap: 'wrap',
         }}
       >
-        <Typography noWrap id="modal-modal-title" variant="h6" component="h6" sx={{ width: '90%' }}>
+        <Typography
+          noWrap
+          id="modal-modal-title"
+          variant="h6"
+          component="h6"
+          sx={{
+            width: '100%',
+            backgroundColor: 'rgb(172, 85, 112)',
+            color: 'rgb(208, 201, 201)',
+            pl: 1,
+            mb: 3,
+          }}
+        >
           {boardTitle}/{columnTitle}
         </Typography>
-        <Typography noWrap id="modal-modal-title" variant="h6" component="h6" sx={{ width: '90%' }}>
+        <Typography
+          noWrap
+          id="modal-modal-title"
+          variant="h6"
+          component="h6"
+          sx={{
+            width: '100%',
+            color: 'rgb(172, 85, 112)',
+            borderBottom: '1px solid rgb(172, 85, 112)',
+            mb: 3,
+          }}
+        >
           {translate.createdTask} {columnCreateUser}
         </Typography>
         <Typography id="modal-modal-title" variant="h6" component="h6" sx={{ width: '90%' }}>
