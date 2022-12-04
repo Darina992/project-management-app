@@ -196,7 +196,7 @@ export const BoardPage = () => {
         </Box>
       ) : (
         <DragDropContext onDragEnd={onDragEnd}>
-          <Box sx={{ display: 'flex', gap: 5, mt: 5, p: 2, overflowX: 'auto' }}>
+          <Box sx={{ display: 'flex', gap: 2, mt: 5, p: 2, overflowX: 'auto' }}>
             <Droppable droppableId="columns" direction="horizontal" type={TYPES.columns}>
               {(provided: IDropProvided) => (
                 <Box
@@ -204,7 +204,6 @@ export const BoardPage = () => {
                   ref={provided.innerRef}
                   sx={{
                     display: 'flex',
-                    gap: 3,
                   }}
                 >
                   {columnState &&
@@ -252,7 +251,7 @@ export const BoardPage = () => {
         </DragDropContext>
       )}
       {openModalTask && <TaskDescriptionData />}
-      <ColumnCreate />
+      {openModal && <ColumnCreate />}
     </Box>
   );
 };
