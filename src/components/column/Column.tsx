@@ -120,7 +120,7 @@ export const Column: React.FC<{
       {...provided.draggableProps}
       {...provided.dragHandleProps}
       style={styleProp}
-      sx={{ width: 265, backgroundColor: 'rgb(233, 239, 243)' }}
+      sx={{ width: 265, backgroundColor: 'rgb(233, 239, 243)', mr: 3 }}
     >
       {isEditTitleColumn ? (
         <CardHeader title={formTitleColumn()} />
