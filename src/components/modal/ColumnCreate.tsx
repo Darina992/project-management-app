@@ -39,6 +39,7 @@ export const ColumnCreate: FC = () => {
     >
       <Box className="modal" component="form" onSubmit={handleSubmit(onSubmit)}>
         <TextField
+          autoFocus={true}
           id="standard-basic"
           label={translate.columnSearchInput}
           variant="standard"
