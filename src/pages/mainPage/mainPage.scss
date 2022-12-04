@@ -1,10 +1,5 @@
 .board {
     height: 100%;
-    background: url("../../assets/Events-cuate.png");
-    background-size: '100%';
-    background-repeat: 'no-repeat';
-    background-position: 'left top';
-
     &__add-btn {
         height: 48px;
     }
@@ -13,6 +8,21 @@
         text-decoration: none;
     }
 
+}
+.board-block {
+    position: relative;
+}
+.board-block::after {
+    content: '';
+    height: 100%;
+    width: 100%;
+    bottom: -105px;
+    position: absolute;
+    background-image: url("../../assets/Events-cuate.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    z-index: -1;
 }
 
 .button-icon {

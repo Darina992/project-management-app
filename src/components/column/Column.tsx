@@ -129,7 +129,7 @@ export const Column: React.FC<{
           title={
             <Typography
               onClick={() => setIsEditTitleColumn(true)}
-              sx={{ overflowWrap: 'break-word', maxWidth: 200 }}
+              sx={{ overflowWrap: 'break-word', maxWidth: 200, fontSize: 24 }}
             >
               {titleColumn}
             </Typography>

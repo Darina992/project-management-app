@@ -47,7 +47,7 @@ export const BoardPage = () => {
   useEffect(() => {
     dispatch(getBoardData(idBoard as string));
     dispatch(actionsColumnSlice.setIdBoard(idBoard));
-  }, [idBoard, dispatch, idColumn]);
+  }, [idBoard, dispatch, idColumn, openModalTask]);
 
   useEffect(() => {
     setBoardState(() => boardData as IBoard);

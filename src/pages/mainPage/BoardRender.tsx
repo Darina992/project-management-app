@@ -1,4 +1,12 @@
-import { Card, CardActionArea, CardActions, CardContent, Grid, Typography } from '@mui/material';
+import {
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  Grid,
+  IconButton,
+  Typography,
+} from '@mui/material';
 import React, { FC, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,7 +30,7 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
     dispatch(getAllBoard());
   }, [openDilog]);
 
-  const handleSubmit = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleSubmit = (e: React.MouseEvent) => {
     const clases = e.currentTarget.classList;
     dispatch(actionsOpenModal.setIdBoard(clases[1]));
     dispatch(actionsOpenModal.setOpen(true));
@@ -42,7 +50,7 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
   return (
     <Grid item xs={12} sm={4} md={3}>
       <Card>
-        <CardActionArea sx={{ backgroundColor: 'rgb(233, 239, 243)' }}>
+        <CardActionArea sx={{ backgroundColor: 'rgb(220, 228, 233)' }}>
           <Link className="board__link" to={`/board/${id}`}>
             <CardContent>
               <Typography noWrap gutterBottom variant="h5" component="div">
@@ -54,11 +62,11 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
             </CardContent>
           </Link>
           <CardActions>
-            <div className={`button-icon ${id} chahge`} onClick={(e) => handleSubmit(e)}>
-              <ModeRoundedIcon sx={{ color: green[200] }} />
-            </div>
+            <IconButton className={`button-icon ${id} chahge`} onClick={(e) => handleSubmit(e)}>
+              <ModeRoundedIcon />
+            </IconButton>
             <div className={`button-icon ${id} delete`} onClick={(e) => handleClickOpen(e)}>
-              <DeleteRoundedIcon sx={{ color: pink[100] }} />
+              <DeleteRoundedIcon sx={{ color: 'rgb(205, 126, 120)' }} />
             </div>
           </CardActions>
         </CardActionArea>
