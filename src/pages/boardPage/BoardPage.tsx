@@ -105,6 +105,7 @@ export const BoardPage = () => {
     const columnTo = columnsCopy.find((column) => column.id === columnIdTo);
 
     const [reorderedItemFrom] = columnFrom?.tasks?.splice(source.index, 1) as ITask[];
+
     columnTo?.tasks?.splice(destination.index, 0, reorderedItemFrom) as ITask[];
 
     setColumnState(() => columnsCopy);
@@ -113,13 +114,15 @@ export const BoardPage = () => {
       dispatch(
         updateTask({
           boardId: idBoard as string,
-          columnId: columnIdTo,
+          columnId: columnIdFrom,
           taskId: draggableId as string,
           body: {
             title: reorderedItemFrom.title as string,
             order: destination.index + 1,
             description: reorderedItemFrom.description,
             userId: reorderedItemFrom.userId,
+            boardId: idBoard as string,
+            columnId: columnIdFrom,
           },
         })
       );
@@ -139,20 +142,21 @@ export const BoardPage = () => {
           description: reorderedItemFrom.description,
           userId: reorderedItemFrom.userId,
         })
-      ).then((data) => {
-        dispatch(
+      ).then(async (data) => {
+        await dispatch(
           updateTask({
             boardId: idBoard as string,
             columnId: columnIdTo,
             taskId: (data.payload as INewTask).id as string,
             body: {
-              title: reorderedItemFrom.title,
+              title: (data.payload as INewTask).title,
               order: destination.index + 1,
-              description: reorderedItemFrom.description,
-              userId: reorderedItemFrom.userId,
+              description: (data.payload as INewTask).description,
+              userId: (data.payload as INewTask).userId,
             },
           })
         );
+        await dispatch(getBoardData(idBoard as string));
       });
     }
   };

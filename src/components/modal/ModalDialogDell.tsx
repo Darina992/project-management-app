@@ -32,6 +32,7 @@ export const ModalDialogDell: FC = () => {
         })
       );
       dispatch(actionsOpenModal.setDelteId(''));
+      await dispatch(getBoardData(idBoard as string));
     }
     if (actionFor === 'task') {
       await dispatch(
@@ -43,8 +44,8 @@ export const ModalDialogDell: FC = () => {
       );
       dispatch(actionsOpenModal.setDelteId(''));
       dispatch(setOpen(false));
+      await dispatch(getBoardData(idBoard as string));
     }
-    await dispatch(getBoardData(idBoard as string));
   };
 
   return (
