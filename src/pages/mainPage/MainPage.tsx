@@ -29,7 +29,7 @@ export const MainPage: FC = () => {
   };
 
   return (
-    <Box>
+    <Box component="main" className="board">
       <Typography gutterBottom variant="h4" component="div">
         {translate.boardTitle}
       </Typography>

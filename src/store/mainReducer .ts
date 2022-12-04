@@ -7,6 +7,7 @@ import { api } from '../api/api';
 export const initialBoardState: IBoards = {
   boards: [],
   isCreated: false,
+  boardsInline: [],
 };
 
 export const createNewBoards = createAsyncThunk(
