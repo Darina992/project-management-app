@@ -1,6 +1,7 @@
 import { decodeToken } from 'react-jwt';
 
 import { IColumn, ITask } from 'api/typesApi';
+import { DraggableStateSnapshot, DraggingStyle } from 'types/dropAndDragTypes';
 
 export function setToLocalStorage(key: string, value: string) {
   window.localStorage.setItem(key, value);
@@ -43,3 +44,13 @@ export function updateUserIdFromToken() {
   }
   return '';
 }
+
+export const getStyle = (style: DraggingStyle, snapshot: DraggableStateSnapshot) => {
+  if (!snapshot.isDropAnimating) {
+    return style;
+  }
+  return {
+    ...style,
+    transitionDuration: `0.5s`,
+  };
+};

@@ -8,13 +8,14 @@ import { useParams } from 'react-router-dom';
 import { actionsOpenModal } from 'store/modalReducer';
 import { getTask, setColumnCreateUser, setColumnTitle, setOpen } from 'store/boardReducer';
 import { api } from 'api/api';
-import { IDragProvided } from 'types/dropAndDragTypes';
+import { DraggingStyle, IDragProvided } from 'types/dropAndDragTypes';
 
-export const Task: FC<{ taskData: ITask; columnId: string; provided: IDragProvided }> = ({
-  taskData,
-  columnId,
-  provided,
-}) => {
+export const Task: FC<{
+  taskData: ITask;
+  columnId: string;
+  provided: IDragProvided;
+  styleProp: DraggingStyle;
+}> = ({ taskData, columnId, provided, styleProp }) => {
   const { task } = useSelector((state: RootState) => state.board);
   const dispatch = useDispatch<AppDispatch>();
   const { idBoard } = useParams();
@@ -58,6 +59,7 @@ export const Task: FC<{ taskData: ITask; columnId: string; provided: IDragProvid
       ref={provided.innerRef}
       {...provided.draggableProps}
       {...provided.dragHandleProps}
+      style={styleProp}
     >
       <Typography
         sx={{ p: 1, overflowWrap: 'break-word', maxWidth: 190, fontSize: 16 }}
