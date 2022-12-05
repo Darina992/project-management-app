@@ -41,18 +41,6 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-
-    textarea {
-        width: 100%;
-        padding: 1rem;
-        background-color: inherit;
-        margin: 2rem 0;
-        border-radius: 5px;
-    }
-    textarea:focus {
-        outline: none !important;
-        border:1px solid rgb(6, 17, 132);
-      }
 }
 
 @media (max-width: 580px) { 
