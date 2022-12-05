@@ -44,6 +44,12 @@ export const Header: FC = () => {
     ) {
       navigate('/');
     }
+    if (
+      (userState.isAuth && window.location.pathname !== '/signIn') ||
+      (userState.isAuth && window.location.pathname !== '/signUp')
+    ) {
+      navigate('/main');
+    }
   }, [userState.isAuth]);
 
   const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
