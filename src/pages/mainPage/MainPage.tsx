@@ -34,7 +34,7 @@ export const MainPage: FC = () => {
       <Typography gutterBottom variant="h4">
         {translate.boardTitle}
       </Typography>
-      <Grid container spacing={4} id="board">
+      <Grid container spacing={4}>
         <Grid item xs={12} sm={4} md={3}>
           <TextField
             label={translate.boardSearchInput}

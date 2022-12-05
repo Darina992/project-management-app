@@ -12,6 +12,7 @@
 }
 .board-block {
     position: relative;
+    height: 90%;
 }
 .board-block::after {
     content: '';

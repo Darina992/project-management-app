@@ -2,8 +2,8 @@ import { Box, IconButton, Typography } from '@mui/material';
 import React, { FC } from 'react';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { ITask } from 'api/typesApi';
-import { AppDispatch, RootState } from 'store';
-import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from 'store';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { actionsOpenModal } from 'store/modalReducer';
 import { getTask, setColumnCreateUser, setColumnTitle, setOpen } from 'store/boardReducer';
@@ -16,18 +16,8 @@ export const Task: FC<{
   provided: IDragProvided;
   styleProp: DraggingStyle;
 }> = ({ taskData, columnId, provided, styleProp }) => {
-  const { task } = useSelector((state: RootState) => state.board);
   const dispatch = useDispatch<AppDispatch>();
   const { idBoard } = useParams();
-  if (!task.id) {
-    dispatch(
-      getTask({
-        boardId: idBoard as string,
-        columnId: columnId as string,
-        taskId: taskData.id,
-      })
-    );
-  }
 
   const handleDelete = () => {
     const data = {
@@ -50,7 +40,7 @@ export const Task: FC<{
     );
     if (idBoard) {
       await api.getColumn(idBoard, columnId).then((el) => dispatch(setColumnTitle(el.title)));
-      await api.getUser(task.userId).then((el) => dispatch(setColumnCreateUser(el.name)));
+      await api.getUser(taskData.userId).then((el) => dispatch(setColumnCreateUser(el.name)));
     }
     dispatch(setOpen(true));
   };
