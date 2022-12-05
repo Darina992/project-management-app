@@ -1,9 +1,10 @@
-import { Card, CardActions, CardContent, Grid, IconButton, Typography } from '@mui/material';
+import { Card, CardActions, CardContent, Grid, IconButton } from '@mui/material';
 import React, { FC, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ModeRoundedIcon from '@mui/icons-material/ModeRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import Typography from '@mui/material/Typography';
 import { AppDispatch, RootState } from 'store';
 import { getAllBoard } from 'store/mainReducer ';
 import { IBoard } from '../../types/boardsTypes';
@@ -21,16 +22,14 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
     dispatch(getAllBoard());
   }, [openDilog]);
 
-  const handleSubmit = (e: React.MouseEvent) => {
-    const clases = e.currentTarget.classList;
-    dispatch(actionsOpenModal.setIdBoard(clases[1]));
+  const handleSubmit = () => {
+    dispatch(actionsOpenModal.setIdBoard(id));
     dispatch(actionsOpenModal.setOpen(true));
   };
 
-  const handleClickOpen = (e: React.MouseEvent) => {
-    const clases = e.currentTarget.classList;
+  const handleClickOpen = () => {
     const data = {
-      id: clases[1] as string,
+      id: id as string,
       actionFor: 'board' as string,
     };
 
@@ -43,7 +42,7 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
       <Card sx={{ backgroundColor: 'rgb(220, 228, 233)' }}>
         <Link className="board__link" to={`/board/${id}`}>
           <CardContent>
-            <Typography noWrap gutterBottom variant="h5" component="div">
+            <Typography noWrap gutterBottom variant="h5">
               {title}
             </Typography>
             <Typography noWrap variant="body2">
@@ -52,10 +51,10 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
           </CardContent>
         </Link>
         <CardActions>
-          <IconButton className={`button-icon ${id} chahge`} onClick={(e) => handleSubmit(e)}>
+          <IconButton className={`button-icon ${id} chahge`} onClick={() => handleSubmit()}>
             <ModeRoundedIcon />
           </IconButton>
-          <IconButton className={`button-icon ${id} delete`} onClick={(e) => handleClickOpen(e)}>
+          <IconButton className={`button-icon ${id} delete`} onClick={() => handleClickOpen()}>
             <DeleteRoundedIcon sx={{ color: 'rgb(205, 126, 120)' }} />
           </IconButton>
         </CardActions>
