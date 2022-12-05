@@ -1,0 +1,33 @@
+export const style = {
+  userInfoConteiner: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '350px',
+    marginTop: '20px',
+  },
+  userInfo: {
+    display: 'flex',
+    flexDirection: 'column',
+    fontFamily: 'Caveat, cursive',
+    fontWeight: '600',
+    color: 'white',
+    backgroundColor: '#bb6b84',
+    borderRadius: '5px',
+    boxShadow: '1px 1px 5px grey',
+  },
+  modal: {
+    position: 'absolute' as const,
+    top: '50%',
+    left: '49%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: '#eceaeb',
+    color: 'inherit',
+    outline: 'none',
+    border: '2px solid white',
+    borderRadius: '10px',
+    boxShadow: 24,
+    p: 4,
+  },
+};
