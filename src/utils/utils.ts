@@ -27,9 +27,13 @@ export function isValidToken() {
   const token = localStorage.getItem('$token') as string;
   const myDecodedToken: DecodedToken | null = decodeToken(token);
   const currentTime = new Date().getTime();
-  const expTokenTime12Hours = new Date(myDecodedToken!.iat * 1000).getTime() + 43200000;
-  if (currentTime > expTokenTime12Hours) {
-    return false;
+  if (myDecodedToken) {
+    const expTokenTime12Hours = new Date(myDecodedToken!.iat * 1000).getTime() + 43200000;
+    if (currentTime > expTokenTime12Hours) {
+      return false;
+    } else {
+      return true;
+    }
   } else {
     return true;
   }
