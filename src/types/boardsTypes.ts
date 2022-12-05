@@ -7,6 +7,8 @@ export interface IBoards {
   boards: IBoard[];
   isCreated?: boolean;
   boardsInline: IBoard[];
+  openSnackbar: boolean;
+  errorMessage: string;
 }
 
 export interface INewBoard {
