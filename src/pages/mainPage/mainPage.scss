@@ -11,20 +11,11 @@
 
 }
 .board-block {
-    position: relative;
-    height: 90%;
-}
-.board-block::after {
-    content: '';
-    height: 100%;
-    width: 100%;
-    bottom: -105px;
-    position: absolute;
-    background-image: url("../../assets/Events-cuate.png");
+    height: 80%;
+    background-image: url("../../assets/Events.png");
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: bottom right;
-    z-index: -1;
+    background-position: center center;
 }
 
 .modal {
@@ -42,7 +33,7 @@
     transform: translate(-50%, -50%);
 }
 
-@media (max-width: 580px) { 
+@media (max-width: 580px) {
     .modal {
         width: 90%;
 

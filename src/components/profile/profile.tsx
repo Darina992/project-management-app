@@ -20,7 +20,7 @@ import {
   resetUnsuccessDelete,
   showConfirm,
 } from '../../store/userReducer';
-import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { SignUpFormData } from '../../types/userTypes';
 import { getFromLocalStorage } from '../../utils/utils';
 import { style } from './styles';
@@ -46,7 +46,6 @@ export default function Profile() {
     store.dispatch(editUser(data));
   };
 
-  const onErrors: SubmitErrorHandler<SignUpFormData> = (errors) => console.error(errors);
   const navigate = useNavigate();
   React.useEffect(() => {
     if (state.successEdit) {
@@ -106,7 +105,7 @@ export default function Profile() {
             </Box>
           </Box>
         </Grid>
-        <Box component="form" noValidate onSubmit={handleSubmit(onSubmit, onErrors)} sx={{ mt: 3 }}>
+        <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField

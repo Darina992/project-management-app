@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from 'store';
 import { setOpen, updateTask } from 'store/boardReducer';
 import { actionsOpenModal } from 'store/modalReducer';
-// import './modalStyle.scss';
 
 export const TaskDescriptionData: FC = () => {
   const { translate } = useSelector((state: RootState) => state.langReducer);

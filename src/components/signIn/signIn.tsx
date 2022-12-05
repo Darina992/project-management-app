@@ -15,7 +15,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { store, RootState } from '../../store/index';
 import { UserState } from '../../store/userReducer';
 import { signInUser, resetAuth, getUserById } from '../../store/userReducer';
-import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { SignInFormData } from '../../types/userTypes';
 
@@ -35,8 +35,6 @@ export default function SignIn() {
     store.dispatch(signInUser(data));
   };
 
-  const onErrors: SubmitErrorHandler<SignInFormData> = (errors) => console.error(errors);
-
   React.useEffect(() => {
     if (state.isAuth) {
       navigate('/main');
@@ -45,7 +43,7 @@ export default function SignIn() {
 
   React.useEffect(() => {
     if (state.id) {
-      store.dispatch(getUserById(state.id));
+      store.dispatch(getUserById());
     }
   }, [state.id]);
 
@@ -67,7 +65,7 @@ export default function SignIn() {
         </Typography>
         <Box
           component="form"
-          onSubmit={handleSubmit(onSubmit, onErrors)}
+          onSubmit={handleSubmit(onSubmit)}
           onChange={() => dispatch(resetAuth())}
           noValidate
           sx={{ mt: 1 }}

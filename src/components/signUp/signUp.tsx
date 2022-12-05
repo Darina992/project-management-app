@@ -16,7 +16,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { store, RootState } from '../../store/index';
 import { UserState } from '../../store/userReducer';
 import { createNewUser, resetReg, signIn } from '../../store/userReducer';
-import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { SignUpFormData } from '../../types/userTypes';
 import { useNavigate } from 'react-router-dom';
 import { styleModal } from './styles';
@@ -37,8 +37,6 @@ export default function SignUp() {
   const onSubmit: SubmitHandler<SignUpFormData> = (data: SignUpFormData) => {
     store.dispatch(createNewUser(data));
   };
-
-  const onErrors: SubmitErrorHandler<SignUpFormData> = (errors) => console.error(errors);
 
   React.useEffect(() => {
     if (state.successReg) {
@@ -70,7 +68,7 @@ export default function SignUp() {
         <Box
           component="form"
           noValidate
-          onSubmit={handleSubmit(onSubmit, onErrors)}
+          onSubmit={handleSubmit(onSubmit)}
           onChange={() => dispatch(resetReg())}
           sx={{ mt: 3 }}
         >
