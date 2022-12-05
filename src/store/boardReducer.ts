@@ -221,7 +221,6 @@ export const boardSlice = createSlice({
         state.openSnackbar = true;
       })
       .addCase(deleteTask.fulfilled, (state, action) => {
-        console.log(action);
         state.errorMessage = action.payload as string;
         state.openSnackbar = true;
       })

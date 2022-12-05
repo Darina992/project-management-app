@@ -8,8 +8,8 @@ export const initialBoardState: IBoards = {
   boards: [],
   isCreated: false,
   boardsInline: [],
-  openSnackbar: false,
-  errorMessage: '',
+  openSnackbarMain: false,
+  errorMessageMain: '',
 };
 
 export const createNewBoards = createAsyncThunk(
@@ -55,7 +55,11 @@ export const updateBoard = createAsyncThunk(
 export const mainReducer = createSlice({
   name: 'boards',
   initialState: initialBoardState,
-  reducers: {},
+  reducers: {
+    setOpenSnackbarMain: (state, actions) => {
+      state.openSnackbarMain = actions.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createNewBoards.pending, (state: IBoards) => {
@@ -66,8 +70,8 @@ export const mainReducer = createSlice({
       })
       .addCase(createNewBoards.rejected, (state: IBoards, action) => {
         state.isCreated = false;
-        state.errorMessage = action.payload as string;
-        state.openSnackbar = true;
+        state.errorMessageMain = action.payload as string;
+        state.openSnackbarMain = true;
       });
     builder
       .addCase(getAllBoard.pending, (state: IBoards) => {
@@ -78,8 +82,8 @@ export const mainReducer = createSlice({
       })
       .addCase(getAllBoard.rejected, (state: IBoards, action) => {
         state.isCreated = false;
-        state.errorMessage = action.payload as string;
-        state.openSnackbar = true;
+        state.errorMessageMain = action.payload as string;
+        state.openSnackbarMain = true;
       });
     builder
       .addCase(deleteBoardID.pending, (state: IBoards) => {
@@ -87,8 +91,8 @@ export const mainReducer = createSlice({
       })
       .addCase(deleteBoardID.fulfilled, (state: IBoards, action) => {
         state.boards = state.boards.filter((el) => el.id !== action.payload.id);
-        state.errorMessage = action.payload as string;
-        state.openSnackbar = true;
+        state.errorMessageMain = action.payload as string;
+        state.openSnackbarMain = true;
       })
       .addCase(deleteBoardID.rejected, (state: IBoards) => {
         state.isCreated = false;
@@ -102,8 +106,8 @@ export const mainReducer = createSlice({
       })
       .addCase(updateBoard.rejected, (state: IBoards, action) => {
         state.isCreated = false;
-        state.errorMessage = action.payload as string;
-        state.openSnackbar = true;
+        state.errorMessageMain = action.payload as string;
+        state.openSnackbarMain = true;
       });
   },
 });
@@ -114,3 +118,4 @@ export const getBoardsSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const getBoardsState = (state: RootState) => state.boards;
 
 export { actionsMainSlice, reducerMainSlice };
+export const { setOpenSnackbarMain } = actionsMainSlice;

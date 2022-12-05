@@ -21,14 +21,12 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
     dispatch(getAllBoard());
   }, [openDilog]);
 
-  const handleSubmit = (e: React.MouseEvent) => {
-    const clases = e.currentTarget.classList;
+  const handleSubmit = () => {
     dispatch(actionsOpenModal.setIdBoard(id));
     dispatch(actionsOpenModal.setOpen(true));
   };
 
-  const handleClickOpen = (e: React.MouseEvent) => {
-    const clases = e.currentTarget.classList;
+  const handleClickOpen = () => {
     const data = {
       id: id as string,
       actionFor: 'board' as string,
@@ -52,10 +50,10 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
           </CardContent>
         </Link>
         <CardActions>
-          <IconButton className={`button-icon ${id} chahge`} onClick={(e) => handleSubmit(e)}>
+          <IconButton className={`button-icon ${id} chahge`} onClick={() => handleSubmit()}>
             <ModeRoundedIcon />
           </IconButton>
-          <IconButton className={`button-icon ${id} delete`} onClick={(e) => handleClickOpen(e)}>
+          <IconButton className={`button-icon ${id} delete`} onClick={() => handleClickOpen()}>
             <DeleteRoundedIcon sx={{ color: 'rgb(205, 126, 120)' }} />
           </IconButton>
         </CardActions>

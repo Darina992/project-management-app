@@ -7,6 +7,7 @@ import { IBoard } from '../../types/boardsTypes';
 import { getAllBoard, getBoardsState } from 'store/mainReducer ';
 import { AppDispatch, RootState } from 'store';
 import './mainPage.scss';
+import { CustomizedSnackbar } from 'components/snackbar/CustomizedSnackbar';
 
 export const MainPage: FC = () => {
   const { boards } = useSelector(getBoardsState);
@@ -14,6 +15,7 @@ export const MainPage: FC = () => {
   const { openModal } = useSelector((state: RootState) => state.openModal);
   const dispatch = useDispatch<AppDispatch>();
   const [boardData, setBoardData] = useState<IBoard[]>(boards);
+  const { openSnackbarMain } = useSelector((state: RootState) => state.boards);
 
   useEffect(() => {
     dispatch(getAllBoard());
@@ -54,6 +56,7 @@ export const MainPage: FC = () => {
           return <BoardRender key={id} {...el} />;
         })}
       </Grid>
+      {openSnackbarMain && <CustomizedSnackbar />}
     </Box>
   );
 };

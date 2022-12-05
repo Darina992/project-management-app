@@ -36,11 +36,10 @@ import { CustomizedSnackbar } from 'components/snackbar/CustomizedSnackbar';
 export const BoardPage = () => {
   const { idBoard } = useParams();
   const { translate } = useSelector((state: RootState) => state.langReducer);
-  const { boardData, columns, isLoading, openSnackbar } = useSelector(
+  const { boardData, columns, isLoading, openSnackbar, openModalTask } = useSelector(
     (state: RootState) => state.board
   );
   const { openModal } = useSelector((state: RootState) => state.columns);
-  const { openModalTask } = useSelector((state: RootState) => state.board);
   const dispatch = useDispatch<AppDispatch>();
   const [boardState, setBoardState] = useState<IBoard>(boardData as IBoard);
   const { openDilog } = useSelector((state: RootState) => state.openModal);
