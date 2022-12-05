@@ -501,7 +501,7 @@ export const api = {
         return await Promise.reject(new Error(response.statusText));
       }
     } catch (error) {
-      throw new Error('Board was not founded!');
+      throw new Error('Tasks not founded!');
     }
   },
   async getTask(boardId: string, columnId: string, taskId: string) {
@@ -582,12 +582,12 @@ export const api = {
         const data = await response.json();
         return data;
       } else if (response.status === 404) {
-        return response.status;
+        return response.statusText;
       } else {
         return await Promise.reject(new Error(response.statusText));
       }
     } catch (error) {
-      throw new Error('Board was not founded!');
+      throw new Error('Task was not founded!');
     }
   },
 };

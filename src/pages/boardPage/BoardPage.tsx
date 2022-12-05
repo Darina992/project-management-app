@@ -31,13 +31,15 @@ import AddTask from 'components/addTask/addTask';
 import { createNewTask, setColumnId, setIsOpenAddTask } from 'store/tasksReducer';
 import './boardPage.scss';
 import { getStyle } from 'utils/utils';
+import { CustomizedSnackbar } from 'components/snackbar/CustomizedSnackbar';
 
 export const BoardPage = () => {
   const { idBoard } = useParams();
   const { translate } = useSelector((state: RootState) => state.langReducer);
-  const { boardData, columns, isLoading } = useSelector((state: RootState) => state.board);
+  const { boardData, columns, isLoading, openSnackbar, openModalTask } = useSelector(
+    (state: RootState) => state.board
+  );
   const { openModal } = useSelector((state: RootState) => state.columns);
-  const { openModalTask } = useSelector((state: RootState) => state.board);
   const dispatch = useDispatch<AppDispatch>();
   const [boardState, setBoardState] = useState<IBoard>(boardData as IBoard);
   const { openDilog } = useSelector((state: RootState) => state.openModal);
@@ -256,6 +258,7 @@ export const BoardPage = () => {
       )}
       {openModalTask && <TaskDescriptionData />}
       {openModal && <ColumnCreate />}
+      {openSnackbar && <CustomizedSnackbar />}
     </Box>
   );
 };
