@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Grid, Typography, InputAdornment, TextField } from '@material-ui/core';
+import { Box, Grid, InputAdornment, TextField } from '@material-ui/core';
 import SearchIcon from '@mui/icons-material/Search';
+import Typography from '@mui/material/Typography';
 import { BoardRender } from './BoardRender';
 import { useDispatch, useSelector } from 'react-redux';
 import { IBoard } from '../../types/boardsTypes';
@@ -32,11 +33,11 @@ export const MainPage: FC = () => {
 
   return (
     <Box component="main" className="board">
-      <Typography gutterBottom variant="h4" component="div">
+      <Typography gutterBottom variant="h4">
         {translate.boardTitle}
       </Typography>
       <Grid container spacing={4}>
-        <Grid item xs={12} sm={4} md={3} key={'w1'}>
+        <Grid item xs={12} sm={4} md={3}>
           <TextField
             label={translate.boardSearchInput}
             variant="standard"
