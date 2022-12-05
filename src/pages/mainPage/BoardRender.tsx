@@ -23,14 +23,14 @@ export const BoardRender: FC<{ id: string; title: string; description: string }>
 
   const handleSubmit = (e: React.MouseEvent) => {
     const clases = e.currentTarget.classList;
-    dispatch(actionsOpenModal.setIdBoard(clases[1]));
+    dispatch(actionsOpenModal.setIdBoard(id));
     dispatch(actionsOpenModal.setOpen(true));
   };
 
   const handleClickOpen = (e: React.MouseEvent) => {
     const clases = e.currentTarget.classList;
     const data = {
-      id: clases[1] as string,
+      id: id as string,
       actionFor: 'board' as string,
     };
 

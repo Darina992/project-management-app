@@ -60,7 +60,7 @@ export const deleteUser = createAsyncThunk('main/deleteUser', async () => {
   return data;
 });
 
-export const getUserById = createAsyncThunk('main/getUserById', async (id: string) => {
+export const getUserById = createAsyncThunk('main/getUserById', async () => {
   const data = await api.getUserById();
   return data;
 });
@@ -159,7 +159,6 @@ export const userSlice = createSlice({
           state.name = '';
           state.login = '';
           setToLocalStorage('$userId', '');
-          //setToLocalStorage('$token', '');
           setToLocalStorage('$name', '');
           setToLocalStorage('$login', '');
           state.successDelete = true;
