@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from 'store';
 import { deleteBoardID } from 'store/mainReducer ';
 import { actionsOpenModal } from 'store/modalReducer';
-import { deleteColumn, deleteTask, setOpen } from 'store/boardReducer';
+import { deleteColumn, deleteTask, getBoardData, setOpen } from 'store/boardReducer';
 
 export const ModalDialogDell: FC = () => {
   const { translate } = useSelector((state: RootState) => state.langReducer);
@@ -17,14 +17,14 @@ export const ModalDialogDell: FC = () => {
     dispatch(actionsOpenModal.setOpenDilog(false));
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     dispatch(actionsOpenModal.setOpenDilog(false));
     if (actionFor === 'board') {
       dispatch(deleteBoardID(deliteId));
       dispatch(actionsOpenModal.setDelteId(''));
     }
     if (actionFor === 'column') {
-      dispatch(
+      await dispatch(
         deleteColumn({
           boardId: idBoard,
           title: '',
@@ -32,9 +32,10 @@ export const ModalDialogDell: FC = () => {
         })
       );
       dispatch(actionsOpenModal.setDelteId(''));
+      await dispatch(getBoardData(idBoard as string));
     }
     if (actionFor === 'task') {
-      dispatch(
+      await dispatch(
         deleteTask({
           boardId: idBoard,
           columnId: columnId,
@@ -43,6 +44,7 @@ export const ModalDialogDell: FC = () => {
       );
       dispatch(actionsOpenModal.setDelteId(''));
       dispatch(setOpen(false));
+      await dispatch(getBoardData(idBoard as string));
     }
   };
 

@@ -11,7 +11,6 @@ import {
   deleteTask,
   getBoardData,
   setBoardTitle,
-  setColumns,
   updateColumn,
   updateTask,
 } from 'store/boardReducer';
@@ -23,7 +22,6 @@ import { TaskDescriptionData } from '../../components/modal/TaskDescriptionData'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import {
   DraggableStateSnapshot,
-  DraggingStyle,
   DropResult,
   IDragProvided,
   IDropProvided,
@@ -32,6 +30,7 @@ import {
 import AddTask from 'components/addTask/addTask';
 import { createNewTask, setColumnId, setIsOpenAddTask } from 'store/tasksReducer';
 import './boardPage.scss';
+import { getStyle } from 'utils/utils';
 
 export const BoardPage = () => {
   const { idBoard } = useParams();
@@ -48,13 +47,17 @@ export const BoardPage = () => {
   useEffect(() => {
     dispatch(getBoardData(idBoard as string));
     dispatch(actionsColumnSlice.setIdBoard(idBoard));
-  }, [idBoard, dispatch, openModal, openDilog, isOpenAddTask, idColumn]);
+  }, [idBoard, dispatch, idColumn, openModalTask]);
 
   useEffect(() => {
     setBoardState(() => boardData as IBoard);
     dispatch(setBoardTitle(boardData?.title));
-    setColumnState(() => columns);
   }, [boardData, columns, dispatch, openDilog, openModal, isOpenAddTask, idColumn]);
+
+  useEffect(() => {
+    const columnsState: IColumn[] = JSON.parse(JSON.stringify(columns));
+    setColumnState(() => columnsState);
+  }, [dispatch, columns, openModal]);
 
   const onDragEnd = (result: DropResult) => {
     if (result.type === TYPES.columns) {
@@ -72,19 +75,19 @@ export const BoardPage = () => {
       return;
     }
 
-    const column = columnState.find((column) => column.id === draggableId);
-    const items = Array.from(columnState);
-    const [reorderedItem] = items.splice(source.index - 1, 1);
-    items.splice(destination.index - 1, 0, reorderedItem);
+    const columnsCopy: IColumn[] = JSON.parse(JSON.stringify(columnState));
+    const column = columnsCopy.find((column) => column.id === draggableId);
+    const [reorderedItem] = columnsCopy.splice(source.index, 1);
+    columnsCopy.splice(destination.index, 0, reorderedItem);
 
-    setColumnState(() => items);
+    setColumnState(() => columnsCopy);
 
     await dispatch(
       updateColumn({
         boardId: idBoard as string,
         columnId: draggableId,
         title: column?.title as string,
-        order: destination.index,
+        order: destination.index + 1,
       })
     );
   };
@@ -102,49 +105,60 @@ export const BoardPage = () => {
     const columnTo = columnsCopy.find((column) => column.id === columnIdTo);
 
     const [reorderedItemFrom] = columnFrom?.tasks?.splice(source.index, 1) as ITask[];
+
     columnTo?.tasks?.splice(destination.index, 0, reorderedItemFrom) as ITask[];
 
-    await dispatch(setColumns(columnsCopy));
-    await dispatch(
-      deleteTask({
-        boardId: idBoard as string,
-        columnId: columnIdFrom,
-        taskId: draggableId,
-      })
-    );
-    await dispatch(
-      createNewTask({
-        boardId: idBoard as string,
-        columnId: columnIdTo,
-        title: reorderedItemFrom.title,
-        description: reorderedItemFrom.description,
-        userId: reorderedItemFrom.userId,
-      })
-    ).then((data) => {
+    setColumnState(() => columnsCopy);
+
+    if (columnIdFrom === columnIdTo) {
       dispatch(
         updateTask({
           boardId: idBoard as string,
-          columnId: columnIdTo,
-          taskId: (data.payload as INewTask).id as string,
+          columnId: columnIdFrom,
+          taskId: draggableId as string,
           body: {
-            title: reorderedItemFrom.title,
+            title: reorderedItemFrom.title as string,
             order: destination.index + 1,
             description: reorderedItemFrom.description,
             userId: reorderedItemFrom.userId,
+            boardId: idBoard as string,
+            columnId: columnIdFrom,
           },
         })
       );
-    });
-  };
-
-  const getStyle = (style: DraggingStyle, snapshot: DraggableStateSnapshot) => {
-    if (!snapshot.isDropAnimating) {
-      return style;
+    } else {
+      await dispatch(
+        deleteTask({
+          boardId: idBoard as string,
+          columnId: columnIdFrom,
+          taskId: draggableId,
+        })
+      );
+      await dispatch(
+        createNewTask({
+          boardId: idBoard as string,
+          columnId: columnIdTo,
+          title: reorderedItemFrom.title,
+          description: reorderedItemFrom.description,
+          userId: reorderedItemFrom.userId,
+        })
+      ).then(async (data) => {
+        await dispatch(
+          updateTask({
+            boardId: idBoard as string,
+            columnId: columnIdTo,
+            taskId: (data.payload as INewTask).id as string,
+            body: {
+              title: (data.payload as INewTask).title,
+              order: destination.index + 1,
+              description: (data.payload as INewTask).description,
+              userId: (data.payload as INewTask).userId,
+            },
+          })
+        );
+        await dispatch(getBoardData(idBoard as string));
+      });
     }
-    return {
-      ...style,
-      transitionDuration: `0.8s`,
-    };
   };
 
   const onCloseAddTask = () => {
@@ -152,9 +166,7 @@ export const BoardPage = () => {
     dispatch(setColumnId(''));
   };
 
-  return isLoading ? (
-    <LinearProgress variant="determinate" />
-  ) : (
+  return (
     <Box
       component="main"
       sx={{
@@ -166,7 +178,6 @@ export const BoardPage = () => {
         backgroundPosition: 'right bottom',
       }}
     >
-      {openModalTask && <TaskDescriptionData />}
       <Box className="board-page" sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box>
           <Typography variant="h3">{boardState?.title}</Typography>
@@ -183,63 +194,68 @@ export const BoardPage = () => {
           {translate.backButton}
         </Button>
       </Box>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Box sx={{ display: 'flex', gap: 5, mt: 5, p: 2, overflowX: 'auto' }}>
-          <Droppable droppableId="columns" direction="horizontal" type={TYPES.columns}>
-            {(provided: IDropProvided) => (
-              <Box
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                sx={{
-                  display: 'flex',
-                  gap: 3,
-                }}
-              >
-                {columnState &&
-                  columnState.map((column) => {
-                    return (
-                      <Draggable
-                        key={column.id}
-                        draggableId={column.id}
-                        index={column.order}
-                        type={TYPES.columns}
-                      >
-                        {(provided: IDragProvided, snapshot: DraggableStateSnapshot) => (
-                          <Box>
-                            <Column
-                              columnId={column.id}
-                              dataColumn={column}
-                              provided={provided}
-                              styleProp={getStyle(provided.draggableProps.style, snapshot)}
-                            />
-
-                            <AddTask
-                              boardId={idBoard as string}
-                              columnId={idColumn}
-                              onClose={onCloseAddTask}
-                              isOpen={isOpenAddTask}
-                            />
-                          </Box>
-                        )}
-                      </Draggable>
-                    );
-                  })}
-                {provided.placeholder}
-              </Box>
-            )}
-          </Droppable>
-          <Button
-            variant="outlined"
-            size="small"
-            startIcon={<AddIcon />}
-            sx={{ height: '100%', minWidth: 170, backgroundColor: '#fff' }}
-            onClick={() => dispatch(actionsColumnSlice.setOpen(true))}
-          >
-            {translate.addColumn}
-          </Button>
+      {isLoading ? (
+        <Box sx={{ display: 'block', height: 1 }}>
+          <LinearProgress sx={{ maxWidth: 500, margin: 'auto', mt: 15 }} />
         </Box>
-      </DragDropContext>
-      <ColumnCreate />
+      ) : (
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Box sx={{ display: 'flex', gap: 2, mt: 5, p: 2, overflowX: 'auto' }}>
+            <Droppable droppableId="columns" direction="horizontal" type={TYPES.columns}>
+              {(provided: IDropProvided) => (
+                <Box
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  sx={{
+                    display: 'flex',
+                  }}
+                >
+                  {columnState &&
+                    columnState.map((column, index) => {
+                      return (
+                        <Draggable
+                          key={column.id}
+                          draggableId={column.id}
+                          index={index}
+                          type={TYPES.columns}
+                        >
+                          {(provided: IDragProvided, snapshot: DraggableStateSnapshot) => (
+                            <Box>
+                              <Column
+                                columnId={column.id}
+                                dataColumn={column}
+                                provided={provided}
+                                styleProp={getStyle(provided.draggableProps.style, snapshot)}
+                              />
+                              <AddTask
+                                boardId={idBoard as string}
+                                columnId={idColumn}
+                                onClose={onCloseAddTask}
+                                isOpen={isOpenAddTask}
+                              />
+                            </Box>
+                          )}
+                        </Draggable>
+                      );
+                    })}
+                  {provided.placeholder}
+                </Box>
+              )}
+            </Droppable>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<AddIcon />}
+              sx={{ height: '100%', minWidth: 170, backgroundColor: '#fff' }}
+              onClick={() => dispatch(actionsColumnSlice.setOpen(true))}
+            >
+              {translate.addColumn}
+            </Button>
+          </Box>
+        </DragDropContext>
+      )}
+      {openModalTask && <TaskDescriptionData />}
+      {openModal && <ColumnCreate />}
     </Box>
   );
 };

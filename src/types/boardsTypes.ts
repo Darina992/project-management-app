@@ -6,6 +6,7 @@ export interface IBoard {
 export interface IBoards {
   boards: IBoard[];
   isCreated?: boolean;
+  boardsInline: IBoard[];
 }
 
 export interface INewBoard {

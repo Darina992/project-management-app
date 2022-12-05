@@ -21,6 +21,7 @@ export const initialUserState: UserState = {
   successEdit: false,
   successDelete: false,
   unsuccessDelete: false,
+  isValidToken: isValidToken(),
 };
 
 export interface UserState {
@@ -36,6 +37,7 @@ export interface UserState {
   successEdit: boolean;
   successDelete: boolean;
   unsuccessDelete: boolean;
+  isValidToken: boolean;
 }
 
 export const createNewUser = createAsyncThunk('main/createNewUser', async (options: INewUser) => {
@@ -76,6 +78,7 @@ export const userSlice = createSlice({
       state.isAuth = false;
       setToLocalStorage('$userIsAuth', JSON.stringify(state.isAuth));
       state.showAlert = false;
+      state.successReg = false;
     },
     signIn: (state: UserState) => {
       state.isAuth = true;

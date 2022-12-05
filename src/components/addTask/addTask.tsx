@@ -5,12 +5,14 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 import { useSelector } from 'react-redux';
-import { store, RootState } from '../../store/index';
+import { store, RootState, AppDispatch } from '../../store/index';
 import { createNewTask } from '../../store/tasksReducer';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { AddTaskForm } from '../../types/userTypes';
 import { style } from './styles';
 import './addTaskStyle.scss';
+import { getBoardData } from 'store/boardReducer';
+import { useDispatch } from 'react-redux';
 
 type MyProps = {
   boardId: string;
@@ -22,6 +24,7 @@ type MyProps = {
 export default function AddTask({ boardId, columnId, onClose, isOpen }: MyProps) {
   const user = useSelector((state: RootState) => state.user);
   const { translate } = useSelector((state: RootState) => state.langReducer);
+  const dispatch = useDispatch<AppDispatch>();
 
   const {
     register,
@@ -29,7 +32,7 @@ export default function AddTask({ boardId, columnId, onClose, isOpen }: MyProps)
     formState: { errors },
   } = useForm<AddTaskForm>();
 
-  const onSubmit: SubmitHandler<AddTaskForm> = (data) => {
+  const onSubmit: SubmitHandler<AddTaskForm> = async (data) => {
     store.dispatch(
       createNewTask({
         boardId: boardId,
@@ -40,6 +43,7 @@ export default function AddTask({ boardId, columnId, onClose, isOpen }: MyProps)
       })
     );
     onClose();
+    await dispatch(getBoardData(boardId as string));
   };
 
   const onErrors: SubmitErrorHandler<AddTaskForm> = (errors) => console.error(errors);

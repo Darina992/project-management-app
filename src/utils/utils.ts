@@ -1,6 +1,7 @@
 import { decodeToken } from 'react-jwt';
 
 import { IColumn, ITask } from 'api/typesApi';
+import { DraggableStateSnapshot, DraggingStyle } from 'types/dropAndDragTypes';
 
 export function setToLocalStorage(key: string, value: string) {
   window.localStorage.setItem(key, value);
@@ -28,10 +29,8 @@ export function isValidToken() {
   const currentTime = new Date().getTime();
   const expTokenTime12Hours = new Date(myDecodedToken!.iat * 1000).getTime() + 43200000;
   if (currentTime > expTokenTime12Hours) {
-    console.log('Token expired.');
     return false;
   } else {
-    console.log('Valid token');
     return true;
   }
 }
@@ -45,3 +44,13 @@ export function updateUserIdFromToken() {
   }
   return '';
 }
+
+export const getStyle = (style: DraggingStyle, snapshot: DraggableStateSnapshot) => {
+  if (!snapshot.isDropAnimating) {
+    return style;
+  }
+  return {
+    ...style,
+    transitionDuration: `0.5s`,
+  };
+};
