@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import { useSelector } from 'react-redux';
 import { store, RootState, AppDispatch } from '../../store/index';
 import { createNewTask } from '../../store/tasksReducer';
-import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { AddTaskForm } from '../../types/userTypes';
 import { style } from './styles';
 import './addTaskStyle.scss';
@@ -46,20 +46,13 @@ export default function AddTask({ boardId, columnId, onClose, isOpen }: MyProps)
     await dispatch(getBoardData(boardId as string));
   };
 
-  const onErrors: SubmitErrorHandler<AddTaskForm> = (errors) => console.error(errors);
-
   return (
     <Modal open={isOpen} onClose={onClose}>
       <Box className="add-task" sx={style.modal}>
         <Typography id="modalAddTask-title" variant="h5" component="h2" sx={style.modalTitle}>
           <strong>{translate.addTask}</strong>
         </Typography>
-        <Box
-          component="form"
-          onSubmit={handleSubmit(onSubmit, onErrors)}
-          noValidate
-          sx={style.form}
-        >
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={style.form}>
           <TextField
             margin="normal"
             required
