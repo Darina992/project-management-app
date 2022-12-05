@@ -49,7 +49,7 @@ export const Task: FC<{
       })
     );
     if (idBoard) {
-      await api.getColumn(idBoard, columnId).then((el) => dispatch(setColumnTitle(el.title)));
+      await api.getColumn(idBoard, columnId).then((el) => dispatch(setColumnTitle(el)));
       await api.getUser(task.userId).then((el) => dispatch(setColumnCreateUser(el.name)));
     }
     dispatch(setOpen(true));

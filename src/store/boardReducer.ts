@@ -29,6 +29,8 @@ export const initialBoardState: IBoardState = {
   },
   boardTitle: '',
   isLoading: false,
+  openSnackbar: false,
+  errorMessage: '',
 };
 
 export interface IBoardState {
@@ -56,85 +58,102 @@ export interface IBoardState {
   };
   boardTitle: string;
   isLoading: boolean;
+  openSnackbar: boolean;
+  errorMessage: string;
 }
 
-export const getBoardData = createAsyncThunk('board/getBoardData', async (idBoard: string) => {
-  const data = await api.getBoard(idBoard);
-  return data;
-});
-
-export const createColumn = createAsyncThunk(
-  'board/createColumn',
-  async (options: { idBoard: string; title: string }) => {
-    const data = await api.createColumn(options.idBoard, options.title);
+export const getBoardData = createAsyncThunk(
+  'board/getBoardData',
+  async (idBoard: string, { rejectWithValue }) => {
+    const data = await api.getBoard(idBoard).catch((err) => {
+      return rejectWithValue(err.message);
+    });
     return data;
   }
 );
 
 export const deleteColumn = createAsyncThunk(
   'board/deleteColumn',
-  async (options: { boardId: string; title: string; columnId: string }) => {
-    const data = await api.deleteColumn(options.boardId, options.title, options.columnId);
+  async (options: { boardId: string; title: string; columnId: string }, { rejectWithValue }) => {
+    const data = await api
+      .deleteColumn(options.boardId, options.title, options.columnId)
+      .catch((err) => {
+        return rejectWithValue(err.message);
+      });
     return data;
   }
 );
 
 export const updateColumn = createAsyncThunk(
   'board/updateColumn',
-  async (options: { boardId: string; title: string; columnId: string; order: number }) => {
-    const data = await api.updateColumn(
-      options.boardId,
-      options.title,
-      options.columnId,
-      options.order
-    );
+  async (
+    options: { boardId: string; title: string; columnId: string; order: number },
+    { rejectWithValue }
+  ) => {
+    const data = await api
+      .updateColumn(options.boardId, options.title, options.columnId, options.order)
+      .catch((err) => {
+        return rejectWithValue(err.message);
+      });
     return data;
   }
 );
 
-export const getAllColumns = createAsyncThunk('board/getAllColumns', async (idBoard: string) => {
-  const data = await api.getAllColumns(idBoard);
-  return data;
-});
+export const getAllColumns = createAsyncThunk(
+  'board/getAllColumns',
+  async (idBoard: string, { rejectWithValue }) => {
+    const data = await api.getAllColumns(idBoard).catch((err) => {
+      return rejectWithValue(err.message);
+    });
+    return data;
+  }
+);
 
-export const getColumn = createAsyncThunk('board/getColumns', async (options: IGetColumn) => {
-  const data = await api.getColumn(options.boardId, options.columnId);
-  return data;
-});
-
-export const getAllTasks = createAsyncThunk(
-  'board/getAllTasks',
-  async (options: { boardId: string; columnId: string }) => {
-    const data = await api.getAllTasks(options.boardId, options.columnId);
+export const getColumn = createAsyncThunk(
+  'board/getColumns',
+  async (options: IGetColumn, { rejectWithValue }) => {
+    const data = await api.getColumn(options.boardId, options.columnId).catch((err) => {
+      return rejectWithValue(err.message);
+    });
     return data;
   }
 );
 
 export const getTask = createAsyncThunk(
   'board/getTask',
-  async (options: { boardId: string; columnId: string; taskId: string }) => {
-    const data = await api.getTask(options.boardId, options.columnId, options.taskId);
+  async (options: { boardId: string; columnId: string; taskId: string }, { rejectWithValue }) => {
+    const data = await api
+      .getTask(options.boardId, options.columnId, options.taskId)
+      .catch((err) => {
+        return rejectWithValue(err.message);
+      });
     return data;
   }
 );
 
 export const updateTask = createAsyncThunk(
   'board/updateTask',
-  async (options: { boardId: string; columnId: string; taskId: string; body: IBodyTask }) => {
-    const data = await api.updateTask(
-      options.boardId,
-      options.columnId,
-      options.taskId,
-      options.body
-    );
+  async (
+    options: { boardId: string; columnId: string; taskId: string; body: IBodyTask },
+    { rejectWithValue }
+  ) => {
+    const data = await api
+      .updateTask(options.boardId, options.columnId, options.taskId, options.body)
+      .catch((err) => {
+        return rejectWithValue(err.message);
+      });
     return data;
   }
 );
 
 export const deleteTask = createAsyncThunk(
   'board/deleteTask',
-  async (options: { boardId: string; columnId: string; taskId: string }) => {
-    const data = await api.deleteTask(options.boardId, options.columnId, options.taskId);
+  async (options: { boardId: string; columnId: string; taskId: string }, { rejectWithValue }) => {
+    const data = await api
+      .deleteTask(options.boardId, options.columnId, options.taskId)
+      .catch((err) => {
+        return rejectWithValue(err.message);
+      });
     return data;
   }
 );
@@ -158,6 +177,9 @@ export const boardSlice = createSlice({
     setColumns: (state, action) => {
       state.columns = action.payload;
     },
+    setOpenSnackbar: (state, actions) => {
+      state.openSnackbar = actions.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -173,17 +195,47 @@ export const boardSlice = createSlice({
         state.columns = state.columns && JSON.parse(JSON.stringify(sorted(copyColumns)));
         state.isLoading = false;
       })
-      .addCase(getAllTasks.fulfilled, (state, action) => {
-        state.tasks = JSON.parse(JSON.stringify(action.payload));
+      .addCase(getBoardData.rejected, (state, action) => {
+        state.errorMessage = action.payload as string;
+        state.openSnackbar = true;
       })
       .addCase(getAllColumns.fulfilled, (state, action) => {
         state.columns = JSON.parse(JSON.stringify(action.payload));
       })
+      .addCase(getAllColumns.rejected, (state, action) => {
+        state.errorMessage = action.payload as string;
+        state.openSnackbar = true;
+      })
       .addCase(getColumn.fulfilled, (state, action) => {
         state.column = action.payload;
       })
+      .addCase(getColumn.rejected, (state, action) => {
+        state.errorMessage = action.payload as string;
+        state.openSnackbar = true;
+      })
       .addCase(getTask.fulfilled, (state, action) => {
         state.task = action.payload;
+      })
+      .addCase(getTask.rejected, (state, action) => {
+        state.errorMessage = action.payload as string;
+        state.openSnackbar = true;
+      })
+      .addCase(deleteTask.fulfilled, (state, action) => {
+        console.log(action);
+        state.errorMessage = action.payload as string;
+        state.openSnackbar = true;
+      })
+      .addCase(deleteColumn.fulfilled, (state, action) => {
+        state.errorMessage = action.payload as string;
+        state.openSnackbar = true;
+      })
+      .addCase(updateColumn.rejected, (state, action) => {
+        state.errorMessage = action.payload as string;
+        state.openSnackbar = true;
+      })
+      .addCase(updateTask.rejected, (state, action) => {
+        state.errorMessage = action.payload as string;
+        state.openSnackbar = true;
       })
       .addDefaultCase(() => {});
   },
@@ -192,4 +244,11 @@ export const boardSlice = createSlice({
 const { reducer, actions } = boardSlice;
 
 export default reducer;
-export const { setOpen, setBoardTitle, setColumnCreateUser, setColumnTitle, setColumns } = actions;
+export const {
+  setOpen,
+  setBoardTitle,
+  setColumnCreateUser,
+  setColumnTitle,
+  setColumns,
+  setOpenSnackbar,
+} = actions;
