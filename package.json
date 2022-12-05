@@ -26,6 +26,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.29.4",
+    "gh-pages": "^4.0.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.4.1",
     "prettier": "^2.6.2",
@@ -41,6 +42,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -70,5 +73,6 @@
     "@types/react-beautiful-dnd": "^13.1.2",
     "@types/react-redux": "^7.1.24",
     "file-loader": "^6.2.0"
-  }
+  },
+  "homepage": "https://Darina992.github.io/project-management-app"
 }
