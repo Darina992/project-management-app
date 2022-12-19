@@ -25,6 +25,7 @@ export interface IDraggableProps {
   'data-rbd-draggable-id': string;
   'data-rbd-draggable-context-id': string;
   style: DraggingStyle;
+  isDragDisabled: boolean;
 }
 export type DragHandleProps = {
   onFocus: FocusEventHandler<HTMLDivElement>;

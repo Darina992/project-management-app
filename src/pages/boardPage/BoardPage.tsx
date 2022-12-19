@@ -45,6 +45,7 @@ export const BoardPage = () => {
   const { openDilog } = useSelector((state: RootState) => state.openModal);
   const [columnState, setColumnState] = useState<IColumn[]>(columns);
   const { isOpenAddTask, idColumn } = useSelector((state: RootState) => state.tasks);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   useEffect(() => {
     dispatch(getBoardData(idBoard as string));
@@ -67,6 +68,13 @@ export const BoardPage = () => {
     }
     if (result.type === TYPES.tasks) {
       handleOnDragEndTasks(result);
+      setIsDisabled(false);
+    }
+  };
+
+  const onDragStart = (result: DropResult) => {
+    if (result.type === TYPES.tasks) {
+      setIsDisabled(true);
     }
   };
 
@@ -201,7 +209,7 @@ export const BoardPage = () => {
           <LinearProgress sx={{ maxWidth: 500, margin: 'auto', mt: 15 }} />
         </Box>
       ) : (
-        <DragDropContext onDragEnd={onDragEnd}>
+        <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
           <Box sx={{ display: 'flex', gap: 2, mt: 5, p: 2, overflowX: 'auto' }}>
             <Droppable droppableId="columns" direction="horizontal" type={TYPES.columns}>
               {(provided: IDropProvided) => (
@@ -220,6 +228,7 @@ export const BoardPage = () => {
                           draggableId={column.id}
                           index={index}
                           type={TYPES.columns}
+                          isDragDisabled={isDisabled}
                         >
                           {(provided: IDragProvided, snapshot: DraggableStateSnapshot) => (
                             <Box>
@@ -228,6 +237,7 @@ export const BoardPage = () => {
                                 dataColumn={column}
                                 provided={provided}
                                 styleProp={getStyle(provided.draggableProps.style, snapshot)}
+                                isDisabled={isDisabled}
                               />
                               <AddTask
                                 boardId={idBoard as string}

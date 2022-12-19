@@ -31,6 +31,7 @@ export const initialBoardState: IBoardState = {
   isLoading: false,
   openSnackbar: false,
   errorMessage: '',
+  isLoadingTaks: false,
 };
 
 export interface IBoardState {
@@ -60,6 +61,7 @@ export interface IBoardState {
   isLoading: boolean;
   openSnackbar: boolean;
   errorMessage: string;
+  isLoadingTaks: boolean;
 }
 
 export const getBoardData = createAsyncThunk(
@@ -220,9 +222,13 @@ export const boardSlice = createSlice({
         state.errorMessage = action.payload as string;
         state.openSnackbar = true;
       })
+      .addCase(deleteTask.pending, (state) => {
+        state.isLoadingTaks = true;
+      })
       .addCase(deleteTask.fulfilled, (state, action) => {
         state.errorMessage = action.payload as string;
         state.openSnackbar = true;
+        state.isLoadingTaks = false;
       })
       .addCase(deleteColumn.fulfilled, (state, action) => {
         state.errorMessage = action.payload as string;
@@ -231,6 +237,12 @@ export const boardSlice = createSlice({
       .addCase(updateColumn.rejected, (state, action) => {
         state.errorMessage = action.payload as string;
         state.openSnackbar = true;
+      })
+      .addCase(updateTask.pending, (state) => {
+        state.isLoadingTaks = true;
+      })
+      .addCase(updateTask.fulfilled, (state) => {
+        state.isLoadingTaks = false;
       })
       .addCase(updateTask.rejected, (state, action) => {
         state.errorMessage = action.payload as string;

@@ -6,6 +6,7 @@ import {
   CardContent,
   CardHeader,
   IconButton,
+  LinearProgress,
   TextField,
   Typography,
 } from '@mui/material';
@@ -39,7 +40,8 @@ export const Column: React.FC<{
   dataColumn: IColumn;
   provided: IDragProvided;
   styleProp: DraggingStyle;
-}> = ({ columnId, dataColumn, provided, styleProp }) => {
+  isDisabled: boolean;
+}> = ({ columnId, dataColumn, provided, styleProp, isDisabled }) => {
   const { idBoard } = useParams();
   const [isEditTitleColumn, setIsEditTitleColumn] = useState(false);
   const {
@@ -51,6 +53,7 @@ export const Column: React.FC<{
   const [titleColumn, setTitleColumn] = useState(dataColumn.title);
   const dispatch = useDispatch<AppDispatch>();
   const { translate } = useSelector((state: RootState) => state.langReducer);
+  const { isLoadingTaks } = useSelector((state: RootState) => state.board);
 
   const handleDelete = () => {
     const data = {
@@ -150,10 +153,19 @@ export const Column: React.FC<{
             {...providedTask.droppableProps}
             ref={providedTask.innerRef}
           >
-            {dataColumn.tasks &&
+            {isLoadingTaks ? (
+              <LinearProgress />
+            ) : (
+              dataColumn.tasks &&
               dataColumn.tasks.map((task, index) => {
                 return (
-                  <Draggable key={task.id} draggableId={task.id} index={index} type={TYPES.tasks}>
+                  <Draggable
+                    key={task.id}
+                    draggableId={task.id}
+                    index={index}
+                    type={TYPES.tasks}
+                    isDragDisabled={isDisabled}
+                  >
                     {(providedTask: IDragProvided, snapshot: DraggableStateSnapshot) => (
                       <Task
                         key={task.id}
@@ -165,7 +177,8 @@ export const Column: React.FC<{
                     )}
                   </Draggable>
                 );
-              })}
+              })
+            )}
             {providedTask.placeholder}
           </CardContent>
         )}
